@@ -1,7 +1,10 @@
 <Solution>
   <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Debug2" />
+    <BuildType Name="Release" />
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Imgui_Couse_dx12ver.vcxproj" />
+  <Project Path="Imgui_Couse_dx12ver.vcxproj" Id="5a2a595b-1f85-4077-b989-548a0aa39999" />
 </Solution>

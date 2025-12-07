@@ -1,0 +1,45 @@
+﻿#include "PCH.hpp"
+#include "WinProc.hpp"
+
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd,
+															 UINT msg,
+															 WPARAM wParam,
+															 LPARAM lParam);
+
+// Win32 message handler
+// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if
+// dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your
+// main application, or clear/overwrite your copy of the mouse data.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to
+// your main application, or clear/overwrite your copy of the keyboard data.
+// Generally you may always pass all inputs to dear imgui, and hide them from
+// your application based on those two flags.
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+  if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	return true;
+
+  switch (msg) {
+  case WM_SIZE:
+	if (m_Device != nullptr && wParam != SIZE_MINIMIZED) {
+	  CleanupRenderTarget();
+	  DXGI_SWAP_CHAIN_DESC1 desc = {};
+	  m_pSwapChain->GetDesc1(&desc);
+	  HRESULT result = m_pSwapChain->ResizeBuffers(0, static_cast<UINT>LOWORD(lParam),
+												   static_cast<UINT>HIWORD(lParam),
+												   desc.Format, desc.Flags);
+	  IM_ASSERT(SUCCEEDED(result) && "Failed to resize swapchain.");
+	  CreateRenderTarget();
+	}
+	return 0;
+  case WM_SYSCOMMAND:
+	if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+	  return 0;
+	break;
+  case WM_DESTROY:
+	::PostQuitMessage(0);
+	return 0;
+  }
+  return ::DefWindowProcW(hWnd, msg, wParam, lParam);
+}

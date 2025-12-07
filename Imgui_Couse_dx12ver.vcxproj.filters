@@ -13,24 +13,237 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{0fc3b372-7f9c-45ee-8c4a-a869f130455e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Imgui">
+      <UniqueIdentifier>{7f1a6ece-276e-4d53-9c53-94745b1f6d72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Imgui\include">
+      <UniqueIdentifier>{c6ab9e6e-1b9a-4bb9-a8d6-a2528580a56d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Imgui\src">
+      <UniqueIdentifier>{c8f2e510-d21a-4f59-8700-34564c122d99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Imgui\backends">
+      <UniqueIdentifier>{89b594f4-3676-406b-b6f9-a7eff8a221aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\pluto">
+      <UniqueIdentifier>{0c065307-e3b3-428e-adf9-a084b1e0d669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\pluto\plutovg">
+      <UniqueIdentifier>{66d776ba-84c9-43e9-9ae6-ca8c31e5af86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\pluto\plutovg\inc">
+      <UniqueIdentifier>{1bb135c4-3f0a-4115-8914-b053a397ce52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\pluto\plutovg\src">
+      <UniqueIdentifier>{369a5f29-3d7c-4bdd-aa3f-da12a32f0512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\pluto\plutosvg">
+      <UniqueIdentifier>{c363ecc0-bb32-4d0e-807f-652d67ec1bbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\implot">
+      <UniqueIdentifier>{2d5f10cb-f7b6-49ed-8d53-9daaf0314ce8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Imgui_Couse_dx12ver.cpp">
+    <ClCompile Include="PCH.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="WindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp">
+    <ClCompile Include="Globals.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExampleDescriptorHeapAllocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinProc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DarkMode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui.cpp">
+      <Filter>External\Imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_demo.cpp">
+      <Filter>External\Imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_draw.cpp">
+      <Filter>External\Imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_tables.cpp">
+      <Filter>External\Imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_widgets.cpp">
+      <Filter>External\Imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
+      <Filter>External\Imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\backends\imgui_impl_win32.cpp">
+      <Filter>External\Imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="external\imgui\misc\freetype\imgui_freetype.cpp">
+      <Filter>External\Imgui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-blend.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-canvas.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-font.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-ft-math.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-ft-raster.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-ft-stroker.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-matrix.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-paint.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-path.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-rasterize.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-surface.c">
+      <Filter>External\pluto\plutovg\src</Filter>
+    </ClCompile>
+    <ClCompile Include="external\plutosvg\source\plutosvg.c">
+      <Filter>External\pluto\plutosvg</Filter>
+    </ClCompile>
+    <ClCompile Include="external\implot\implot.cpp">
+      <Filter>External\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="external\implot\implot_demo.cpp">
+      <Filter>External\implot</Filter>
+    </ClCompile>
+    <ClCompile Include="external\implot\implot_items.cpp">
+      <Filter>External\implot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="PCH.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="App.hpp">
+    <ClInclude Include="WindowManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Globals.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FontManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameContext.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WinProc.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DarkMode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imconfig.h">
+      <Filter>External\Imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imgui.h">
+      <Filter>External\Imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imgui_internal.h">
+      <Filter>External\Imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imstb_rectpack.h">
+      <Filter>External\Imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imstb_textedit.h">
+      <Filter>External\Imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="external\imgui\imstb_truetype.h">
+      <Filter>External\Imgui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\include\plutovg.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-ft-math.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-ft-raster.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-ft-stroker.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-ft-types.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-private.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-stb-image.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-stb-image-write.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-stb-truetype.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutovg\source\plutovg-utils.h">
+      <Filter>External\pluto\plutovg\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutosvg\source\plutosvg.h">
+      <Filter>External\pluto\plutosvg</Filter>
+    </ClInclude>
+    <ClInclude Include="external\plutosvg\source\plutosvg-ft.h">
+      <Filter>External\pluto\plutosvg</Filter>
+    </ClInclude>
+    <ClInclude Include="external\implot\implot.h">
+      <Filter>External\implot</Filter>
+    </ClInclude>
+    <ClInclude Include="external\implot\implot_internal.h">
+      <Filter>External\implot</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vcpkg.json" />
+    <None Include="vcpkg-configuration.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="external\imgui\misc\debuggers\imgui.natvis">
+      <Filter>External\Imgui\src</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>

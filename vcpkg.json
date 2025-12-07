@@ -1,0 +1,58 @@
+﻿{
+  "name": "app",
+  "version": "1.0",
+  "dependencies": [
+    "d3dx12",
+    {
+      "name": "directxmath",
+        "features":
+        [
+            "dx12",
+            "xdsp"
+        ]
+    },
+    {
+      "name": "directxtex",
+        "features":
+        [
+            "dx12",
+            "spectre",
+            "tools"
+        ]
+    },
+    {
+      "name": "directxtk12",
+      "features": [
+        "gameinput",
+        "spectre",
+        "tools",
+        "xaudio2-9",
+        "xaudio2redist",
+        "xinput"
+      ]
+    },
+    "fmt",
+    {
+      "name": "freetype",
+      "features": [
+        "brotli",
+        "bzip2",
+        "error-strings",
+        "png",
+        "subpixel-rendering",
+        "zlib"
+      ]
+    },
+    "directx-headers",
+    "directx12-agility",
+    {
+      "name": "directxmesh",
+        "features":
+        [
+            "dx12",
+            "spectre",
+            "tools"
+        ]
+    }
+  ]
+}
