@@ -1,8 +1,10 @@
 ﻿#pragma once
 
 #include <iostream>
+#include <algorithm>
 #include <bit>
 #include <exception>
+#include <map>
 #include <memory>
 #include <filesystem>
 #include <string>
@@ -15,6 +17,9 @@
 #include <windows.h>
 #include <tchar.h>
 #include <dwmapi.h> // Desktop Window Manager API (for dark mode)
+#include <commdlg.h>     // Common Dialogs - for file open/save dialogs
+#include <shlobj.h>      // Shell Objects - for folder browser dialog
+
 
 #define DX12_ENABLE_DEBUG_LAYER
 #include <d3d12.h>
@@ -43,9 +48,9 @@
 #include "implot.h"
 #include "implot_internal.h"
 
-//#include "plutovg.h"
-//#include "plutosvg.h"
-//#include "plutosvg-ft.h"
+#include "plutovg.h"
+#include "plutosvg.h"
+#include "plutosvg-ft.h"
 
 using namespace Microsoft::WRL;
 namespace fs = std::filesystem;

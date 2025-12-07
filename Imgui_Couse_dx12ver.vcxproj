@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgUseMD>false</VcpkgUseMD>
+    <VcpkgUseMD>true</VcpkgUseMD>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -118,13 +118,20 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;WIN32;_DEBUG;_WINDOWS;_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp23</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <UseUnicodeForAssemblerListing>true</UseUnicodeForAssemblerListing>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <FixedBaseAddress>false</FixedBaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,17 +152,265 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="DarkMode.cpp" />
+    <ClCompile Include="ExampleDescriptorHeapAllocator.cpp" />
+    <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\imgui\backends\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\imgui\misc\freetype\imgui_freetype.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\implot\implot.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\implot\implot_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\implot\implot_items.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutosvg\source\plutosvg.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-blend.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-canvas.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-font.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-ft-math.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-ft-raster.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-ft-stroker.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-matrix.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-paint.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-path.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-rasterize.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="external\plutovg\source\plutovg-surface.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp" />
+    <ClCompile Include="FontManagerWindow.cpp" />
+    <ClCompile Include="FrameContext.cpp" />
+    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="Main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="render.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DarkMode.hpp" />
+    <ClInclude Include="ExampleDescriptorHeapAllocator.hpp" />
+    <ClInclude Include="external\imgui\backends\imgui_impl_dx12.h" />
+    <ClInclude Include="external\imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="external\imgui\imconfig.h" />
+    <ClInclude Include="external\imgui\imgui.h" />
+    <ClInclude Include="external\imgui\imgui_internal.h" />
+    <ClInclude Include="external\imgui\imstb_rectpack.h" />
+    <ClInclude Include="external\imgui\imstb_textedit.h" />
+    <ClInclude Include="external\imgui\imstb_truetype.h" />
+    <ClInclude Include="external\imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="external\implot\implot.h" />
+    <ClInclude Include="external\plutosvg\source\plutosvg.h" />
+    <ClInclude Include="external\plutovg\include\plutovg.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-ft-math.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-ft-raster.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-ft-stroker.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-ft-types.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-private.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-stb-image-write.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-stb-image.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-stb-truetype.h" />
+    <ClInclude Include="external\plutovg\source\plutovg-utils.h" />
+    <ClInclude Include="FontManager.hpp" />
+    <ClInclude Include="FontManagerWindow.hpp" />
+    <ClInclude Include="FrameContext.hpp" />
+    <ClInclude Include="Globals.hpp" />
     <ClInclude Include="Main.hpp" />
+    <ClInclude Include="MainWindow.hpp" />
     <ClInclude Include="PCH.hpp" />
+    <ClInclude Include="render.hpp" />
+    <ClInclude Include="WindowManager.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vcpkg-configuration.json" />
+    <None Include="vcpkg.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

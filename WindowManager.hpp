@@ -10,9 +10,9 @@ public:
 
   void WMCreateWindow(_In_ HINSTANCE &hInstance);
 
-  HWND GetHWND() const { return m_hwnd; }
-  WNDCLASSEX *GetWc() const { return m_wc; }
-  float get_main_scale() const { return m_main_scale; }
+  inline HWND GetHWND() const { return m_hwnd; }
+  inline WNDCLASSEX *GetWc() const { return m_wc; }
+  inline float get_main_scale() const { return m_main_scale; }
 
 private:
   WNDCLASSEX *m_wc;

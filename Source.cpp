@@ -1,25 +1,78 @@
 ﻿#include "PCH.hpp"
 
-#include "MainWindow.hpp"
-
+#include "ExampleDescriptorHeapAllocator.hpp"
 #include "FontManager.hpp"
-#include "WindowManager.hpp"
+#include "FrameContext.hpp"
 #include "render.hpp"
+#include "Globals.hpp"
+#include "WindowManager.hpp"
+#include "FontManagerWindow.hpp"
+
+constexpr static const int APP_NUM_FRAMES_IN_FLIGHT = 2;
+constexpr static const int APP_NUM_BACK_BUFFERS = 2;
+constexpr static const int APP_SRV_HEAP_SIZE = 64;
+
+auto WINDOW_WIDTH = std::uint32_t{ 2000 };
+auto WINDOW_HEIGHT = std::uint32_t{ 1000 };
 
 
-// Main code
-int MainWindow::launch(HINSTANCE& hInstance) {
+// Data
+static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT] = {};
+static UINT g_frameIndex = 0;
 
+std::unique_ptr<ExampleDescriptorHeapAllocator> g_pd3dSrvDescHeapAlloc;
+
+ComPtr<ID3D12Device> m_Device;
+ComPtr<ID3D12DescriptorHeap> m_RtvDescHeap;
+ComPtr<ID3D12DescriptorHeap> m_SrvDescHeap;
+ComPtr<ID3D12CommandQueue> m_CommandQueue;
+ComPtr<ID3D12GraphicsCommandList> m_CommandList;
+ComPtr<ID3D12Fence> m_fence;
+ComPtr<IDXGISwapChain3> m_pSwapChain;
+ComPtr<ID3D12Resource> m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
+static D3D12_CPU_DESCRIPTOR_HANDLE
+m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS] = {};
+
+static HANDLE m_fenceEvent;
+static UINT64 m_fenceLastSignaledValue = 0;
+static bool m_SwapChainTearingSupport = false;
+static bool m_SwapChainOccluded = false;
+static HANDLE m_hSwapChainWaitableObject = nullptr;
+
+// Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void CreateRenderTarget();
+void CleanupRenderTarget();
+void WaitForPendingOperations();
+FrameContext* WaitForNextFrameContext();
+
+int Start(_In_ HINSTANCE hInstance);
+
+_Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPWSTR lpCmdLine,
+    _In_ int nCmdShow) {
+
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+    UNREFERENCED_PARAMETER(nCmdShow);
+
+    return Start(hInstance);
+}
+
+int Start(_In_ HINSTANCE hInstance) {
+    // Main code
     g_pd3dSrvDescHeapAlloc = std::make_unique<ExampleDescriptorHeapAllocator>();
     std::unique_ptr<WindowManager> window = std::make_unique<WindowManager>();
+
 
     window->WMCreateWindow(hInstance);
 
     // Initialize Direct3D
     if(!CreateDeviceD3D(window->GetHWND())) {
         CleanupDeviceD3D();
-        ::UnregisterClass(window->GetWc()->lpszClassName,
-            window->GetWc()->hInstance);
+        ::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
         return 1;
     }
 
@@ -44,8 +97,7 @@ int MainWindow::launch(HINSTANCE& hInstance) {
     // Setup scaling
     ImGuiStyle& style = ImGui::GetStyle();
     style.ScaleAllSizes(
-        window
-        ->get_main_scale()); // Bake a fixed style scale. (until we have a solution for
+        window->get_main_scale()); // Bake a fixed style scale. (until we have a solution for
     // dynamic style scaling, changing this requires resetting
     // Style + calling this again)
     style.FontScaleDpi =
@@ -76,22 +128,15 @@ int MainWindow::launch(HINSTANCE& hInstance) {
     // descriptor, future versions will need to allocate more)
     init_info.SrvDescriptorHeap = m_SrvDescHeap.Get();
     init_info.SrvDescriptorAllocFn =
-        std::bit_cast<decltype(init_info.SrvDescriptorAllocFn)>(
-            ([&](ImGui_ImplDX12_InitInfo*,
-                D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle,
-                D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
-                    return g_pd3dSrvDescHeapAlloc->Alloc(out_cpu_handle,
-                        out_gpu_handle);
-                }));
-
-
-    init_info.SrvDescriptorFreeFn =
-        std::bit_cast<decltype(init_info.SrvDescriptorFreeFn)>(
-            [&](ImGui_ImplDX12_InitInfo*,
-                D3D12_CPU_DESCRIPTOR_HANDLE cpu_handle,
-                D3D12_GPU_DESCRIPTOR_HANDLE gpu_handle) {
-                    return g_pd3dSrvDescHeapAlloc->Free(cpu_handle, gpu_handle);
-            });
+        [](ImGui_ImplDX12_InitInfo*, D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle,
+            D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
+                return g_pd3dSrvDescHeapAlloc->Alloc(out_cpu_handle, out_gpu_handle);
+        };
+    init_info.SrvDescriptorFreeFn = [](ImGui_ImplDX12_InitInfo*,
+        D3D12_CPU_DESCRIPTOR_HANDLE cpu_handle,
+        D3D12_GPU_DESCRIPTOR_HANDLE gpu_handle) {
+            return g_pd3dSrvDescHeapAlloc->Free(cpu_handle, gpu_handle);
+        };
     ImGui_ImplDX12_Init(&init_info);
 
     // Before 1.91.6: our signature was using a single descriptor. From 1.92,
@@ -102,15 +147,20 @@ int MainWindow::launch(HINSTANCE& hInstance) {
     // m_SrvDescHeap->GetCPUDescriptorHandleForHeapStart(),
     // m_SrvDescHeap->GetGPUDescriptorHandleForHeapStart());
 
-    FontManager font_manager(&io);
+    auto font_manager = std::make_unique<FontManager>(&io);
+     auto font_manager_window = std::make_unique<FontManagerWindow>(font_manager.get(), window->GetHWND());
 
-    font_manager.LoadFonts();
-    font_manager.SetDefaultFont();
+
+    font_manager->LoadFonts();
+    font_manager->SetDefaultFont();
 
     // Our state
     bool show_demo_window = false;
     bool show_another_window = false;
+    bool show_FontManager_window = false;
+    bool show_styleEditor_window = false;
     ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.15f, 1.f);
+
 
     WindowClass window_obj;
 
@@ -132,8 +182,7 @@ int MainWindow::launch(HINSTANCE& hInstance) {
 
         // Handle window screen locked
         if((m_SwapChainOccluded &&
-            m_pSwapChain->Present(0, DXGI_PRESENT_TEST) ==
-            DXGI_STATUS_OCCLUDED) ||
+            m_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
             ::IsIconic(window->GetHWND())) {
             ::Sleep(10);
             continue;
@@ -149,6 +198,16 @@ int MainWindow::launch(HINSTANCE& hInstance) {
             render(window_obj);
         }
 
+        if(show_FontManager_window) 
+
+          
+                font_manager_window->Render();
+              
+        
+        
+
+        if(show_styleEditor_window)   ImGui::ShowStyleEditor();
+
         // 1. Show the big demo window (Most of the sample code is in
         // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
         // ImGui!).
@@ -161,38 +220,33 @@ int MainWindow::launch(HINSTANCE& hInstance) {
             static float f = 0.0f;
             static int counter = 0;
 
-            ImGui::Begin(
-                "Hello, world!"); // Create a window called "Hello, world!"
+            ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!"
             // and append into it.
 
-            ImGui::Text(
-                "This is some useful text."); // Display some text (you can
+            ImGui::Text("This is some useful text."); // Display some text (you can
             // use a format strings too)
             ImGui::Checkbox(
                 "Demo Window",
                 &show_demo_window); // Edit bools storing our window open/close state
             ImGui::Checkbox("Another Window", &show_another_window);
+            ImGui::Checkbox("Font Manager Window", &show_FontManager_window);
+            ImGui::Checkbox("Style Editor", &show_styleEditor_window);
 
-            ImGui::SliderFloat(
-                "float",
-                &f,
-                0.0f,
+            ImGui::SliderFloat("float", &f, 0.0f,
                 1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
             ImGui::ColorEdit3(
                 "clear color",
-                std::bit_cast<float*>(std::ref(
-                    clear_color))); // Edit 3 floats representing a color
+                std::bit_cast<float*>(
+                    std::ref(clear_color))); // Edit 3 floats representing a color
 
-            if(ImGui::Button(
-                "Button")) // Buttons return true when clicked (most
+            if(ImGui::Button("Button")) // Buttons return true when clicked (most
                 // widgets return true when edited/activated)
                 counter++;
             ImGui::SameLine();
             ImGui::Text("counter = %d", counter);
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-                1000.0f / io.Framerate,
-                io.Framerate);
+                1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
         }
 
@@ -221,28 +275,21 @@ int MainWindow::launch(HINSTANCE& hInstance) {
         barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
         barrier.Transition.pResource =
             m_mainRenderTargetResource[backBufferIdx].Get();
-        barrier.Transition.Subresource =
-            D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
         barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
         barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
         m_CommandList->Reset(frameCtx->CommandAllocator, nullptr);
         m_CommandList->ResourceBarrier(1, &barrier);
 
         // Render Dear ImGui graphics
-        const float clear_color_with_alpha[4]={ clear_color.x * clear_color.w,
-                                              clear_color.y * clear_color.w,
-                                              clear_color.z * clear_color.w,
-                                              clear_color.w };
+        const float clear_color_with_alpha[4] = {
+            clear_color.x * clear_color.w, clear_color.y * clear_color.w,
+            clear_color.z * clear_color.w, clear_color.w };
         m_CommandList->ClearRenderTargetView(
-            m_mainRenderTargetDescriptor[backBufferIdx],
-            clear_color_with_alpha,
-            0,
+            m_mainRenderTargetDescriptor[backBufferIdx], clear_color_with_alpha, 0,
             nullptr);
         m_CommandList->OMSetRenderTargets(
-            1,
-            &m_mainRenderTargetDescriptor[backBufferIdx],
-            FALSE,
-            nullptr);
+            1, &m_mainRenderTargetDescriptor[backBufferIdx], FALSE, nullptr);
         m_CommandList->SetDescriptorHeaps(1, m_SrvDescHeap.GetAddressOf());
         ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(),
             m_CommandList.Get());
@@ -275,10 +322,9 @@ int MainWindow::launch(HINSTANCE& hInstance) {
 
     CleanupDeviceD3D();
     ::DestroyWindow(window->GetHWND());
-    ::UnregisterClass(window->GetWc()->lpszClassName,
-        window->GetWc()->hInstance);
+    ::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
 
-    font_manager.CleanupFonts();
+    font_manager->CleanupFonts();
     ImPlot::DestroyContext();
 
     return 0;
@@ -286,10 +332,7 @@ int MainWindow::launch(HINSTANCE& hInstance) {
 
 // Helper functions
 
-
-MainWindow::MainWindow() {}
-
-bool MainWindow::CreateDeviceD3D(HWND hWnd) {
+bool CreateDeviceD3D(HWND hWnd) {
     // Setup swap chain
     // This is a basic setup. Optimally could handle fullscreen mode differently.
     // See #8979 for suggestions.
@@ -354,9 +397,8 @@ bool MainWindow::CreateDeviceD3D(HWND hWnd) {
         desc.NumDescriptors = APP_NUM_BACK_BUFFERS;
         desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         desc.NodeMask = 1;
-        if(m_Device->CreateDescriptorHeap(&desc,
-            IID_PPV_ARGS(&m_RtvDescHeap)) !=
-            S_OK)
+        if(m_Device->CreateDescriptorHeap(
+            &desc, IID_PPV_ARGS(&m_RtvDescHeap)) != S_OK)
             return false;
 
         SIZE_T rtvDescriptorSize = m_Device->GetDescriptorHandleIncrementSize(
@@ -374,9 +416,8 @@ bool MainWindow::CreateDeviceD3D(HWND hWnd) {
         desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
         desc.NumDescriptors = APP_SRV_HEAP_SIZE;
         desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-        if(m_Device->CreateDescriptorHeap(&desc,
-            IID_PPV_ARGS(&m_SrvDescHeap)) !=
-            S_OK)
+        if(m_Device->CreateDescriptorHeap(
+            &desc, IID_PPV_ARGS(&m_SrvDescHeap)) != S_OK)
             return false;
         g_pd3dSrvDescHeapAlloc->Create(m_Device.Get(), m_SrvDescHeap.Get());
     }
@@ -386,8 +427,8 @@ bool MainWindow::CreateDeviceD3D(HWND hWnd) {
         desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
         desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
         desc.NodeMask = 1;
-        if(m_Device->CreateCommandQueue(&desc,
-            IID_PPV_ARGS(&m_CommandQueue)) != S_OK)
+        if(m_Device->CreateCommandQueue(
+            &desc, IID_PPV_ARGS(&m_CommandQueue)) != S_OK)
             return false;
     }
 
@@ -397,16 +438,13 @@ bool MainWindow::CreateDeviceD3D(HWND hWnd) {
             IID_PPV_ARGS(&g_frameContext[i].CommandAllocator)) != S_OK)
             return false;
 
-    if(m_Device->CreateCommandList(0,
-        D3D12_COMMAND_LIST_TYPE_DIRECT,
-        g_frameContext[0].CommandAllocator,
-        nullptr,
-        IID_PPV_ARGS(&m_CommandList)) != S_OK ||
+    if(m_Device->CreateCommandList(
+        0, D3D12_COMMAND_LIST_TYPE_DIRECT, g_frameContext[0].CommandAllocator,
+        nullptr, IID_PPV_ARGS(&m_CommandList)) != S_OK ||
         m_CommandList->Close() != S_OK)
         return false;
 
-    if(m_Device->CreateFence(0,
-        D3D12_FENCE_FLAG_NONE,
+    if(m_Device->CreateFence(0, D3D12_FENCE_FLAG_NONE,
         IID_PPV_ARGS(&m_fence)) != S_OK)
         return false;
 
@@ -422,17 +460,13 @@ bool MainWindow::CreateDeviceD3D(HWND hWnd) {
 
         BOOL allow_tearing = FALSE;
         dxgiFactory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING,
-            &allow_tearing,
-            sizeof(allow_tearing));
+            &allow_tearing, sizeof(allow_tearing));
         m_SwapChainTearingSupport = (allow_tearing == TRUE);
         if(m_SwapChainTearingSupport)
             sd.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 
-        if(dxgiFactory->CreateSwapChainForHwnd(m_CommandQueue.Get(),
-            hWnd,
-            &sd,
-            nullptr,
-            nullptr,
+        if(dxgiFactory->CreateSwapChainForHwnd(m_CommandQueue.Get(), hWnd, &sd,
+            nullptr, nullptr,
             &swapChain1) != S_OK)
             return false;
         if(swapChain1->QueryInterface(IID_PPV_ARGS(&m_pSwapChain)) != S_OK)
@@ -443,15 +477,14 @@ bool MainWindow::CreateDeviceD3D(HWND hWnd) {
         swapChain1->Release();
         dxgiFactory->Release();
         m_pSwapChain->SetMaximumFrameLatency(APP_NUM_BACK_BUFFERS);
-        m_hSwapChainWaitableObject =
-            m_pSwapChain->GetFrameLatencyWaitableObject();
+        m_hSwapChainWaitableObject = m_pSwapChain->GetFrameLatencyWaitableObject();
     }
 
     CreateRenderTarget();
     return true;
 }
 
-void MainWindow::CleanupDeviceD3D() {
+void CleanupDeviceD3D() {
     CleanupRenderTarget();
 
     if(m_hSwapChainWaitableObject != nullptr) {
@@ -468,20 +501,20 @@ void MainWindow::CleanupDeviceD3D() {
         CloseHandle(m_fenceEvent);
         m_fenceEvent = nullptr;
     }
+
 }
 
-void MainWindow::CreateRenderTarget() {
+void CreateRenderTarget() {
     for(UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++) {
         ID3D12Resource* pBackBuffer = nullptr;
         m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&pBackBuffer));
-        m_Device->CreateRenderTargetView(pBackBuffer,
-            nullptr,
+        m_Device->CreateRenderTargetView(pBackBuffer, nullptr,
             m_mainRenderTargetDescriptor[i]);
         m_mainRenderTargetResource[i] = pBackBuffer;
     }
 }
 
-void MainWindow::CleanupRenderTarget() {
+void CleanupRenderTarget() {
     WaitForPendingOperations();
 
     for(UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++)
@@ -491,14 +524,14 @@ void MainWindow::CleanupRenderTarget() {
         }
 }
 
-void MainWindow::WaitForPendingOperations() {
+void WaitForPendingOperations() {
     m_CommandQueue->Signal(m_fence.Get(), ++m_fenceLastSignaledValue);
 
     m_fence->SetEventOnCompletion(m_fenceLastSignaledValue, m_fenceEvent);
     ::WaitForSingleObject(m_fenceEvent, INFINITE);
 }
 
-FrameContext* MainWindow::WaitForNextFrameContext() {
+FrameContext* WaitForNextFrameContext() {
     FrameContext* frame_context =
         &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
     if(m_fence->GetCompletedValue() < frame_context->FenceValue) {
@@ -511,9 +544,43 @@ FrameContext* MainWindow::WaitForNextFrameContext() {
     return frame_context;
 }
 
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd,
+    UINT msg,
+    WPARAM wParam,
+    LPARAM lParam);
 
-std::string MainWindow::HrToString(HRESULT hr) {
-    char s_str[64] = {};
-    sprintf_s(s_str, "HRESULT of 0x%08X", static_cast<UINT>(hr));
-    return std::string(s_str);
+// dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your
+// main application, or clear/overwrite your copy of the mouse data.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to
+// your main application, or clear/overwrite your copy of the keyboard data.
+// Generally you may always pass all inputs to dear imgui, and hide them from
+// your application based on those two flags.
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    if(ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
+
+    switch(msg) {
+    case WM_SIZE:
+        if(m_Device != nullptr && wParam != SIZE_MINIMIZED) {
+            CleanupRenderTarget();
+            DXGI_SWAP_CHAIN_DESC1 desc = {};
+            m_pSwapChain->GetDesc1(&desc);
+            HRESULT result = m_pSwapChain->ResizeBuffers(0, static_cast<UINT>LOWORD(lParam),
+                static_cast<UINT>HIWORD(lParam),
+                desc.Format, desc.Flags);
+            IM_ASSERT(SUCCEEDED(result) && "Failed to resize swapchain.");
+            CreateRenderTarget();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }

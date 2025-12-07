@@ -2,8 +2,7 @@
 #include "WindowManager.hpp"
 
 #include "DarkMode.hpp"
-#include "Globals.hpp"
-#include "winproc.hpp"
+#include "Main.hpp"
 
 WindowManager::WindowManager()
     : m_wc(nullptr), m_windowRect(nullptr), m_hwnd(nullptr), m_main_scale(0.f)
@@ -14,7 +13,7 @@ WindowManager::~WindowManager()
 {
 }
 
-void WindowManager::WMCreateWindow(HINSTANCE &hInstance)
+void WindowManager::WMCreateWindow(_In_ HINSTANCE &hInstance)
 {
 
     // Make process DPI aware and obtain main monitor scale
@@ -33,8 +32,8 @@ void WindowManager::WMCreateWindow(HINSTANCE &hInstance)
 
     RECT windowRect = {0,
                        0,
-                       static_cast<LONG>(WINDOW_WIDTH),
-                       static_cast<LONG>(WINDOW_HEIGHT)};
+                       static_cast<LONG>(2000),
+                       static_cast<LONG>(1000)};
     m_windowRect = &windowRect;
     AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
     m_hwnd = ::CreateWindowW(m_wc->lpszClassName,
@@ -42,8 +41,8 @@ void WindowManager::WMCreateWindow(HINSTANCE &hInstance)
                              WS_OVERLAPPEDWINDOW,
                              CW_USEDEFAULT,
                              CW_USEDEFAULT,
-                             static_cast<int>(WINDOW_WIDTH * m_main_scale),
-                             static_cast<int>(WINDOW_HEIGHT * m_main_scale),
+                             static_cast<int>(2000 * m_main_scale),
+                             static_cast<int>(1000 * m_main_scale),
                              nullptr,
                              nullptr,
                              m_wc->hInstance,
