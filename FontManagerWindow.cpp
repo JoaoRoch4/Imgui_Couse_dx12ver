@@ -1,11 +1,41 @@
 ﻿#include "PCH.hpp"
 #include "FontManagerWindow.hpp"
 
+FontManagerWindow::FontManagerWindow()
+    : m_fontManager(nullptr),           // Store font manager pointer
+    m_selectedFilePath(""),               // Initialize empty file path
+    m_selectedFolderPath(""),             // Initialize empty folder path
+    m_statusMessage("Ready"),             // Initial status message
+    m_hwnd(nullptr),                         // Store window handle
+    m_fontsLoaded(false),                 // No fonts loaded yet
+    m_totalFontsLoaded(0),                // Zero fonts loaded+
+    bShowFontPreview(false),
+bFonstsWereLoaded(false){}
+
+FontManagerWindow::FontManagerWindow(FontManager* fontManager, HWND hwnd) : FontManagerWindow() {
+    if(fontManager)
+        m_fontManager = fontManager;
+    else throw std::runtime_error("fontManager is nullptr");
+
+    if(hwnd)
+        m_hwnd = hwnd;
+    else throw std::runtime_error("hwnd is nullptr");
+
+}
+FontManagerWindow::~FontManagerWindow() {}
+
+
 void FontManagerWindow::Render() {
     // Begin a new ImGui window
     // "Font Manager Demo" is the window title
     // The window is resizable and can be moved
     ImGui::Begin("Font Manager Demo");
+
+    ImGui::Checkbox("Show font preview", &bShowFontPreview);
+
+    ImGui::ShowFontSelector("FontManager");
+
+    if(bShowFontPreview) RenderFontPreview();
 
     // Display a text header
     ImGui::Text("Font File and Folder Selection");
@@ -113,7 +143,7 @@ void FontManagerWindow::Render() {
 
         // Button to load fonts recursively
         ImGui::SameLine();
-        if(ImGui::Button("Load Fonts Recursively")) {
+        if(ImGui::Button("Load Fonts Recursively") && bFonstsWereLoaded) {
             // Load fonts from folder and all subfolders
             int loaded = m_fontManager->LoadFontsFromFolderRecursiveToMap(
                 m_selectedFolderPath, true);
@@ -122,10 +152,11 @@ void FontManagerWindow::Render() {
                 " fonts recursively";
             m_totalFontsLoaded += loaded;
             m_fontsLoaded = true;
+
         }
 
         // Button to search fonts without loading
-        if(ImGui::Button("Search Fonts (Don't Load)")) {
+        if(ImGui::Button("Search Fonts (Don't Load)") && bFonstsWereLoaded) {
             // Search for fonts but don't load them into memory
             std::map<std::string, std::string> foundFonts =
                 m_fontManager->SearchFontsInFolderAsMap(m_selectedFolderPath, false);

@@ -13,6 +13,9 @@
 // This class manages the ImGui UI with file/folder dialog buttons
 class FontManagerWindow {
 private:
+
+    FontManagerWindow();
+
     // FontManager instance for managing fonts
     FontManager* m_fontManager;
     
@@ -38,23 +41,19 @@ public:
     // Constructor - initializes all member variables
     // @param fontManager: Pointer to FontManager instance
     // @param hwnd: Handle to the parent window
-    FontManagerWindow(FontManager* fontManager, HWND hwnd) 
-        : m_fontManager(fontManager),           // Store font manager pointer
-          m_selectedFilePath(""),               // Initialize empty file path
-          m_selectedFolderPath(""),             // Initialize empty folder path
-          m_statusMessage("Ready"),             // Initial status message
-          m_hwnd(hwnd),                         // Store window handle
-          m_fontsLoaded(false),                 // No fonts loaded yet
-          m_totalFontsLoaded(0)                 // Zero fonts loaded
-    {}
+    FontManagerWindow(FontManager* fontManager, HWND hwnd);
     
     // Destructor
-    ~FontManagerWindow() {}
+    ~FontManagerWindow();
     
     // Main render function - called every frame to draw the UI
     void Render();
     // Method to display a font preview window (bonus feature)
     void RenderFontPreview();
+
+    bool bShowFontPreview;
+
+    bool bFonstsWereLoaded;
 };
 
 // ============================================================================

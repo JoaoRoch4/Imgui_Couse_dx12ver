@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DarkMode.cpp" />
+    <ClCompile Include="DebugWindow.cpp" />
     <ClCompile Include="ExampleDescriptorHeapAllocator.cpp" />
     <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -376,6 +377,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DarkMode.hpp" />
+    <ClInclude Include="DebugWindow.hpp" />
     <ClInclude Include="ExampleDescriptorHeapAllocator.hpp" />
     <ClInclude Include="external\imgui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="external\imgui\backends\imgui_impl_win32.h" />

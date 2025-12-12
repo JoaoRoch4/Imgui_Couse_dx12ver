@@ -11,8 +11,13 @@
 #include <string_view>
 #include <system_error>
 #include <vector>
+#include <type_traits>
 
 #include <cstdint>
+#include <cstdio>
+
+#include <stdint.h>
+#include <stdio.h>
 
 #include <windows.h>
 #include <tchar.h>

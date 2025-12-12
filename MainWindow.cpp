@@ -225,7 +225,7 @@ int MainWindow::launch(HINSTANCE& hInstance) {
             D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
         barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
         barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-        m_CommandList->Reset(frameCtx->CommandAllocator, nullptr);
+        m_CommandList->Reset(frameCtx->CommandAllocator.Get(), nullptr);
         m_CommandList->ResourceBarrier(1, &barrier);
 
         // Render Dear ImGui graphics
@@ -399,7 +399,7 @@ bool MainWindow::CreateDeviceD3D(HWND hWnd) {
 
     if(m_Device->CreateCommandList(0,
         D3D12_COMMAND_LIST_TYPE_DIRECT,
-        g_frameContext[0].CommandAllocator,
+        g_frameContext[0].CommandAllocator.Get(),
         nullptr,
         IID_PPV_ARGS(&m_CommandList)) != S_OK ||
         m_CommandList->Close() != S_OK)

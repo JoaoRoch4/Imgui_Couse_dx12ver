@@ -153,6 +153,9 @@
     <ClCompile Include="FontManagerWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DebugWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PCH.hpp">
@@ -249,6 +252,9 @@
       <Filter>External\implot</Filter>
     </ClInclude>
     <ClInclude Include="FontManagerWindow.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugWindow.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
