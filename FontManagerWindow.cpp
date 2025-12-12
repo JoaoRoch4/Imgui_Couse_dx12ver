@@ -117,6 +117,7 @@ void FontManagerWindow::Render() {
             // Folder selected - store it
             m_selectedFolderPath = selectedFolder;
             m_statusMessage = "Folder selected: " + selectedFolder;
+            bFonstsWereLoaded = false;
         } else {
             // User cancelled
             m_statusMessage = "Folder selection cancelled";
@@ -129,40 +130,45 @@ void FontManagerWindow::Render() {
         m_selectedFolderPath.empty() ? "None" : m_selectedFolderPath.c_str());
 
     // Show buttons for loading fonts from folder (only if folder selected)
-    if(!m_selectedFolderPath.empty()) {
-        // Button to load fonts from folder (non-recursive)
-        if(ImGui::Button("Load Fonts from This Folder")) {
-            // Load all fonts from the selected folder
-            int loaded = m_fontManager->LoadFontsFromFolderToMap(m_selectedFolderPath);
+    if(!bFonstsWereLoaded){
+        if(!m_selectedFolderPath.empty()) {
+            // Button to load fonts from folder (non-recursive)
+            if(ImGui::Button("Load Fonts from This Folder")) {
+                // Load all fonts from the selected folder
+                int loaded = m_fontManager->LoadFontsFromFolderToMap(m_selectedFolderPath);
 
-            // Update status with number of fonts loaded
-            m_statusMessage = "Loaded " + std::to_string(loaded) + " fonts from folder";
-            m_totalFontsLoaded += loaded;
-            m_fontsLoaded = true;
-        }
+                // Update status with number of fonts loaded
+                m_statusMessage = "Loaded " + std::to_string(loaded) + " fonts from folder";
+                m_totalFontsLoaded += loaded;
+                m_fontsLoaded = true;
+                bFonstsWereLoaded = true;
 
-        // Button to load fonts recursively
-        ImGui::SameLine();
-        if(ImGui::Button("Load Fonts Recursively") && bFonstsWereLoaded) {
-            // Load fonts from folder and all subfolders
-            int loaded = m_fontManager->LoadFontsFromFolderRecursiveToMap(
-                m_selectedFolderPath, true);
+            }
 
-            m_statusMessage = "Loaded " + std::to_string(loaded) +
-                " fonts recursively";
-            m_totalFontsLoaded += loaded;
-            m_fontsLoaded = true;
+            // Button to load fonts recursively
+            ImGui::SameLine();
+            if(ImGui::Button("Load Fonts Recursively") && bFonstsWereLoaded) {
+                // Load fonts from folder and all subfolders
+                int loaded = m_fontManager->LoadFontsFromFolderRecursiveToMap(
+                    m_selectedFolderPath, true);
 
-        }
+                m_statusMessage = "Loaded " + std::to_string(loaded) +
+                    " fonts recursively";
+                m_totalFontsLoaded += loaded;
+                m_fontsLoaded = true;
+                bFonstsWereLoaded = true;
 
-        // Button to search fonts without loading
-        if(ImGui::Button("Search Fonts (Don't Load)") && bFonstsWereLoaded) {
-            // Search for fonts but don't load them into memory
-            std::map<std::string, std::string> foundFonts =
-                m_fontManager->SearchFontsInFolderAsMap(m_selectedFolderPath, false);
+            }
 
-            m_statusMessage = "Found " + std::to_string(foundFonts.size()) +
-                " font files";
+            // Button to search fonts without loading
+            if(ImGui::Button("Search Fonts (Don't Load)") && bFonstsWereLoaded) {
+                // Search for fonts but don't load them into memory
+                std::map<std::string, std::string> foundFonts =
+                    m_fontManager->SearchFontsInFolderAsMap(m_selectedFolderPath, false);
+
+                m_statusMessage = "Found " + std::to_string(foundFonts.size()) +
+                    " font files";
+            }
         }
     }
 

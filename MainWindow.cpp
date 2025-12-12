@@ -1,10 +1,5 @@
-﻿#include "PCH.hpp"
-
-#include "MainWindow.hpp"
-
-#include "FontManager.hpp"
-#include "WindowManager.hpp"
-#include "render.hpp"
+#include "PCH.hpp"
+#include "Classes.hpp"
 
 
 // Main code

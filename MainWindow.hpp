@@ -1,9 +1,5 @@
-﻿#include "ExampleDescriptorHeapAllocator.hpp"
+#include "ExampleDescriptorHeapAllocator.hpp"
 #include "FrameContext.hpp"
-
-constexpr static const int APP_NUM_FRAMES_IN_FLIGHT = 2;
-constexpr static const int APP_NUM_BACK_BUFFERS = 2;
-constexpr static const int APP_SRV_HEAP_SIZE = 64;
 
 
 class MainWindow {
