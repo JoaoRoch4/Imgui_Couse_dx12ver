@@ -1,7 +1,7 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
 
-CommandLineArgumments::CommandLineArgumments() : szArgList(nullptr), argCount() {
+CommandLineArgumments::CommandLineArgumments() : Args{}, szArgList(nullptr), argCount(0) {
 }
 
 CommandLineArgumments::~CommandLineArgumments() {
@@ -23,14 +23,12 @@ int CommandLineArgumments::GetInitArgs() {
 
 	for (int i = 0; i < argCount; i++) {
 
-		ToPrint + L"\n"+ L"[" + std::to_wstring((i)) + L"] " +=  szArgList[i];
 
 		Args.insert(std::make_pair(toLower(szArgList[i]), i));
 	}
 
-	ToPrint += L"\n";
 
-    return 0;
+	return 0;
 }
 
 std::wstring CommandLineArgumments::toLower(std::wstring s) {

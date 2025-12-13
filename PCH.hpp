@@ -1,32 +1,35 @@
 #pragma once
 
-#include <iostream>
 #include <algorithm>
 #include <bit>
 #include <chrono>
 #include <exception>
+#include <filesystem>
+#include <iostream>
 #include <map>
 #include <memory>
-#include <filesystem>
 #include <string>
 #include <string_view>
 #include <system_error>
-#include <vector>
-#include <type_traits>
 #include <thread>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
+#include <cctype>
 #include <cstdint>
 #include <cstdio>
-#include <cctype>
 
 #include <stdint.h>
 #include <stdio.h>
 
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <tchar.h>
-#include <dwmapi.h> // Desktop Window Manager API (for dark mode)
 #include <commdlg.h>     // Common Dialogs - for file open/save dialogs
+#include <dwmapi.h> // Desktop Window Manager API (for dark mode)
 #include <shlobj.h>      // Shell Objects - for folder browser dialog
+#include <tchar.h>
 
 #define DX12_ENABLE_DEBUG_LAYER
 #include <d3d12.h>
@@ -59,8 +62,6 @@
 #include "plutovg.h"
 #include "plutosvg.h"
 #include "plutosvg-ft.h"
-
-
 
 using namespace Microsoft::WRL;
 namespace fs = std::filesystem;

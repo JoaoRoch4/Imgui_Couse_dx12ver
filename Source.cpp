@@ -8,9 +8,10 @@ constexpr static const int APP_SRV_HEAP_SIZE = 64;
 auto WINDOW_WIDTH = std::uint32_t{2000};
 auto WINDOW_HEIGHT = std::uint32_t{1000};
 
+bool bShowConsole;
 
 // Data
-static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT] = {};
+FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 static UINT g_frameIndex = 0;
 
 std::unique_ptr<ExampleDescriptorHeapAllocator> g_pd3dSrvDescHeapAlloc;
@@ -41,6 +42,31 @@ FrameContext *WaitForNextFrameContext();
 
 int Start(_In_ HINSTANCE hInstance);
 
+static void ShowConsole() {
+
+	if (!AllocConsole())
+		return;
+	bShowConsole = true;
+	HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE hConsoleInput = GetStdHandle(STD_INPUT_HANDLE);
+
+	// Redirect standard I/O streams to the new console
+	// C-style I/O
+	FILE *fp;
+	freopen_s(&fp, "CONOUT$", "w", stdout);
+	freopen_s(&fp, "CONIN$", "r", stdin);
+	freopen_s(&fp, "CONOUT$", "w", stderr);
+
+	// C++-style I/O
+	std::ios_base::sync_with_stdio();
+
+	// Clear iostream error flags
+	std::cout.clear();
+	std::cerr.clear();
+	std::cin.clear();
+}
+
+
 _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 										   _In_opt_ HINSTANCE hPrevInstance,
 										   _In_ LPWSTR lpCmdLine,
@@ -50,41 +76,16 @@ _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
 
-
-	
-
-
 	try {
 		return Start(hInstance);
 	} catch (std::runtime_error &e) {
-
+		if (bShowConsole)
+		ShowConsole();
 		std::cout << e.what();
 		return EXIT_FAILURE;
 	}
 }
 
-void ShowConsole() {
-
-    if (AllocConsole()) {
-		HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-		HANDLE hConsoleInput = GetStdHandle(STD_INPUT_HANDLE);
-
-		// Redirect standard I/O streams to the new console
-		// C-style I/O
-		FILE *fp;
-		freopen_s(&fp, "CONOUT$", "w", stdout);
-		freopen_s(&fp, "CONIN$", "r", stdin);
-		freopen_s(&fp, "CONOUT$", "w", stderr);
-
-		// C++-style I/O
-		std::ios_base::sync_with_stdio();
-
-		// Clear iostream error flags
-		std::cout.clear();
-		std::cerr.clear();
-		std::cin.clear();
-	}
-}
 
 int Start(_In_ HINSTANCE hInstance) {
 	// Main code
@@ -95,17 +96,19 @@ int Start(_In_ HINSTANCE hInstance) {
 	g_pd3dSrvDescHeapAlloc = std::make_unique<ExampleDescriptorHeapAllocator>();
 	std::unique_ptr<WindowManager> window = std::make_unique<WindowManager>();
 
-    if (cmdArgs->GetInitMap().contains(L"-cmd")) {
+	if (cmdArgs->GetMap().contains(L"-cmd")) {
 
+        if (!bShowConsole)
 		ShowConsole();
 
 		std::cout << "\nThis message appears in the new console window.\n" << std::endl;
 
-        std::wcout << cmdArgs->ToPrint;
 
-        for (const auto &map : cmdArgs->GetInitMap().begin()->first) {
-			std::wcout << map;
+		for (const auto &map : cmdArgs->GetMap()) {
+			std::wcout << map.first << L"\n";
 		}
+
+        std::wcout << std::endl;
 	}
 
 
@@ -126,7 +129,7 @@ int Start(_In_ HINSTANCE hInstance) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
-	(void)io;
+	static_cast<void>(io);
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
 
@@ -204,7 +207,6 @@ int Start(_In_ HINSTANCE hInstance) {
 	bool show_FileSys_window = false;
 
 	ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.15f, 1.f);
-
 
 	WindowClass window_obj;
 
