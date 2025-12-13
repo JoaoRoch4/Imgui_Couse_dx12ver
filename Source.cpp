@@ -1,5 +1,6 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
+#include "Source.hpp"
 
 constexpr static const int APP_NUM_FRAMES_IN_FLIGHT = 2;
 constexpr static const int APP_NUM_BACK_BUFFERS = 2;
@@ -13,7 +14,6 @@ bool bShowConsole;
 // Data
 FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 static UINT g_frameIndex = 0;
-
 std::unique_ptr<ExampleDescriptorHeapAllocator> g_pd3dSrvDescHeapAlloc;
 
 ComPtr<ID3D12Device> m_Device;
@@ -32,17 +32,7 @@ static bool m_SwapChainTearingSupport = false;
 static bool m_SwapChainOccluded = false;
 static HANDLE m_hSwapChainWaitableObject = nullptr;
 
-// Forward declarations of helper functions
-bool CreateDeviceD3D(HWND hWnd);
-void CleanupDeviceD3D();
-void CreateRenderTarget();
-void CleanupRenderTarget();
-void WaitForPendingOperations();
-FrameContext *WaitForNextFrameContext();
-
-int Start(_In_ HINSTANCE hInstance);
-
-static void ShowConsole() {
+ void ShowConsole() {
 
 	if (!AllocConsole())
 		return;
@@ -64,26 +54,6 @@ static void ShowConsole() {
 	std::cout.clear();
 	std::cerr.clear();
 	std::cin.clear();
-}
-
-
-_Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
-										   _In_opt_ HINSTANCE hPrevInstance,
-										   _In_ LPWSTR lpCmdLine,
-										   _In_ int nCmdShow) {
-
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	UNREFERENCED_PARAMETER(nCmdShow);
-
-	try {
-		return Start(hInstance);
-	} catch (std::runtime_error &e) {
-		if (bShowConsole)
-		ShowConsole();
-		std::cout << e.what();
-		return EXIT_FAILURE;
-	}
 }
 
 

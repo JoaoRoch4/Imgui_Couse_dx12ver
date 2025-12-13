@@ -2,13 +2,9 @@
 
 #include "render.hpp"
 
-WindowClass::WindowClass() : currentPath(fs::current_path()), selectedEntry(fs::path{}) {
-}
+WindowClass::WindowClass() : currentPath(fs::current_path()), selectedEntry(fs::path{}) {}
 
-WindowClass::~WindowClass() {
-
-	currentPath.clear();
-}
+WindowClass::~WindowClass() { currentPath.clear(); }
 
 void WindowClass::Draw(std::string_view label) {
 
@@ -30,13 +26,13 @@ void WindowClass::Draw(std::string_view label) {
 		DrawMenu();
 		ig::Spacing();
 		ig::Separator();
+		DrawFilters();
+		ig::Spacing();
+		ig::Separator();
 		DrawContent();
 		ig::Spacing();
 		ig::Separator();
 		DrawActions();
-		ig::Spacing();
-		ig::Separator();
-		DrawFilters();
 		ig::Spacing();
 		ig::Separator();
 	}
@@ -49,9 +45,7 @@ void WindowClass::DrawMenu() {
 
 	if (ImGui::Button("Go up")) {
 
-		if (currentPath.has_parent_path()) {
-			currentPath = currentPath.parent_path();
-		}
+		if (currentPath.has_parent_path()) { currentPath = currentPath.parent_path(); }
 	}
 
 	ImGui::SameLine();
@@ -64,22 +58,19 @@ void WindowClass::DrawContent() {
 	ImGui::Text("Content: ");
 	ig::Spacing();
 
-	for (const auto &entry : fs::directory_iterator(currentPath)) {
+	for (const auto& entry : fs::directory_iterator(currentPath)) {
 
 		const bool is_selected = entry.path() == selectedEntry;
 		const bool is_directory = entry.is_directory();
 		const bool is_file = entry.is_regular_file();
 		str entry_name = entry.path().filename().string();
 
-		if (is_directory)
-			entry_name = "[D] " + entry_name;
-		else if (is_file)
-			entry_name = "[F] " + entry_name;
+		if (is_directory) entry_name = "[D] " + entry_name;
+		else if (is_file) entry_name = "[F] " + entry_name;
 
 		if (ig::Selectable(entry_name.c_str(), is_selected)) {
 
-			if (is_directory)
-				currentPath /= entry.path().filename();
+			if (is_directory) currentPath /= entry.path().filename();
 
 			selectedEntry = entry.path();
 		}
@@ -87,14 +78,28 @@ void WindowClass::DrawContent() {
 	}
 }
 
-void WindowClass::DrawActions() {
-	ImGui::Text("Actions");
-}
+void WindowClass::DrawActions() { ImGui::Text("Actions"); }
 
 void WindowClass::DrawFilters() {
-	ImGui::Text("Filters");
+
+	static char extention_filter[16]{"\0"};
+
+	ImGui::Text("Filter By Extention: ");
+	ig::SameLine();
+	ig::InputText("###inFilter", extention_filter, sizeof(extention_filter));
+
+	if (std::strlen(extention_filter) == 0) return;
+
+    size_t filtered_file_count{};
+
+	for (const auto& entry : fs::directory_iterator(currentPath)) {
+
+        if (!fs::is_regular_file(entry)) continue;
+
+        if (entry.path().extension().string() == extention_filter) ++filtered_file_count;
+    }
+
+    ig::Text("Number of files: %u", filtered_file_count);
 }
 
-void render(WindowClass &window_obj) {
-	window_obj.Draw("Label");
-}
+void render(WindowClass& window_obj) { window_obj.Draw("Label"); }

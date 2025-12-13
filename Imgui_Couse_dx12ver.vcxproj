@@ -364,9 +364,7 @@
     <ClCompile Include="FontManagerWindow.cpp" />
     <ClCompile Include="FrameContext.cpp" />
     <ClCompile Include="Globals.cpp" />
-    <ClCompile Include="Main.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -418,6 +416,7 @@
     <ClInclude Include="MainWindow.hpp" />
     <ClInclude Include="PCH.hpp" />
     <ClInclude Include="render.hpp" />
+    <ClInclude Include="Source.hpp" />
     <ClInclude Include="WindowManager.hpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
-﻿#include "PCH.hpp"
+#include "PCH.hpp"
 #include "WindowManager.hpp"
 
 #include "DarkMode.hpp"
-#include "Main.hpp"
+extern LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam); 
 
 WindowManager::WindowManager()
     : m_wc(nullptr), m_windowRect(nullptr), m_hwnd(nullptr), m_main_scale(0.f)
