@@ -1,7 +1,7 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
 
-CommandLineArgumments::CommandLineArgumments() : Args{}, szArgList(nullptr), argCount(0) {
+CommandLineArgumments::CommandLineArgumments() : Args{}, szArgList(nullptr), argCount(0), bConsoleLauched(false) {
 }
 
 CommandLineArgumments::~CommandLineArgumments() {

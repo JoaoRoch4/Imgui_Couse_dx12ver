@@ -1,6 +1,6 @@
 #include "pch.hpp"
 #include "Classes.hpp"
-#include "Source.hpp"
+
 _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 										   _In_opt_ HINSTANCE hPrevInstance,
 										   _In_ LPWSTR lpCmdLine,
@@ -10,12 +10,17 @@ _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
 
+    auto cmdArgs = std::make_unique<CommandLineArgumments>();
+	cmdArgs->GetInitArgs();
+
 	try {
-		return Start(hInstance);
+		return Start(hInstance, cmdArgs.get());
 	} catch (std::runtime_error &e) {
 
-		ShowConsole();
-		std::cout << e.what();
+        if(!cmdArgs->GetbConsoleLauched()) {
+            if(!AllocConsole());
+        }
+         std::cout << e.what(); 
 		return EXIT_FAILURE;
 	}
 }

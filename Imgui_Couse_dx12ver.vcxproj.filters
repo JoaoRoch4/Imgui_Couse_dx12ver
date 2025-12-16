@@ -156,9 +156,6 @@
     <ClCompile Include="DebugWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DX12Handler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CommandLineArgumments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -261,9 +258,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DebugWindow.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DX12Handler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Classes.hpp">

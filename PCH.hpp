@@ -63,7 +63,11 @@
 #include "plutosvg.h"
 #include "plutosvg-ft.h"
 
-using namespace Microsoft::WRL;
+#include <winrt/base.h>
+
+template <typename T>
+using ComPtr = winrt::com_ptr<T>;
+
 namespace fs = std::filesystem;
 namespace ig = ImGui;
 

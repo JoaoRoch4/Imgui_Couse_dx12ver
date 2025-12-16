@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "PCH.hpp"
 
@@ -8,7 +8,7 @@ public:
   WindowManager();
   ~WindowManager();
 
-  void WMCreateWindow(_In_ HINSTANCE &hInstance);
+  bool WMCreateWindow(_In_ HINSTANCE hInstance);
 
   inline HWND GetHWND() const { return m_hwnd; }
   inline WNDCLASSEX *GetWc() const { return m_wc; }

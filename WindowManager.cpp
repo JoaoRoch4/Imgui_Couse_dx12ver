@@ -1,7 +1,5 @@
 #include "PCH.hpp"
-#include "WindowManager.hpp"
-
-#include "DarkMode.hpp"
+#include "Classes.hpp"
 extern LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam); 
 
 WindowManager::WindowManager()
@@ -13,8 +11,7 @@ WindowManager::~WindowManager()
 {
 }
 
-void WindowManager::WMCreateWindow(_In_ HINSTANCE &hInstance)
-{
+bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance) {
 
     // Make process DPI aware and obtain main monitor scale
     ImGui_ImplWin32_EnableDpiAwareness();
@@ -58,4 +55,6 @@ void WindowManager::WMCreateWindow(_In_ HINSTANCE &hInstance)
     {
         OutputDebugStringA("Dark mode successfully applied to title bar\n");
     }
+
+    return 0;
 }

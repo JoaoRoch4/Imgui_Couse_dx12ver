@@ -11,5 +11,5 @@ void WaitForPendingOperations();
 FrameContext *WaitForNextFrameContext();
 void ShowConsole();
 
-int Start(_In_ HINSTANCE hInstance);
+int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs);
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

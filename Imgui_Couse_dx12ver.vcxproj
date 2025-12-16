@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug3|Win32">
+      <Configuration>Debug3</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug3|x64">
+      <Configuration>Debug3</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -53,6 +61,16 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug3|Win32'">
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+    <PlatformToolset>v145</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>Spectre</SpectreMitigation>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -74,10 +92,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+    <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
     <VcpkgUseMD>true</VcpkgUseMD>
   </PropertyGroup>
@@ -152,11 +177,32 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+    <ClCompile>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointExceptions>true</FloatingPointExceptions>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>d3d12.lib;</DelayLoadDLLs>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CommandLineArgumments.cpp" />
     <ClCompile Include="DarkMode.cpp" />
     <ClCompile Include="DebugWindow.cpp" />
-    <ClCompile Include="DX12Handler.cpp" />
     <ClCompile Include="ExampleDescriptorHeapAllocator.cpp" />
     <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -376,7 +422,7 @@
     </ClCompile>
     <ClCompile Include="render.cpp" />
     <ClCompile Include="Source.cpp">
-      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</IncludeInUnityFile>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IncludeInUnityFile>
     </ClCompile>
     <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
@@ -385,7 +431,6 @@
     <ClInclude Include="CommandLineArgumments.hpp" />
     <ClInclude Include="DarkMode.hpp" />
     <ClInclude Include="DebugWindow.hpp" />
-    <ClInclude Include="DX12Handler.hpp" />
     <ClInclude Include="ExampleDescriptorHeapAllocator.hpp" />
     <ClInclude Include="external\imgui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="external\imgui\backends\imgui_impl_win32.h" />

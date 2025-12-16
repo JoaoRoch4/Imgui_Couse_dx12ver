@@ -15,6 +15,11 @@ protected:
 	void DrawContent();
 	void DrawActions();
 	void DrawFilters();
+	void OpenFileWithDefaultEditor();
+	void RenameFilePopUp();
+	void DeleteFilePopUp();
+	bool renameFile(const fs::path& old_Path, const fs::path& new_Path);
+	bool deleteFile(const fs::path& Path);
 
 private:
 	fs::path currentPath;
