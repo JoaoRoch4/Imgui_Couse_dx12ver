@@ -53,15 +53,14 @@ void ShowConsole(CommandLineArgumments *cmdArgs) {
 int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 	// Main code
 
-	
 
 	g_pd3dSrvDescHeapAlloc				  = std::make_unique<ExampleDescriptorHeapAllocator>();
 	std::unique_ptr<WindowManager> window = std::make_unique<WindowManager>();
 
 	if (cmdArgs->GetbConsoleLauched() == false && cmdArgs->GetMap().contains(L"-cmd")) {
 
-        
-        ShowConsole(cmdArgs);
+
+		ShowConsole(cmdArgs);
 
 
 		std::cout << "\nThis message appears in the new console window.\n" << std::endl;
@@ -300,7 +299,7 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 											 clear_color_with_alpha, 0, nullptr);
 		m_CommandList->OMSetRenderTargets(1, &m_mainRenderTargetDescriptor[backBufferIdx], FALSE,
 										  nullptr);
-        ID3D12DescriptorHeap* ppHeaps[] = { m_SrvDescHeap.get() };
+		ID3D12DescriptorHeap *ppHeaps[] = {m_SrvDescHeap.get()};
 		m_CommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), m_CommandList.get());
 		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
@@ -496,7 +495,8 @@ void CreateRenderTarget() {
 	for (UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++) {
 		ComPtr<ID3D12Resource> pBackBuffer;
 		m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(pBackBuffer.put()));
-		m_Device->CreateRenderTargetView(pBackBuffer.get(), nullptr, m_mainRenderTargetDescriptor[i]);
+		m_Device->CreateRenderTargetView(pBackBuffer.get(), nullptr,
+										 m_mainRenderTargetDescriptor[i]);
 		m_mainRenderTargetResource[i] = pBackBuffer;
 	}
 }
@@ -505,10 +505,7 @@ void CleanupRenderTarget() {
 	WaitForPendingOperations();
 
 	for (UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++)
-		if (m_mainRenderTargetResource[i]) {
-                m_mainRenderTargetResource[i].detach();
-            
-		}
+		if (m_mainRenderTargetResource[i]) { m_mainRenderTargetResource[i].detach(); }
 }
 
 void WaitForPendingOperations() {

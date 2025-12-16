@@ -203,6 +203,7 @@
     <ClCompile Include="CommandLineArgumments.cpp" />
     <ClCompile Include="DarkMode.cpp" />
     <ClCompile Include="DebugWindow.cpp" />
+    <ClCompile Include="DX12Demos.cpp" />
     <ClCompile Include="ExampleDescriptorHeapAllocator.cpp" />
     <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -431,6 +432,7 @@
     <ClInclude Include="CommandLineArgumments.hpp" />
     <ClInclude Include="DarkMode.hpp" />
     <ClInclude Include="DebugWindow.hpp" />
+    <ClInclude Include="DX12Demos.hpp" />
     <ClInclude Include="ExampleDescriptorHeapAllocator.hpp" />
     <ClInclude Include="external\imgui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="external\imgui\backends\imgui_impl_win32.h" />
