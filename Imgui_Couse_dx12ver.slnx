@@ -7,5 +7,10 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="../../../../../../DirectX-Graphics-Samples/Samples/Desktop/D3D12HelloWorld/src/HelloTriangle/D3D12HelloTriangle.vcxproj" Id="5018f6a3-6533-4744-b1fd-727d199fd2e9">
+    <BuildType Solution="Debug2|*" Project="Debug" />
+    <BuildType Solution="Debug3|*" Project="Debug" />
+    <Platform Project="x64" />
+  </Project>
   <Project Path="Imgui_Couse_dx12ver.vcxproj" Id="5a2a595b-1f85-4077-b989-548a0aa39999" />
 </Solution>

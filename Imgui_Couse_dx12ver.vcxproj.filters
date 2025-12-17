@@ -287,6 +287,12 @@
     <ClInclude Include="ConsoleWindow.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="dx.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManagement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />

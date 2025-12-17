@@ -11,9 +11,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
-#include <system_error>
 #include <thread>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -37,12 +35,8 @@
 #include <d3dx12.h>
 #include <dxgi.h>
 #include <dxgidebug.h>
-#include <dxgi1_4.h>
-#include <dxgi1_5.h>
 #include <dxgi1_6.h>
-#include <D3Dcompiler.h>
 #include <DirectXMath.h>
-#include <wrl.h>
 #include <pix.h>
 #include <shellapi.h>
 
@@ -55,7 +49,6 @@
 #include "imgui_freetype.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
-#include "imgui_stdlib.h"
 
 
 
