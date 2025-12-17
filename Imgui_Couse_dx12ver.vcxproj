@@ -195,11 +195,18 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4267;4273;4244;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <FixedBaseAddress>false</FixedBaseAddress>
       <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <DelayLoadDLLs>d3d12.lib;</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+      <AdditionalOptions>/ignore:4273 /ignore:4217 /ignore:4286
+ %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -207,10 +214,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CommandLineArgumments.cpp" />
+    <ClCompile Include="ConsoleInputHandler.cpp" />
     <ClCompile Include="ConsoleWindow.cpp" />
     <ClCompile Include="DarkMode.cpp" />
     <ClCompile Include="DebugWindow.cpp" />
     <ClCompile Include="DX12Demos.cpp" />
+    <ClCompile Include="DX12Renderer.cpp" />
     <ClCompile Include="ExampleDescriptorHeapAllocator.cpp" />
     <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -336,6 +345,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-canvas.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -346,6 +357,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-font.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -356,6 +369,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-math.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -366,6 +381,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-raster.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -376,6 +393,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-stroker.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -386,6 +405,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-matrix.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -396,6 +417,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-paint.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -406,6 +429,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-path.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -416,6 +441,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-rasterize.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -426,6 +453,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-surface.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -436,6 +465,8 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="FontManagerWindow.cpp" />
@@ -462,11 +493,13 @@
   <ItemGroup>
     <ClInclude Include="Classes.hpp" />
     <ClInclude Include="CommandLineArgumments.hpp" />
+    <ClInclude Include="ConsoleInputHandler.hpp" />
     <ClInclude Include="ConsoleWindow.hpp" />
     <ClInclude Include="DarkMode.hpp" />
     <ClInclude Include="DebugWindow.hpp" />
-    <ClInclude Include="dx.hpp" />
     <ClInclude Include="DX12Demos.hpp" />
+    <ClInclude Include="DXSample.h" />
+    <ClInclude Include="DXSampleHelper.hpp" />
     <ClInclude Include="ExampleDescriptorHeapAllocator.hpp" />
     <ClInclude Include="external\imgui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="external\imgui\backends\imgui_impl_win32.h" />

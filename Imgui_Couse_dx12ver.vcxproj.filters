@@ -171,6 +171,12 @@
     <ClCompile Include="MemoryManagement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DX12Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleInputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PCH.hpp">
@@ -290,10 +296,16 @@
     <ClInclude Include="ConsoleWindow.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dx.hpp">
+    <ClInclude Include="MemoryManagement.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryManagement.hpp">
+    <ClInclude Include="ConsoleInputHandler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXSampleHelper.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXSample.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -26,12 +26,12 @@
 //    ComPtr<ID3D12GraphicsCommandList> m_CommandList;
 //    ComPtr<ID3D12Fence> m_fence;
 //    ComPtr<IDXGISwapChain3> m_pSwapChain;
-//    ComPtr<ID3D12Resource> m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
+//    ComPtr<ID3D12Resource> m_MainRenderTargetResource[APP_NUM_BACK_BUFFERS];
 //    D3D12_CPU_DESCRIPTOR_HANDLE
-//        m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS];
+//        m_MainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS];
 //
-//    HANDLE m_fenceEvent;
-//    UINT64 m_fenceLastSignaledValue = 0;
+//    HANDLE m_FenceEvent;
+//    UINT64 m_FenceLastSignaledValue = 0;
 //    bool m_SwapChainTearingSupport = false;
 //    bool m_SwapChainOccluded = false;
 //    HANDLE m_hSwapChainWaitableObject = nullptr;

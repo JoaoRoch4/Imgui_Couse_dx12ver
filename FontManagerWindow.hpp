@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // FontManagerWindow.cpp - Complete example of ImGui with file/folder dialogs
 // This shows how to create buttons that open Windows file dialogs
@@ -12,7 +12,6 @@
 
 // This class manages the ImGui UI with file/folder dialog buttons
 class FontManagerWindow {
-private:
 
     FontManagerWindow();
 
@@ -38,9 +37,7 @@ private:
     int m_totalFontsLoaded;
 
 public:
-    // Constructor - initializes all member variables
-    // @param fontManager: Pointer to FontManager instance
-    // @param hwnd: Handle to the parent window
+   
     FontManagerWindow(FontManager* fontManager, HWND hwnd);
     
     // Destructor
@@ -56,9 +53,4 @@ public:
     bool bFonstsWereLoaded;
 };
 
-// ============================================================================
-// USAGE EXAMPLE IN MAIN LOOP
-// ============================================================================
-
-// Example of how to use this in your main application loop
 void ExampleUsageInMainLoop(HWND hwnd);

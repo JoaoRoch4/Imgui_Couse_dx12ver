@@ -215,7 +215,7 @@
 //        barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 //        barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 //        barrier.Transition.pResource =
-//            m_mainRenderTargetResource[backBufferIdx].Get();
+//            m_MainRenderTargetResource[backBufferIdx].Get();
 //        barrier.Transition.Subresource =
 //            D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 //        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
@@ -229,13 +229,13 @@
 //                                              clear_color.z * clear_color.w,
 //                                              clear_color.w };
 //        m_CommandList->ClearRenderTargetView(
-//            m_mainRenderTargetDescriptor[backBufferIdx],
+//            m_MainRenderTargetDescriptor[backBufferIdx],
 //            clear_color_with_alpha,
 //            0,
 //            nullptr);
 //        m_CommandList->OMSetRenderTargets(
 //            1,
-//            &m_mainRenderTargetDescriptor[backBufferIdx],
+//            &m_MainRenderTargetDescriptor[backBufferIdx],
 //            FALSE,
 //            nullptr);
 //        m_CommandList->SetDescriptorHeaps(1, m_SrvDescHeap.GetAddressOf());
@@ -250,8 +250,8 @@
 //
 //        m_CommandQueue->ExecuteCommandLists(_countof(ppCommandLists),
 //            ppCommandLists);
-//        m_CommandQueue->Signal(m_fence.Get(), ++m_fenceLastSignaledValue);
-//        frameCtx->FenceValue = m_fenceLastSignaledValue;
+//        m_CommandQueue->Signal(m_fence.Get(), ++m_FenceLastSignaledValue);
+//        frameCtx->FenceValue = m_FenceLastSignaledValue;
 //
 //        // Present
 //        HRESULT hr = m_pSwapChain->Present(1, 0); // Present with vsync
@@ -359,7 +359,7 @@
 //        D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle =
 //            m_RtvDescHeap->GetCPUDescriptorHandleForHeapStart();
 //        for(UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++) {
-//            m_mainRenderTargetDescriptor[i] = rtvHandle;
+//            m_MainRenderTargetDescriptor[i] = rtvHandle;
 //            rtvHandle.ptr += rtvDescriptorSize;
 //        }
 //    }
@@ -405,8 +405,8 @@
 //        IID_PPV_ARGS(&m_fence)) != S_OK)
 //        return false;
 //
-//    m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-//    if(m_fenceEvent == nullptr)
+//    m_FenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+//    if(m_FenceEvent == nullptr)
 //        return false;
 //
 //    {
@@ -459,9 +459,9 @@
 //            g_frameContext[i].CommandAllocator = nullptr;
 //        }
 //
-//    if(m_fenceEvent) {
-//        CloseHandle(m_fenceEvent);
-//        m_fenceEvent = nullptr;
+//    if(m_FenceEvent) {
+//        CloseHandle(m_FenceEvent);
+//        m_FenceEvent = nullptr;
 //    }
 //}
 //
@@ -471,8 +471,8 @@
 //        m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&pBackBuffer));
 //        m_Device->CreateRenderTargetView(pBackBuffer,
 //            nullptr,
-//            m_mainRenderTargetDescriptor[i]);
-//        m_mainRenderTargetResource[i] = pBackBuffer;
+//            m_MainRenderTargetDescriptor[i]);
+//        m_MainRenderTargetResource[i] = pBackBuffer;
 //    }
 //}
 //
@@ -480,25 +480,25 @@
 //    WaitForPendingOperations();
 //
 //    for(UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++)
-//        if(m_mainRenderTargetResource[i]) {
-//            m_mainRenderTargetResource[i]->Release();
-//            m_mainRenderTargetResource[i] = nullptr;
+//        if(m_MainRenderTargetResource[i]) {
+//            m_MainRenderTargetResource[i]->Release();
+//            m_MainRenderTargetResource[i] = nullptr;
 //        }
 //}
 //
 //void MainWindow::WaitForPendingOperations() {
-//    m_CommandQueue->Signal(m_fence.Get(), ++m_fenceLastSignaledValue);
+//    m_CommandQueue->Signal(m_fence.Get(), ++m_FenceLastSignaledValue);
 //
-//    m_fence->SetEventOnCompletion(m_fenceLastSignaledValue, m_fenceEvent);
-//    ::WaitForSingleObject(m_fenceEvent, INFINITE);
+//    m_fence->SetEventOnCompletion(m_FenceLastSignaledValue, m_FenceEvent);
+//    ::WaitForSingleObject(m_FenceEvent, INFINITE);
 //}
 //
 //FrameContext* MainWindow::WaitForNextFrameContext() {
 //    FrameContext* frame_context =
 //        &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
 //    if(m_fence->GetCompletedValue() < frame_context->FenceValue) {
-//        m_fence->SetEventOnCompletion(frame_context->FenceValue, m_fenceEvent);
-//        HANDLE waitableObjects[] = { m_hSwapChainWaitableObject, m_fenceEvent };
+//        m_fence->SetEventOnCompletion(frame_context->FenceValue, m_FenceEvent);
+//        HANDLE waitableObjects[] = { m_hSwapChainWaitableObject, m_FenceEvent };
 //        ::WaitForMultipleObjects(2, waitableObjects, TRUE, INFINITE);
 //    } else
 //        ::WaitForSingleObject(m_hSwapChainWaitableObject, INFINITE);

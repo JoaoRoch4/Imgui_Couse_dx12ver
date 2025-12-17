@@ -9,6 +9,8 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <mutex>
+#include <queue>
 #include <string>
 #include <string_view>
 #include <thread>
@@ -21,6 +23,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdexcept>
 
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
@@ -29,11 +32,15 @@
 #include <dwmapi.h> // Desktop Window Manager API (for dark mode)
 #include <shlobj.h>      // Shell Objects - for folder browser dialog
 #include <tchar.h>
+#include <wtypes.h>
+#include <intsafe.h>
+
 
 #define DX12_ENABLE_DEBUG_LAYER
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <dxgi.h>
+#include <D3Dcompiler.h>
 #include <dxgidebug.h>
 #include <dxgi1_6.h>
 #include <DirectXMath.h>
