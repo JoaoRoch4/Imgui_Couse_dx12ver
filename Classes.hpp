@@ -5,7 +5,6 @@
 #include "Master.hpp"
 #include "CommandLineArgumments.hpp"
 #include "ConsoleWindow.hpp"
-#include "DarkMode.hpp"
 #include "DX12Demos.hpp"
 #include "DebugWindow.hpp"
 #include "ExampleDescriptorHeapAllocator.hpp"
@@ -14,5 +13,6 @@
 #include "FrameContext.hpp"
 #include "Globals.hpp"
 #include "render.hpp"
+#include "MemoryManagement.hpp"
 #include "WindowManager.hpp"
 

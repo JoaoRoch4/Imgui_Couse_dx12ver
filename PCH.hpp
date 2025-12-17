@@ -69,3 +69,6 @@ namespace ig = ImGui;
 
 using str = std::string;
 
+template <typename T>
+using UPtr = std::unique_ptr<T>;
+

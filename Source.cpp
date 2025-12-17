@@ -2,9 +2,11 @@
 #include "Classes.hpp"
 #include "Source.hpp"
 
+static UPtr<MemoryManagement> memory;
+
 
 // Data
-std::unique_ptr<ExampleDescriptorHeapAllocator> g_pd3dSrvDescHeapAlloc;
+ExampleDescriptorHeapAllocator* g_pd3dSrvDescHeapAlloc;
 
 ComPtr<ID3D12Device>			  m_Device;
 ComPtr<ID3D12DescriptorHeap>	  m_RtvDescHeap;
@@ -19,13 +21,17 @@ static D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUF
 
 static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
-int Start(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs) {
+int Start(_In_ HINSTANCE hInstance) {
+    memory = std::make_unique<MemoryManagement>();
+    memory->AllocAll();
 
 	// Main code
-	g_pd3dSrvDescHeapAlloc				  = std::make_unique<ExampleDescriptorHeapAllocator>();
-	std::unique_ptr<WindowManager> window = std::make_unique<WindowManager>();
+    g_pd3dSrvDescHeapAlloc = memory->Get_ExampleDescriptorHeapAllocator();
+    WindowManager* window = memory->Get_WindowManager();
 
-	OpenWindow(hInstance, cmdArgs, window.get());
+    CommandLineArguments* cmdArgs = memory->Get_CommandLineArguments();
+
+	OpenWindow(hInstance, cmdArgs, window);
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -93,12 +99,12 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs) {
 	// m_SrvDescHeap->GetGPUDescriptorHandleForHeapStart());
 
 
-	MainLoop(&io, window.get());
+	MainLoop(&io, window);
 
 	WaitForPendingOperations();
 
 	// Cleanup
-	Cleanup(window.get());
+	Cleanup(window);
 
 	return 0;
 }
@@ -126,6 +132,7 @@ void OpenWindow(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs, WindowM
 void MainLoop(ImGuiIO *io, WindowManager *window) {
 
 	auto font_manager = std::make_unique<FontManager>(io);
+    //font_manager->GetIo(io);
 	auto font_manager_window =
 		std::make_unique<FontManagerWindow>(font_manager.get(), window->GetHWND());
 	auto debug_window = std::make_unique<DebugWindow>(io);

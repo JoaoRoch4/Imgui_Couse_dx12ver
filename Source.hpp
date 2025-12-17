@@ -21,7 +21,7 @@ void ShowConsole(class CommandLineArguments* cmdArgs);
 void Cleanup(class WindowManager* window);
 void OpenWindow(_In_ HINSTANCE hInstance, CommandLineArguments* cmdArgs, WindowManager* window);
 void MainLoop(struct ImGuiIO* io, WindowManager* window);
-int	 Start(_In_ HINSTANCE hInstance, CommandLineArguments* cmdArgs);
+int	 Start(_In_ HINSTANCE hInstance);
 
 class FrameContext* WaitForNextFrameContext();
 
