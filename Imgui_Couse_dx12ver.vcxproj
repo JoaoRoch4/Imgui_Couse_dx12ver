@@ -70,6 +70,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <SpectreMitigation>Spectre</SpectreMitigation>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -192,6 +193,8 @@
       <FloatingPointExceptions>true</FloatingPointExceptions>
       <IntelJCCErratum>true</IntelJCCErratum>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <FixedBaseAddress>false</FixedBaseAddress>
@@ -200,7 +203,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Classes.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="CommandLineArgumments.cpp" />
+    <ClCompile Include="ConsoleWindow.cpp" />
     <ClCompile Include="DarkMode.cpp" />
     <ClCompile Include="DebugWindow.cpp" />
     <ClCompile Include="DX12Demos.cpp" />
@@ -213,6 +220,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\backends\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -222,6 +230,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -231,6 +240,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_demo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -240,6 +250,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_draw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -249,6 +260,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_tables.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -258,6 +270,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_widgets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -267,6 +280,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\misc\freetype\imgui_freetype.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -276,6 +290,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\implot\implot.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -285,6 +300,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\implot\implot_demo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -294,6 +310,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\implot\implot_items.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -303,10 +320,12 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutosvg\source\plutosvg.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-blend.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -316,6 +335,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-canvas.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -325,6 +345,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-font.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -334,6 +355,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-math.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -343,6 +365,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-raster.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -352,6 +375,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-stroker.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -361,6 +385,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-matrix.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -370,6 +395,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-paint.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -379,6 +405,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-path.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -388,6 +415,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-rasterize.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -397,6 +425,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-surface.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -406,6 +435,7 @@
       <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="FontManagerWindow.cpp" />
@@ -420,6 +450,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="render.cpp" />
     <ClCompile Include="Source.cpp">
@@ -430,6 +461,7 @@
   <ItemGroup>
     <ClInclude Include="Classes.hpp" />
     <ClInclude Include="CommandLineArgumments.hpp" />
+    <ClInclude Include="ConsoleWindow.hpp" />
     <ClInclude Include="DarkMode.hpp" />
     <ClInclude Include="DebugWindow.hpp" />
     <ClInclude Include="DX12Demos.hpp" />
@@ -461,6 +493,7 @@
     <ClInclude Include="Globals.hpp" />
     <ClInclude Include="Main.hpp" />
     <ClInclude Include="MainWindow.hpp" />
+    <ClInclude Include="Master.hpp" />
     <ClInclude Include="PCH.hpp" />
     <ClInclude Include="render.hpp" />
     <ClInclude Include="Source.hpp" />

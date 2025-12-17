@@ -4,86 +4,28 @@
 
 
 // Data
-FrameContext									g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
-static UINT										g_frameIndex = 0;
 std::unique_ptr<ExampleDescriptorHeapAllocator> g_pd3dSrvDescHeapAlloc;
 
-ComPtr<ID3D12Device>			   m_Device;
-ComPtr<ID3D12DescriptorHeap>	   m_RtvDescHeap;
-ComPtr<ID3D12DescriptorHeap>	   m_SrvDescHeap;
-ComPtr<ID3D12CommandQueue>		   m_CommandQueue;
-ComPtr<ID3D12GraphicsCommandList>  m_CommandList;
-ComPtr<ID3D12Fence>				   m_fence;
-ComPtr<IDXGISwapChain3>			   m_pSwapChain;
-ComPtr<ID3D12Resource>			   m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
+ComPtr<ID3D12Device>			  m_Device;
+ComPtr<ID3D12DescriptorHeap>	  m_RtvDescHeap;
+ComPtr<ID3D12DescriptorHeap>	  m_SrvDescHeap;
+ComPtr<ID3D12CommandQueue>		  m_CommandQueue;
+ComPtr<ID3D12GraphicsCommandList> m_CommandList;
+ComPtr<ID3D12Fence>				  m_fence;
+ComPtr<IDXGISwapChain3>			  m_pSwapChain;
+ComPtr<ID3D12Resource>			  m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
 static D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS] = {};
 
-static HANDLE m_fenceEvent;
-static UINT64 m_fenceLastSignaledValue	 = 0;
-static bool	  m_SwapChainTearingSupport	 = false;
-static bool	  m_SwapChainOccluded		 = false;
-static HANDLE m_hSwapChainWaitableObject = nullptr;
 
-void ShowConsole(CommandLineArgumments *cmdArgs) {
+static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
-	if (!AllocConsole()) return;
+int Start(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs) {
 
-	cmdArgs->SetbConsoleLauched(true);
-
-	HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-	HANDLE hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
-
-	// Redirect standard I/O streams to the new console
-	// C-style I/O
-	FILE *fp;
-	freopen_s(&fp, "CONOUT$", "w", stdout);
-	freopen_s(&fp, "CONIN$", "r", stdin);
-	freopen_s(&fp, "CONOUT$", "w", stderr);
-
-	// C++-style I/O
-	std::ios_base::sync_with_stdio();
-
-	// Clear iostream error flags
-	std::cout.clear();
-	std::cerr.clear();
-	std::cin.clear();
-}
-
-
-int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 	// Main code
-
-
 	g_pd3dSrvDescHeapAlloc				  = std::make_unique<ExampleDescriptorHeapAllocator>();
 	std::unique_ptr<WindowManager> window = std::make_unique<WindowManager>();
 
-	if (cmdArgs->GetbConsoleLauched() == false && cmdArgs->GetMap().contains(L"-cmd")) {
-
-
-		ShowConsole(cmdArgs);
-
-
-		std::cout << "\nThis message appears in the new console window.\n" << std::endl;
-
-
-		for (const auto &map : cmdArgs->GetMap()) { std::wcout << map.first << L"\n"; }
-
-		std::wcout << std::endl;
-	}
-
-
-	window->WMCreateWindow(hInstance);
-
-	// Initialize Direct3D
-	if (!CreateDeviceD3D(window->GetHWND())) {
-		CleanupDeviceD3D();
-		::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
-		return 1;
-	}
-
-	// Show the window
-	::ShowWindow(window->GetHWND(), SW_SHOWDEFAULT);
-	::UpdateWindow(window->GetHWND());
+	OpenWindow(hInstance, cmdArgs, window.get());
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -150,10 +92,43 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 	// m_SrvDescHeap->GetCPUDescriptorHandleForHeapStart(),
 	// m_SrvDescHeap->GetGPUDescriptorHandleForHeapStart());
 
-	auto font_manager = std::make_unique<FontManager>(&io);
+
+	MainLoop(&io, window.get());
+
+	WaitForPendingOperations();
+
+	// Cleanup
+	Cleanup(window.get());
+
+	return 0;
+}
+
+
+void OpenWindow(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs, WindowManager *window) {
+
+
+    cmdArgs->Open();
+
+	window->WMCreateWindow(hInstance, cmdArgs);
+
+	// Initialize Direct3D
+	if (!CreateDeviceD3D(window->GetHWND())) {
+		CleanupDeviceD3D();
+		::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
+		throw std::runtime_error("failed CreateDeviceD3D");
+	}
+
+	// Show the window
+	::ShowWindow(window->GetHWND(), SW_SHOWMAXIMIZED);
+	::UpdateWindow(window->GetHWND());
+}
+
+void MainLoop(ImGuiIO *io, WindowManager *window) {
+
+	auto font_manager = std::make_unique<FontManager>(io);
 	auto font_manager_window =
 		std::make_unique<FontManagerWindow>(font_manager.get(), window->GetHWND());
-	auto debug_window = std::make_unique<DebugWindow>(&io);
+	auto debug_window = std::make_unique<DebugWindow>(io);
 
 
 	font_manager->LoadFonts();
@@ -201,7 +176,7 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 
 		if (show_FileSys_window) { render(window_obj); }
 
-		if (show_Debug_window) debug_window->Render();
+		if (show_Debug_window) debug_window->Tick();
 
 		if (show_FontManager_window) font_manager_window->Render();
 
@@ -219,27 +194,30 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 			static int	 counter = 0;
 
 			ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!"
+            ShowExampleAppMainMenuBar();
+
 			// and append into it.
 			ig::Separator();
 
 			ImGui::Text("This is some useful text."); // Display some text (you can
 
-			{
-				// use a format strings too)
-				ig::Separator();
-				ImGui::Checkbox("Demo Window", &show_demo_window);
-				ImGui::Checkbox("Another Window", &show_another_window);
-				ImGui::Checkbox("Style Editor", &show_styleEditor_window);
+            {
+                // use a format strings too)
+                ig::Separator();
+                ImGui::Checkbox("Demo Window", &show_demo_window);
+                ImGui::Checkbox("Another Window", &show_another_window);
+                ImGui::Checkbox("Style Editor", &show_styleEditor_window);
 
-				ig::Separator();
-				ig::Spacing();
-				ImGui::Checkbox("Debug Window", &show_Debug_window);
-				ImGui::Checkbox("Font Manager Window", &show_FontManager_window);
-				ImGui::Checkbox("File System Window", &show_FileSys_window);
-				ig::Spacing();
-				ig::Separator();
-				ig::Spacing();
-			}
+                ig::Separator();
+                ig::Spacing();
+                ImGui::Checkbox("Debug Window", &show_Debug_window);
+                ImGui::Checkbox("Font Manager Window", &show_FontManager_window);
+                ImGui::Checkbox("File System Window", &show_FileSys_window);
+                ig::Spacing();
+                ig::Separator();
+                ig::Spacing();
+            }
+               
 
 			// Edit 1 float using a slider from 0.0f to 1.0f
 			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
@@ -274,6 +252,10 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 			if (ImGui::Button("Close Me")) show_another_window = false;
 			ImGui::End();
 		}
+
+
+
+        
 		// Rendering
 		ImGui::Render();
 
@@ -321,9 +303,10 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 		g_frameIndex++;
 	}
 
-	WaitForPendingOperations();
+}
 
-	// Cleanup
+void Cleanup(WindowManager *window) {
+
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
@@ -332,10 +315,7 @@ int Start(_In_ HINSTANCE hInstance, CommandLineArgumments *cmdArgs) {
 	::DestroyWindow(window->GetHWND());
 	::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
 
-	font_manager->CleanupFonts();
 	ImPlot::DestroyContext();
-
-	return 0;
 }
 
 // Helper functions
@@ -346,18 +326,68 @@ bool CreateDeviceD3D(HWND hWnd) {
 	// See #8979 for suggestions.
 	DXGI_SWAP_CHAIN_DESC1 sd;
 	{
+		// Zero out the structure to ensure clean values
 		ZeroMemory(&sd, sizeof(sd));
+		
+		// Number of back buffers (double or triple buffering)
 		sd.BufferCount		  = APP_NUM_BACK_BUFFERS;
+		
+		// Width = 0 and Height = 0 means "use the window size automatically"
+		// DirectX will detect the correct client area size
 		sd.Width			  = 0;
 		sd.Height			  = 0;
+		
+		// Pixel format: RGBA with 8 bits per channel, unnormalized
 		sd.Format			  = DXGI_FORMAT_R8G8B8A8_UNORM;
+		
+		// Flag that allows using waitable object for frame latency synchronization
 		sd.Flags			  = DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
+		
+		// Buffer usage: as render target (rendering destination)
 		sd.BufferUsage		  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		
+		// Sample Count = 1 means no multisampling anti-aliasing (MSAA)
+		// Quality = 0 is the default quality level
 		sd.SampleDesc.Count	  = 1;
 		sd.SampleDesc.Quality = 0;
+		
+		// DXGI_SWAP_EFFECT_FLIP_DISCARD is the most modern and efficient mode
+		// It discards the previous buffer content when flipping
 		sd.SwapEffect		  = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+		
+		// DXGI_ALPHA_MODE_UNSPECIFIED means we're not using window transparency
 		sd.AlphaMode		  = DXGI_ALPHA_MODE_UNSPECIFIED;
-		sd.Scaling			  = DXGI_SCALING_STRETCH;
+		
+		// *** FIX FOR WINDOW STRETCHING PROBLEM ***
+		// BEFORE (original code that causes the problem):
+		// sd.Scaling = DXGI_SCALING_STRETCH;  // ❌ Causes stretching/distortion
+		
+		// AFTER (applied fix):
+		// Option 1: No scaling (most accurate, recommended)
+		sd.Scaling			  = DXGI_SCALING_NONE;
+		
+		// Option 2: Alternative - maintains aspect ratio (if you prefer)
+		// sd.Scaling = DXGI_SCALING_ASPECT_RATIO_STRETCH;
+		
+		// EXPLANATION OF SCALING MODES:
+		//
+		// DXGI_SCALING_STRETCH:
+		// - Stretches the image to fill the entire window
+		// - Can distort the image if proportions change
+		// - Causes the problem you were experiencing
+		//
+		// DXGI_SCALING_NONE:
+		// - Does not apply any scaling
+		// - Image is rendered at 1:1 pixel ratio
+		// - Most accurate and without distortions
+		// - Recommended for most cases
+		//
+		// DXGI_SCALING_ASPECT_RATIO_STRETCH:
+		// - Stretches the image while maintaining original aspect ratio
+		// - Adds black bars if necessary
+		// - Useful if you want to maintain fixed aspect ratio
+		
+		// Not using stereo mode (stereoscopic 3D)
 		sd.Stereo			  = FALSE;
 	}
 
@@ -560,4 +590,104 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_DESTROY: ::PostQuitMessage(0); return 0;
 	}
 	return ::DefWindowProcW(hWnd, msg, wParam, lParam);
+}
+
+void ShowExampleAppMainMenuBar()
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            ShowExampleMenuFile();
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo", "Ctrl+Z")) {}
+            if (ImGui::MenuItem("Redo", "Ctrl+Y", false, false)) {} // Disabled item
+            ImGui::Separator();
+            if (ImGui::MenuItem("Cut", "Ctrl+X")) {}
+            if (ImGui::MenuItem("Copy", "Ctrl+C")) {}
+            if (ImGui::MenuItem("Paste", "Ctrl+V")) {}
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+}
+
+void ShowExampleMenuFile()
+{
+    ImGui::MenuItem("(demo menu)", NULL, false, false);
+    if (ImGui::MenuItem("New")) {}
+    if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+    if (ImGui::BeginMenu("Open Recent"))
+    {
+        ImGui::MenuItem("fish_hat.c");
+        ImGui::MenuItem("fish_hat.inl");
+        ImGui::MenuItem("fish_hat.h");
+        if (ImGui::BeginMenu("More.."))
+        {
+            ImGui::MenuItem("Hello");
+            ImGui::MenuItem("Sailor");
+            if (ImGui::BeginMenu("Recurse.."))
+            {
+                ShowExampleMenuFile();
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenu();
+    }
+    if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+    if (ImGui::MenuItem("Save As..")) {}
+
+    ImGui::Separator();
+    if (ImGui::BeginMenu("Options"))
+    {
+        static bool enabled = true;
+        ImGui::MenuItem("Enabled", "", &enabled);
+        ImGui::BeginChild("child", ImVec2(0, 60), ImGuiChildFlags_Borders);
+        for (int i = 0; i < 10; i++)
+            ImGui::Text("Scrolling Text %d", i);
+        ImGui::EndChild();
+        static float f = 0.5f;
+        static int n = 0;
+        ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
+        ImGui::InputFloat("Input", &f, 0.1f);
+        ImGui::Combo("Combo", &n, "Yes\0No\0Maybe\0\0");
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Colors"))
+    {
+        float sz = ImGui::GetTextLineHeight();
+        for (int i = 0; i < ImGuiCol_COUNT; i++)
+        {
+            const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
+            ImVec2 p = ImGui::GetCursorScreenPos();
+            ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
+            ImGui::Dummy(ImVec2(sz, sz));
+            ImGui::SameLine();
+            ImGui::MenuItem(name);
+        }
+        ImGui::EndMenu();
+    }
+
+    // Here we demonstrate appending again to the "Options" menu (which we already created above)
+    // Of course in this demo it is a little bit silly that this function calls BeginMenu("Options") twice.
+    // In a real code-base using it would make senses to use this feature from very different code locations.
+    if (ImGui::BeginMenu("Options")) // <-- Append!
+    {
+        static bool b = true;
+        ImGui::Checkbox("SomeOption", &b);
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Disabled", false)) // Disabled
+    {
+        IM_ASSERT(0);
+    }
+    if (ImGui::MenuItem("Checked", NULL, true)) {}
+    ImGui::Separator();
+    if(ImGui::MenuItem("Quit", "Alt+F4")) { exit(EXIT_SUCCESS); }
 }
