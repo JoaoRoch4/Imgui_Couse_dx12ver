@@ -204,6 +204,22 @@ ConsoleInputHandler* MemoryManagement::Get_ConsoleInputHandler() const {
 	return console_input_handler.get();
 }
 
+ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
+
+    // Check if allocated
+	if (!bConsole_window_allocated) {
+		throw std::runtime_error("console_window is not allocated");
+	}
+	
+	// Check if pointer is valid
+	if (!console_window) {
+		throw std::runtime_error("console_window is nullptr!");
+	}
+	
+	// Return raw pointer
+	return console_window.get();
+}
+
 /**
  * @brief Allocates DX12Renderer object
  * 
@@ -346,7 +362,22 @@ WindowManager* MemoryManagement::Get_WindowManager() const {
 // These can be implemented as needed
 
 void MemoryManagement::Alloc_console_window() {
-	// TODO: Implement console window allocation
+
+    // Check if already allocated
+    if (!bConsole_window_allocated) {
+		// Create new instance
+		console_window			 = std::make_unique<ConsoleWindow>();
+		
+		// Mark as allocated
+		bConsole_window_allocated = true;
+	} else {
+		throw std::runtime_error("console_window is already allocated");
+	}
+
+	// Verify allocation
+	if (!window_manager) {
+		throw std::runtime_error("console_window failed to allocate");
+	}
 }
 
 void MemoryManagement::Alloc_dx_demos() {

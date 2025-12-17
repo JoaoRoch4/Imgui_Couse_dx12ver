@@ -32,6 +32,7 @@ public:
 
 	CommandLineArguments*			Get_CommandLineArguments() const;
 	ConsoleInputHandler*			Get_ConsoleInputHandler() const;
+    ConsoleWindow* Get_ConsoleWindow() const;
 	//DX12Renderer*					Get_DX12Renderer() const;
 	ExampleDescriptorHeapAllocator* Get_ExampleDescriptorHeapAllocator() const;
 	WindowManager*					Get_WindowManager() const;
