@@ -217,6 +217,10 @@ void CommandLineArguments::ShowConsole()  {
 	// C++-style I/O
 	std::ios_base::sync_with_stdio();
 
+    
+	std::setlocale(LC_ALL, "");
+    SetConsoleOutputCP(CP_UTF8);
+
 	// Clear iostream error flags
 	std::cout.clear();
 	std::cerr.clear();

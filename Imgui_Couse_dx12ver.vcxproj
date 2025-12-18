@@ -197,7 +197,7 @@
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4267;4273;4244;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -216,6 +216,7 @@
     <ClCompile Include="CommandLineArgumments.cpp" />
     <ClCompile Include="ConsoleInputHandler.cpp" />
     <ClCompile Include="ConsoleWindow.cpp" />
+    <ClCompile Include="Conv.cpp" />
     <ClCompile Include="DarkMode.cpp" />
     <ClCompile Include="DebugWindow.cpp" />
     <ClCompile Include="DX12Demos.cpp" />
@@ -495,6 +496,7 @@
     <ClInclude Include="CommandLineArgumments.hpp" />
     <ClInclude Include="ConsoleInputHandler.hpp" />
     <ClInclude Include="ConsoleWindow.hpp" />
+    <ClInclude Include="Conv.hpp" />
     <ClInclude Include="DarkMode.hpp" />
     <ClInclude Include="DebugWindow.hpp" />
     <ClInclude Include="DX12Demos.hpp" />

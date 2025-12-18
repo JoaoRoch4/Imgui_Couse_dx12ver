@@ -10,6 +10,7 @@
 #include "CommandLineArgumments.hpp"
 #include "ConsoleWindow.hpp"
 #include "ConsoleInputHandler.hpp"
+#include "Conv.hpp"
 #include "DX12Renderer.hpp"
 #include "DX12Demos.hpp"
 #include "DebugWindow.hpp"

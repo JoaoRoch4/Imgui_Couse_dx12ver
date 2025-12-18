@@ -16,6 +16,8 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include <locale>
+#include <codecvt>
 
 #include <cctype>
 #include <cstdint>
@@ -75,6 +77,7 @@ namespace fs = std::filesystem;
 namespace ig = ImGui;
 
 using str = std::string;
+using wstr = std::wstring;
 
 template <typename T>
 using UPtr = std::unique_ptr<T>;
