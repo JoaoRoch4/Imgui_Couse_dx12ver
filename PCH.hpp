@@ -22,7 +22,8 @@
 #include <cctype>
 #include <cstdint>
 #include <cstdio>
-
+#include <fstream>      // For file I/O
+#include <sstream>      // For string streams
 #include <stdint.h>
 #include <stdio.h>
 #include <stdexcept>
@@ -69,6 +70,10 @@
 #include "plutosvg-ft.h"
 
 #include <winrt/base.h>
+
+#include <rfl.hpp>
+#include <rfl/json.hpp>
+
 
 template <typename T>
 using ComPtr = winrt::com_ptr<T>;

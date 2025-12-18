@@ -214,6 +214,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CommandLineArgumments.cpp" />
+    <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="ConsoleInputHandler.cpp" />
     <ClCompile Include="ConsoleWindow.cpp" />
     <ClCompile Include="Conv.cpp" />
@@ -494,6 +495,7 @@
   <ItemGroup>
     <ClInclude Include="Classes.hpp" />
     <ClInclude Include="CommandLineArgumments.hpp" />
+    <ClInclude Include="ConfigManager.hpp" />
     <ClInclude Include="ConsoleInputHandler.hpp" />
     <ClInclude Include="ConsoleWindow.hpp" />
     <ClInclude Include="Conv.hpp" />

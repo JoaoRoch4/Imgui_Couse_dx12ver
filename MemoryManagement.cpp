@@ -15,6 +15,7 @@ MemoryManagement::MemoryManagement()
 : command_line_args(nullptr),
   console_window(nullptr),
   console_input_handler(nullptr),
+    config_manager(nullptr),
   // dx12_renderer(nullptr),
   dx_demos(nullptr),
   debug_window(nullptr),
@@ -27,6 +28,7 @@ MemoryManagement::MemoryManagement()
   bCommand_line_args_allocated(false),
   bConsole_window_allocated(false),
   bConsole_input_handler_allocated(false),
+    bConfig_manager_allocated(false),
   //bDx12_renderer_allocated(false),
   bDx_demos_allocated(false),
   bDebug_window_allocated(false),
@@ -194,6 +196,32 @@ void MemoryManagement::Alloc_console_input_handler() {
 }
 
 /**
+ * @brief Allocates ConsoleInputHandler object
+ *
+ * 
+ *
+ * @throws std::runtime_error if already allocated or allocation fails
+ */
+
+void MemoryManagement::Alloc_config_manager() {
+
+    if(!bConfig_manager_allocated) {
+        // Create new instance
+        config_manager = std::make_unique<ConfigManager>();
+
+        // Mark as allocated
+        bConfig_manager_allocated = true;
+    } else {
+        throw std::runtime_error("config_manager is already allocated");
+    }
+
+    // Verify allocation
+    if(!config_manager) {
+        throw std::runtime_error("config_manager failed to allocate");
+    }
+}
+
+/**
  * @brief Gets the ConsoleInputHandler instance
  * 
  * @return Raw pointer to ConsoleInputHandler
@@ -354,6 +382,18 @@ WindowManager* MemoryManagement::Get_WindowManager() const {
 
 	// Return raw pointer
 	return window_manager.get();
+}
+
+ConfigManager* MemoryManagement::Get_ConfigManager() const {
+
+    // Check if allocated
+    if(!bConfig_manager_allocated) { throw std::runtime_error("config_manager is not allocated"); }
+
+    // Check if pointer is valid
+    if(!config_manager) { throw std::runtime_error("config_manager is nullptr!"); }
+
+    // Return raw pointer
+    return config_manager.get();
 }
 
 // Placeholder implementations for other allocation methods

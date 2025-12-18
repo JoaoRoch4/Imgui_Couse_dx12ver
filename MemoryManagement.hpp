@@ -11,6 +11,7 @@
 class CommandLineArguments;
 class ConsoleWindow;
 class ConsoleInputHandler;
+class ConfigManager;
 //class DX12Renderer;
 class DxDemos;
 class DebugWindow;
@@ -36,11 +37,13 @@ public:
 	//DX12Renderer*					Get_DX12Renderer() const;
 	ExampleDescriptorHeapAllocator* Get_ExampleDescriptorHeapAllocator() const;
 	WindowManager*					Get_WindowManager() const;
+	ConfigManager*					Get_ConfigManager() const;
 
 protected:
 	void Alloc_command_line_args();
 	void Alloc_console_window();
 	void Alloc_console_input_handler();
+	void Alloc_config_manager();
 	//void Alloc_dx12_renderer();
 	void Alloc_dx_demos();
 	void Alloc_debug_window();
@@ -52,22 +55,27 @@ protected:
 	void Alloc_window_manager();
 
 private:
+	//UPtr<DX12Renderer>					 dx12_renderer;
+
+	UPtr<ExampleDescriptorHeapAllocator> Example_Descriptor_Heap_Allocator;
+
+
 	UPtr<CommandLineArguments> command_line_args;
 	UPtr<ConsoleWindow>		   console_window;
 	UPtr<ConsoleInputHandler>  console_input_handler;
-	//UPtr<DX12Renderer>					 dx12_renderer;
-	UPtr<DxDemos>						 dx_demos;
-	UPtr<DebugWindow>					 debug_window;
-	UPtr<ExampleDescriptorHeapAllocator> Example_Descriptor_Heap_Allocator;
-	UPtr<FontManager>					 font_manager;
-	UPtr<FontManagerWindow>				 font_manager_window;
-	UPtr<FrameContext>					 frame_context;
-	UPtr<WindowClass>					 window_class;
-	UPtr<WindowManager>					 window_manager;
+	UPtr<ConfigManager>		   config_manager;
+	UPtr<DxDemos>			   dx_demos;
+	UPtr<DebugWindow>		   debug_window;
+	UPtr<FontManager>		   font_manager;
+	UPtr<FontManagerWindow>	   font_manager_window;
+	UPtr<FrameContext>		   frame_context;
+	UPtr<WindowClass>		   window_class;
+	UPtr<WindowManager>		   window_manager;
 
 	bool bCommand_line_args_allocated;
 	bool bConsole_window_allocated;
 	bool bConsole_input_handler_allocated;
+    bool bConfig_manager_allocated;
 	//bool bDx12_renderer_allocated;
 	bool bDx_demos_allocated;
 	bool bDebug_window_allocated;
