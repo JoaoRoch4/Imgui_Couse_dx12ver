@@ -30,9 +30,9 @@ public:
 
 	void AllocAll();
 
-	CommandLineArguments*			Get_CommandLineArguments() const;
-	ConsoleInputHandler*			Get_ConsoleInputHandler() const;
-    ConsoleWindow* Get_ConsoleWindow() const;
+	CommandLineArguments* Get_CommandLineArguments() const;
+	ConsoleInputHandler*  Get_ConsoleInputHandler() const;
+	ConsoleWindow*		  Get_ConsoleWindow() const;
 	//DX12Renderer*					Get_DX12Renderer() const;
 	ExampleDescriptorHeapAllocator* Get_ExampleDescriptorHeapAllocator() const;
 	WindowManager*					Get_WindowManager() const;
@@ -52,9 +52,9 @@ protected:
 	void Alloc_window_manager();
 
 private:
-	UPtr<CommandLineArguments>			 command_line_args;
-	UPtr<ConsoleWindow>					 console_window;
-	UPtr<ConsoleInputHandler>			 console_input_handler;
+	UPtr<CommandLineArguments> command_line_args;
+	UPtr<ConsoleWindow>		   console_window;
+	UPtr<ConsoleInputHandler>  console_input_handler;
 	//UPtr<DX12Renderer>					 dx12_renderer;
 	UPtr<DxDemos>						 dx_demos;
 	UPtr<DebugWindow>					 debug_window;
@@ -77,4 +77,14 @@ private:
 	bool bFrame_context_allocated;
 	bool bWindow_class_allocated;
 	bool bWindow_manager_allocated;
+
+
+	//imgui flags
+public:
+	bool bShow_demo_window;
+	bool bShow_another_window;
+	bool bShow_FontManager_window;
+	bool bShow_styleEditor_window;
+	bool bShow_Debug_window;
+	bool bShow_FileSys_window;
 };

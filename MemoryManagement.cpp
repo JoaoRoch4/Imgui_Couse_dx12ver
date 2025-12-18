@@ -15,7 +15,7 @@ MemoryManagement::MemoryManagement()
 : command_line_args(nullptr),
   console_window(nullptr),
   console_input_handler(nullptr),
- // dx12_renderer(nullptr),
+  // dx12_renderer(nullptr),
   dx_demos(nullptr),
   debug_window(nullptr),
   Example_Descriptor_Heap_Allocator(nullptr),
@@ -35,7 +35,15 @@ MemoryManagement::MemoryManagement()
   bFont_manager_window_allocated(false),
   bFrame_context_allocated(false),
   bWindow_class_allocated(false),
-  bWindow_manager_allocated(false) {}
+  bWindow_manager_allocated(false),
+  bShow_demo_window(false),
+  bShow_another_window(false),
+  bShow_FontManager_window(false),
+  bShow_styleEditor_window(false),
+  bShow_Debug_window(false),
+  bShow_FileSys_window(false)
+
+{}
 
 /**
  * @brief Destructor - Resets all allocation flags
@@ -56,6 +64,12 @@ MemoryManagement::~MemoryManagement() {
 	bFrame_context_allocated					 = false;
 	bWindow_class_allocated						 = false;
 	bWindow_manager_allocated					 = false;
+	bShow_demo_window							 = false;
+	bShow_another_window						 = false;
+	bShow_FontManager_window					 = false;
+	bShow_styleEditor_window					 = false;
+	bShow_Debug_window							 = false;
+	bShow_FileSys_window						 = false;
 }
 
 /**
@@ -69,37 +83,37 @@ MemoryManagement::~MemoryManagement() {
 void MemoryManagement::AllocAll() {
 	// Allocate command line arguments parser
 	Alloc_command_line_args();
-	
+
 	// Allocate console window (ImGui console)
 	Alloc_console_window();
-	
+
 	// Allocate console input handler (threaded command input)
 	Alloc_console_input_handler();
-	
+
 	// Allocate DX12 renderer
 	//Alloc_dx12_renderer();
-	
+
 	// Allocate DirectX demos
 	Alloc_dx_demos();
-	
+
 	// Allocate debug window
 	Alloc_debug_window();
-	
+
 	// Allocate descriptor heap allocator for ImGui
 	Alloc_Example_Descriptor_Heap_Allocator();
-	
+
 	// Allocate font manager
 	Alloc_font_manager();
-	
+
 	// Allocate font manager window
 	Alloc_font_manager_window();
-	
+
 	// Allocate frame context
 	Alloc_frame_context();
-	
+
 	// Allocate window class (file system browser)
 	Alloc_window_class();
-	
+
 	// Allocate window manager
 	Alloc_window_manager();
 }
@@ -118,8 +132,8 @@ void MemoryManagement::Alloc_command_line_args() {
 	if (!bCommand_line_args_allocated) {
 		// Create new instance using make_unique
 		// make_unique is exception-safe and more efficient than new
-		command_line_args			 = std::make_unique<CommandLineArguments>();
-		
+		command_line_args = std::make_unique<CommandLineArguments>();
+
 		// Mark as allocated
 		bCommand_line_args_allocated = true;
 	} else {
@@ -129,9 +143,7 @@ void MemoryManagement::Alloc_command_line_args() {
 
 	// Verify allocation succeeded
 	// The pointer should not be null after make_unique
-	if (!command_line_args) {
-		throw std::runtime_error("CommandLineArguments failed to allocate");
-	}
+	if (!command_line_args) { throw std::runtime_error("CommandLineArguments failed to allocate"); }
 }
 
 /**
@@ -147,12 +159,10 @@ CommandLineArguments* MemoryManagement::Get_CommandLineArguments() const {
 	if (!bCommand_line_args_allocated) {
 		throw std::runtime_error("CommandLineArguments is not allocated");
 	}
-	
+
 	// Check if pointer is valid
-	if (!command_line_args) {
-		throw std::runtime_error("command_line_args is nullptr!");
-	}
-	
+	if (!command_line_args) { throw std::runtime_error("command_line_args is nullptr!"); }
+
 	// Return raw pointer from unique_ptr
 	// get() returns the raw pointer without releasing ownership
 	return command_line_args.get();
@@ -170,7 +180,7 @@ void MemoryManagement::Alloc_console_input_handler() {
 	if (!bConsole_input_handler_allocated) {
 		// Create new instance
 		console_input_handler = std::make_unique<ConsoleInputHandler>();
-		
+
 		// Mark as allocated
 		bConsole_input_handler_allocated = true;
 	} else {
@@ -194,28 +204,22 @@ ConsoleInputHandler* MemoryManagement::Get_ConsoleInputHandler() const {
 	if (!bConsole_input_handler_allocated) {
 		throw std::runtime_error("ConsoleInputHandler is not allocated");
 	}
-	
+
 	// Check if pointer is valid
-	if (!console_input_handler) {
-		throw std::runtime_error("console_input_handler is nullptr!");
-	}
-	
+	if (!console_input_handler) { throw std::runtime_error("console_input_handler is nullptr!"); }
+
 	// Return raw pointer
 	return console_input_handler.get();
 }
 
 ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
 
-    // Check if allocated
-	if (!bConsole_window_allocated) {
-		throw std::runtime_error("console_window is not allocated");
-	}
-	
+	// Check if allocated
+	if (!bConsole_window_allocated) { throw std::runtime_error("console_window is not allocated"); }
+
 	// Check if pointer is valid
-	if (!console_window) {
-		throw std::runtime_error("console_window is nullptr!");
-	}
-	
+	if (!console_window) { throw std::runtime_error("console_window is nullptr!"); }
+
 	// Return raw pointer
 	return console_window.get();
 }
@@ -232,7 +236,7 @@ ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
 //	if (!bDx12_renderer_allocated) {
 //		// Create new instance
 //		dx12_renderer = std::make_unique<DX12Renderer>();
-//		
+//
 //		// Mark as allocated
 //		bDx12_renderer_allocated = true;
 //	} else {
@@ -256,12 +260,12 @@ ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
 //	if (!bDx12_renderer_allocated) {
 //		throw std::runtime_error("DX12Renderer is not allocated");
 //	}
-//	
+//
 //	// Check if pointer is valid
 //	if (!dx12_renderer) {
 //		throw std::runtime_error("dx12_renderer is nullptr!");
 //	}
-//	
+//
 //	// Return raw pointer
 //	return dx12_renderer.get();
 //}
@@ -278,7 +282,7 @@ void MemoryManagement::Alloc_Example_Descriptor_Heap_Allocator() {
 	if (!bExample_Descriptor_Heap_Allocator_allocated) {
 		// Create new instance
 		Example_Descriptor_Heap_Allocator = std::make_unique<ExampleDescriptorHeapAllocator>();
-		
+
 		// Mark as allocated
 		bExample_Descriptor_Heap_Allocator_allocated = true;
 	} else {
@@ -302,12 +306,12 @@ ExampleDescriptorHeapAllocator* MemoryManagement::Get_ExampleDescriptorHeapAlloc
 	if (!bExample_Descriptor_Heap_Allocator_allocated) {
 		throw std::runtime_error("ExampleDescriptorHeapAllocator is not allocated");
 	}
-	
+
 	// Check if pointer is valid
 	if (!Example_Descriptor_Heap_Allocator) {
 		throw std::runtime_error("Example_Descriptor_Heap_Allocator is nullptr!");
 	}
-	
+
 	// Return raw pointer
 	return Example_Descriptor_Heap_Allocator.get();
 }
@@ -321,10 +325,10 @@ ExampleDescriptorHeapAllocator* MemoryManagement::Get_ExampleDescriptorHeapAlloc
  */
 void MemoryManagement::Alloc_window_manager() {
 	// Check if already allocated
-    if (!bWindow_manager_allocated) {
+	if (!bWindow_manager_allocated) {
 		// Create new instance
-		window_manager			 = std::make_unique<WindowManager>();
-		
+		window_manager = std::make_unique<WindowManager>();
+
 		// Mark as allocated
 		bWindow_manager_allocated = true;
 	} else {
@@ -332,9 +336,7 @@ void MemoryManagement::Alloc_window_manager() {
 	}
 
 	// Verify allocation
-	if (!window_manager) {
-		throw std::runtime_error("window_manager failed to allocate");
-	}
+	if (!window_manager) { throw std::runtime_error("window_manager failed to allocate"); }
 }
 
 /**
@@ -345,15 +347,11 @@ void MemoryManagement::Alloc_window_manager() {
  */
 WindowManager* MemoryManagement::Get_WindowManager() const {
 	// Check if allocated
-    if (!bWindow_manager_allocated) {
-		throw std::runtime_error("window_manager is not allocated");
-	}
-	
+	if (!bWindow_manager_allocated) { throw std::runtime_error("window_manager is not allocated"); }
+
 	// Check if pointer is valid
-	if (!window_manager) {
-		throw std::runtime_error("window_manager is nullptr!");
-	}
-	
+	if (!window_manager) { throw std::runtime_error("window_manager is nullptr!"); }
+
 	// Return raw pointer
 	return window_manager.get();
 }
@@ -363,11 +361,11 @@ WindowManager* MemoryManagement::Get_WindowManager() const {
 
 void MemoryManagement::Alloc_console_window() {
 
-    // Check if already allocated
-    if (!bConsole_window_allocated) {
+	// Check if already allocated
+	if (!bConsole_window_allocated) {
 		// Create new instance
-		console_window			 = std::make_unique<ConsoleWindow>();
-		
+		console_window = std::make_unique<ConsoleWindow>();
+
 		// Mark as allocated
 		bConsole_window_allocated = true;
 	} else {
@@ -375,9 +373,7 @@ void MemoryManagement::Alloc_console_window() {
 	}
 
 	// Verify allocation
-	if (!window_manager) {
-		throw std::runtime_error("console_window failed to allocate");
-	}
+	if (!console_window) { throw std::runtime_error("console_window failed to allocate"); }
 }
 
 void MemoryManagement::Alloc_dx_demos() {

@@ -142,12 +142,7 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
 	font_manager->SetDefaultFont();
 
 	// Our state
-	bool show_demo_window		 = false;
-	bool show_another_window	 = false;
-	bool show_FontManager_window = false;
-	bool show_styleEditor_window = false;
-	bool show_Debug_window		 = false;
-	bool show_FileSys_window	 = false;
+	
 
 	ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.15f, 1.f);
 
@@ -181,18 +176,18 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		if (show_FileSys_window) { render(window_obj); }
+		if (memory->bShow_FileSys_window) { render(window_obj); }
 
-		if (show_Debug_window) debug_window->Tick();
+		if (memory->bShow_Debug_window) debug_window->Tick();
 
-		if (show_FontManager_window) font_manager_window->Render();
+		if (memory->bShow_FontManager_window) font_manager_window->Render();
 
-		if (show_styleEditor_window) ImGui::ShowStyleEditor();
+		if (memory->bShow_styleEditor_window) ImGui::ShowStyleEditor();
 
 		// 1. Show the big demo window (Most of the sample code is in
 		// ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
 		// ImGui!).
-		if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window);
+		if (memory->bShow_demo_window) ImGui::ShowDemoWindow(&memory->bShow_demo_window);
 
 		// 2. Show a simple window that we create ourselves. We use a Begin/End pair
 		// to create a named window.
@@ -211,15 +206,15 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
             {
                 // use a format strings too)
                 ig::Separator();
-                ImGui::Checkbox("Demo Window", &show_demo_window);
-                ImGui::Checkbox("Another Window", &show_another_window);
-                ImGui::Checkbox("Style Editor", &show_styleEditor_window);
+                ImGui::Checkbox("Demo Window", &memory->bShow_demo_window);
+                ImGui::Checkbox("Another Window", &memory->bShow_another_window);
+                ImGui::Checkbox("Style Editor", &memory->bShow_styleEditor_window);
 
                 ig::Separator();
                 ig::Spacing();
-                ImGui::Checkbox("Debug Window", &show_Debug_window);
-                ImGui::Checkbox("Font Manager Window", &show_FontManager_window);
-                ImGui::Checkbox("File System Window", &show_FileSys_window);
+                ImGui::Checkbox("Debug Window", &memory->bShow_Debug_window);
+                ImGui::Checkbox("Font Manager Window", &memory->bShow_FontManager_window);
+                ImGui::Checkbox("File System Window", &memory->bShow_FileSys_window);
                 ig::Spacing();
                 ig::Separator();
                 ig::Spacing();
@@ -250,13 +245,13 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
 		}
 
 		// 3. Show another simple window.
-		if (show_another_window) {
+		if (memory->bShow_another_window) {
 			// Pass a pointer to our bool variable (the
 			// window will have a closing button that will
 			// clear the bool when clicked)
-			ImGui::Begin("Another Window", &show_another_window);
+			ImGui::Begin("Another Window", &memory->bShow_another_window);
 			ImGui::Text("Hello from another window!");
-			if (ImGui::Button("Close Me")) show_another_window = false;
+			if (ImGui::Button("Close Me")) memory->bShow_another_window = false;
 			ImGui::End();
 		}
 
