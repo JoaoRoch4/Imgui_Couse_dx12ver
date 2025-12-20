@@ -479,6 +479,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MemoryManagement.cpp" />
+    <ClCompile Include="OutputConsole.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -534,6 +535,7 @@
     <ClInclude Include="MainWindow.hpp" />
     <ClInclude Include="Master.hpp" />
     <ClInclude Include="MemoryManagement.hpp" />
+    <ClInclude Include="OutputConsole.hpp" />
     <ClInclude Include="PCH.hpp" />
     <ClInclude Include="render.hpp" />
     <ClInclude Include="Source.hpp" />

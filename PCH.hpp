@@ -7,6 +7,7 @@
 #include <exception>
 #include <filesystem>
 #include <iostream>
+#include <io.h>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -37,6 +38,7 @@
 #include <tchar.h>
 #include <wtypes.h>
 #include <intsafe.h>
+#include <fcntl.h>
 
 
 #define DX12_ENABLE_DEBUG_LAYER
@@ -74,6 +76,8 @@
 #include <rfl.hpp>
 #include <rfl/json.hpp>
 
+#include <termcolor/termcolor.hpp>
+
 
 template <typename T>
 using ComPtr = winrt::com_ptr<T>;
@@ -86,4 +90,6 @@ using wstr = std::wstring;
 
 template <typename T>
 using UPtr = std::unique_ptr<T>;
+
+namespace tc = termcolor;
 

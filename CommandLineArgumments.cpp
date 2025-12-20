@@ -200,29 +200,5 @@ std::wstring CommandLineArguments::toLower(std::wstring s) {
 
 void CommandLineArguments::ShowConsole()  {
 
-	if (!AllocConsole()) return;
-
-    bConsoleLaunched = true;
-
-	HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-	HANDLE hConsoleInput  = GetStdHandle(STD_INPUT_HANDLE);
-
-	// Redirect standard I/O streams to the new console
-	// C-style I/O
-	FILE *fp;
-	freopen_s(&fp, "CONOUT$", "w", stdout);
-	freopen_s(&fp, "CONIN$", "r", stdin);
-	freopen_s(&fp, "CONOUT$", "w", stderr);
-
-	// C++-style I/O
-	std::ios_base::sync_with_stdio();
-
-    
-	std::setlocale(LC_ALL, "");
-    SetConsoleOutputCP(CP_UTF8);
-
-	// Clear iostream error flags
-	std::cout.clear();
-	std::cerr.clear();
-	std::cin.clear();
+	
 }

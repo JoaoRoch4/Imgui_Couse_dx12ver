@@ -97,10 +97,10 @@
 //    // m_SrvDescHeap->GetCPUDescriptorHandleForHeapStart(),
 //    // m_SrvDescHeap->GetGPUDescriptorHandleForHeapStart());
 //
-//    FontManager font_manager(&io);
+//    FontManager m_font_manager(&io);
 //
-//    font_manager.LoadFonts();
-//    font_manager.SetDefaultFont();
+//    m_font_manager.LoadFonts();
+//    m_font_manager.SetDefaultFont();
 //
 //    // Our state
 //    bool show_demo_window = false;
@@ -273,7 +273,7 @@
 //    ::UnregisterClass(window->GetWc()->lpszClassName,
 //        window->GetWc()->hInstance);
 //
-//    font_manager.CleanupFonts();
+//    m_font_manager.CleanupFonts();
 //    ImPlot::DestroyContext();
 //
 //    return 0;
@@ -494,16 +494,16 @@
 //}
 //
 //FrameContext* MainWindow::WaitForNextFrameContext() {
-//    FrameContext* frame_context =
+//    FrameContext* m_frame_context =
 //        &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
-//    if(m_fence->GetCompletedValue() < frame_context->FenceValue) {
-//        m_fence->SetEventOnCompletion(frame_context->FenceValue, m_FenceEvent);
+//    if(m_fence->GetCompletedValue() < m_frame_context->FenceValue) {
+//        m_fence->SetEventOnCompletion(m_frame_context->FenceValue, m_FenceEvent);
 //        HANDLE waitableObjects[] = { m_hSwapChainWaitableObject, m_FenceEvent };
 //        ::WaitForMultipleObjects(2, waitableObjects, TRUE, INFINITE);
 //    } else
 //        ::WaitForSingleObject(m_hSwapChainWaitableObject, INFINITE);
 //
-//    return frame_context;
+//    return m_frame_context;
 //}
 //
 //

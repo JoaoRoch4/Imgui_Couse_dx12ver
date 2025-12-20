@@ -23,22 +23,26 @@ static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
 int Start(_In_ HINSTANCE hInstance) {
 
-	SetConsoleOutputCP(CP_UTF8);
-    std::wcout.imbue(std::locale(""));
-
-    std::wcout << L"=== Application Starting ===" << std::endl;
-
-
 	memory = std::make_unique<MemoryManagement>();
 	memory->AllocAll();
+
+    OutputConsole* console = memory->Get_OutputConsole();
+
+    console->Open();
+
+    console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
+  
+    CommandLineArguments* cmdArgs = memory->Get_CommandLineArguments();
+
+    console->Out << tc::green << "Memory management initialized" << std::endl;
+    console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 
 	// Main code
 	g_pd3dSrvDescHeapAlloc = memory->Get_ExampleDescriptorHeapAllocator();
 	WindowManager *window  = memory->Get_WindowManager();
 
-	CommandLineArguments *cmdArgs = memory->Get_CommandLineArguments();
 
-    std::wcout << L"Memory management initialized" << std::endl;
+
 
 
 	OpenWindow(hInstance, cmdArgs, window);
@@ -141,15 +145,15 @@ void OpenWindow(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs, WindowM
 
 void MainLoop(ImGuiIO *io, WindowManager *window) {
 
-	auto font_manager = std::make_unique<FontManager>(io);
-	//font_manager->GetIo(io);
-	auto font_manager_window =
-		std::make_unique<FontManagerWindow>(font_manager.get(), window->GetHWND());
-	auto debug_window = std::make_unique<DebugWindow>(io);
+	auto m_font_manager = std::make_unique<FontManager>(io);
+	//m_font_manager->GetIo(io);
+	auto m_font_manager_window =
+		std::make_unique<FontManagerWindow>(m_font_manager.get(), window->GetHWND());
+	auto m_debug_window = std::make_unique<DebugWindow>(io);
 
 
-	font_manager->LoadFonts();
-	font_manager->SetDefaultFont();
+	m_font_manager->LoadFonts();
+	m_font_manager->SetDefaultFont();
 
 	// Our state
 
@@ -186,18 +190,18 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		if (memory->bShow_FileSys_window) { render(window_obj); }
+		if (memory->m_bShow_FileSys_window) { render(window_obj); }
 
-		if (memory->bShow_Debug_window) debug_window->Tick();
+		if (memory->m_bShow_Debug_window) m_debug_window->Tick();
 
-		if (memory->bShow_FontManager_window) font_manager_window->Render();
+		if (memory->m_bShow_FontManager_window) m_font_manager_window->Render();
 
-		if (memory->bShow_styleEditor_window) ImGui::ShowStyleEditor();
+		if (memory->m_bShow_styleEditor_window) ImGui::ShowStyleEditor();
 
 		// 1. Show the big demo window (Most of the sample code is in
 		// ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
 		// ImGui!).
-		if (memory->bShow_demo_window) ImGui::ShowDemoWindow(&memory->bShow_demo_window);
+		if (memory->m_bShow_demo_window) ImGui::ShowDemoWindow(&memory->m_bShow_demo_window);
 
 		// 2. Show a simple window that we create ourselves. We use a Begin/End pair
 		// to create a named window.
@@ -216,15 +220,15 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
 			{
 				// use a format strings too)
 				ig::Separator();
-				ImGui::Checkbox("Demo Window", &memory->bShow_demo_window);
-				ImGui::Checkbox("Another Window", &memory->bShow_another_window);
-				ImGui::Checkbox("Style Editor", &memory->bShow_styleEditor_window);
+				ImGui::Checkbox("Demo Window", &memory->m_bShow_demo_window);
+				ImGui::Checkbox("Another Window", &memory->m_bShow_another_window);
+				ImGui::Checkbox("Style Editor", &memory->m_bShow_styleEditor_window);
 
 				ig::Separator();
 				ig::Spacing();
-				ImGui::Checkbox("Debug Window", &memory->bShow_Debug_window);
-				ImGui::Checkbox("Font Manager Window", &memory->bShow_FontManager_window);
-				ImGui::Checkbox("File System Window", &memory->bShow_FileSys_window);
+				ImGui::Checkbox("Debug Window", &memory->m_bShow_Debug_window);
+				ImGui::Checkbox("Font Manager Window", &memory->m_bShow_FontManager_window);
+				ImGui::Checkbox("File System Window", &memory->m_bShow_FileSys_window);
 				ig::Spacing();
 				ig::Separator();
 				ig::Spacing();
@@ -255,13 +259,13 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
 		}
 
 		// 3. Show another simple window.
-		if (memory->bShow_another_window) {
+		if (memory->m_bShow_another_window) {
 			// Pass a pointer to our bool variable (the
 			// window will have a closing button that will
 			// clear the bool when clicked)
-			ImGui::Begin("Another Window", &memory->bShow_another_window);
+			ImGui::Begin("Another Window", &memory->m_bShow_another_window);
 			ImGui::Text("Hello from another window!");
-			if (ImGui::Button("Close Me")) memory->bShow_another_window = false;
+			if (ImGui::Button("Close Me")) memory->m_bShow_another_window = false;
 			ImGui::End();
 		}
 
@@ -555,14 +559,14 @@ void WaitForPendingOperations() {
 }
 
 FrameContext *WaitForNextFrameContext() {
-	FrameContext *frame_context = &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
-	if (m_fence->GetCompletedValue() < frame_context->FenceValue) {
-		m_fence->SetEventOnCompletion(frame_context->FenceValue, m_fenceEvent);
+	FrameContext *m_frame_context = &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
+	if (m_fence->GetCompletedValue() < m_frame_context->FenceValue) {
+		m_fence->SetEventOnCompletion(m_frame_context->FenceValue, m_fenceEvent);
 		HANDLE waitableObjects[] = {m_hSwapChainWaitableObject, m_fenceEvent};
 		::WaitForMultipleObjects(2, waitableObjects, TRUE, INFINITE);
 	} else ::WaitForSingleObject(m_hSwapChainWaitableObject, INFINITE);
 
-	return frame_context;
+	return m_frame_context;
 }
 
 // Forward declare message handler from imgui_impl_win32.cpp

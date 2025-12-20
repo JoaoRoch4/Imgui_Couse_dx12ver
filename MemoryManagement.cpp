@@ -4,6 +4,7 @@
 
 #include "pch.hpp"
 #include "Classes.hpp"
+#include "MemoryManagement.hpp"
 
 /**
  * @brief Constructor - Initializes all pointers and flags
@@ -12,38 +13,40 @@
  * This ensures objects start in a clean, unallocated state.
  */
 MemoryManagement::MemoryManagement()
-: command_line_args(nullptr),
-  console_window(nullptr),
-  console_input_handler(nullptr),
-    config_manager(nullptr),
+: m_command_line_args(nullptr),
+  m_console_window(nullptr),
+  m_console_input_handler(nullptr),
+  m_config_manager(nullptr),
   // dx12_renderer(nullptr),
-  dx_demos(nullptr),
-  debug_window(nullptr),
-  Example_Descriptor_Heap_Allocator(nullptr),
-  font_manager(nullptr),
-  font_manager_window(nullptr),
-  frame_context(nullptr),
-  window_class(nullptr),
-  window_manager(nullptr),
-  bCommand_line_args_allocated(false),
-  bConsole_window_allocated(false),
-  bConsole_input_handler_allocated(false),
-    bConfig_manager_allocated(false),
+  m_dx_demos(nullptr),
+  m_debug_window(nullptr),
+  m_Example_Descriptor_Heap_Allocator(nullptr),
+  m_font_manager(nullptr),
+  m_font_manager_window(nullptr),
+  m_frame_context(nullptr),
+  m_window_class(nullptr),
+  m_window_manager(nullptr),
+    m_output_console(nullptr),
+  m_bCommand_line_args_allocated(false),
+  m_bConsole_window_allocated(false),
+  m_bConsole_input_handler_allocated(false),
+  m_bConfig_manager_allocated(false),
   //bDx12_renderer_allocated(false),
-  bDx_demos_allocated(false),
-  bDebug_window_allocated(false),
-  bExample_Descriptor_Heap_Allocator_allocated(false),
-  bFont_manager_allocated(false),
-  bFont_manager_window_allocated(false),
-  bFrame_context_allocated(false),
-  bWindow_class_allocated(false),
-  bWindow_manager_allocated(false),
-  bShow_demo_window(false),
-  bShow_another_window(false),
-  bShow_FontManager_window(false),
-  bShow_styleEditor_window(false),
-  bShow_Debug_window(false),
-  bShow_FileSys_window(false)
+  m_bDx_demos_allocated(false),
+  m_bDebug_window_allocated(false),
+  m_bExample_Descriptor_Heap_Allocator_allocated(false),
+  m_bFont_manager_allocated(false),
+  m_bFont_manager_window_allocated(false),
+  m_bFrame_context_allocated(false),
+  m_bWindow_class_allocated(false),
+  m_bWindow_manager_allocated(false),
+  m_bShow_demo_window(false),
+  m_bShow_another_window(false),
+  m_bShow_FontManager_window(false),
+  m_bShow_styleEditor_window(false),
+  m_bShow_Debug_window(false),
+  m_bShow_FileSys_window(false),
+    m_bOutput_console_allocated(false)
 
 {}
 
@@ -54,24 +57,25 @@ MemoryManagement::MemoryManagement()
  * We just need to reset the flags to indicate nothing is allocated.
  */
 MemoryManagement::~MemoryManagement() {
-	bCommand_line_args_allocated				 = false;
-	bConsole_window_allocated					 = false;
-	bConsole_input_handler_allocated			 = false;
+	m_bCommand_line_args_allocated				 = false;
+	m_bConsole_window_allocated					 = false;
+	m_bConsole_input_handler_allocated			 = false;
 	//bDx12_renderer_allocated					 = false;
-	bDx_demos_allocated							 = false;
-	bDebug_window_allocated						 = false;
-	bExample_Descriptor_Heap_Allocator_allocated = false;
-	bFont_manager_allocated						 = false;
-	bFont_manager_window_allocated				 = false;
-	bFrame_context_allocated					 = false;
-	bWindow_class_allocated						 = false;
-	bWindow_manager_allocated					 = false;
-	bShow_demo_window							 = false;
-	bShow_another_window						 = false;
-	bShow_FontManager_window					 = false;
-	bShow_styleEditor_window					 = false;
-	bShow_Debug_window							 = false;
-	bShow_FileSys_window						 = false;
+	m_bDx_demos_allocated							 = false;
+	m_bDebug_window_allocated						 = false;
+	m_bExample_Descriptor_Heap_Allocator_allocated = false;
+	m_bFont_manager_allocated						 = false;
+	m_bFont_manager_window_allocated				 = false;
+	m_bFrame_context_allocated					 = false;
+	m_bWindow_class_allocated						 = false;
+	m_bWindow_manager_allocated					 = false;
+	m_bShow_demo_window							 = false;
+	m_bShow_another_window						 = false;
+	m_bShow_FontManager_window					 = false;
+	m_bShow_styleEditor_window					 = false;
+	m_bShow_Debug_window							 = false;
+	m_bShow_FileSys_window						 = false;
+    m_bOutput_console_allocated= false;
 }
 
 /**
@@ -118,6 +122,9 @@ void MemoryManagement::AllocAll() {
 
 	// Allocate window manager
 	Alloc_window_manager();
+
+    // Allocate m_console_window
+    Alloc_output_console();
 }
 
 /**
@@ -131,13 +138,13 @@ void MemoryManagement::AllocAll() {
 void MemoryManagement::Alloc_command_line_args() {
 	// Check if already allocated
 	// Prevents double allocation which would cause a memory leak
-	if (!bCommand_line_args_allocated) {
+	if (!m_bCommand_line_args_allocated) {
 		// Create new instance using make_unique
 		// make_unique is exception-safe and more efficient than new
-		command_line_args = std::make_unique<CommandLineArguments>();
+		m_command_line_args = std::make_unique<CommandLineArguments>();
 
 		// Mark as allocated
-		bCommand_line_args_allocated = true;
+		m_bCommand_line_args_allocated = true;
 	} else {
 		// Already allocated, throw error
 		throw std::runtime_error("CommandLineArguments is already allocated");
@@ -145,7 +152,7 @@ void MemoryManagement::Alloc_command_line_args() {
 
 	// Verify allocation succeeded
 	// The pointer should not be null after make_unique
-	if (!command_line_args) { throw std::runtime_error("CommandLineArguments failed to allocate"); }
+	if (!m_command_line_args) { throw std::runtime_error("CommandLineArguments failed to allocate"); }
 }
 
 /**
@@ -158,16 +165,16 @@ void MemoryManagement::Alloc_command_line_args() {
  */
 CommandLineArguments* MemoryManagement::Get_CommandLineArguments() const {
 	// Check if allocated
-	if (!bCommand_line_args_allocated) {
+	if (!m_bCommand_line_args_allocated) {
 		throw std::runtime_error("CommandLineArguments is not allocated");
 	}
 
 	// Check if pointer is valid
-	if (!command_line_args) { throw std::runtime_error("command_line_args is nullptr!"); }
+	if (!m_command_line_args) { throw std::runtime_error("m_command_line_args is nullptr!"); }
 
 	// Return raw pointer from unique_ptr
 	// get() returns the raw pointer without releasing ownership
-	return command_line_args.get();
+	return m_command_line_args.get();
 }
 
 /**
@@ -179,18 +186,18 @@ CommandLineArguments* MemoryManagement::Get_CommandLineArguments() const {
  */
 void MemoryManagement::Alloc_console_input_handler() {
 	// Check if already allocated
-	if (!bConsole_input_handler_allocated) {
+	if (!m_bConsole_input_handler_allocated) {
 		// Create new instance
-		console_input_handler = std::make_unique<ConsoleInputHandler>();
+		m_console_input_handler = std::make_unique<ConsoleInputHandler>();
 
 		// Mark as allocated
-		bConsole_input_handler_allocated = true;
+		m_bConsole_input_handler_allocated = true;
 	} else {
 		throw std::runtime_error("ConsoleInputHandler is already allocated");
 	}
 
 	// Verify allocation
-	if (!console_input_handler) {
+	if (!m_console_input_handler) {
 		throw std::runtime_error("ConsoleInputHandler failed to allocate");
 	}
 }
@@ -205,20 +212,18 @@ void MemoryManagement::Alloc_console_input_handler() {
 
 void MemoryManagement::Alloc_config_manager() {
 
-    if(!bConfig_manager_allocated) {
-        // Create new instance
-        config_manager = std::make_unique<ConfigManager>();
+	if (!m_bConfig_manager_allocated) {
+		// Create new instance
+		m_config_manager = std::make_unique<ConfigManager>();
 
-        // Mark as allocated
-        bConfig_manager_allocated = true;
-    } else {
-        throw std::runtime_error("config_manager is already allocated");
-    }
+		// Mark as allocated
+		m_bConfig_manager_allocated = true;
+	} else {
+		throw std::runtime_error("m_config_manager is already allocated");
+	}
 
-    // Verify allocation
-    if(!config_manager) {
-        throw std::runtime_error("config_manager failed to allocate");
-    }
+	// Verify allocation
+	if (!m_config_manager) { throw std::runtime_error("m_config_manager failed to allocate"); }
 }
 
 /**
@@ -229,27 +234,27 @@ void MemoryManagement::Alloc_config_manager() {
  */
 ConsoleInputHandler* MemoryManagement::Get_ConsoleInputHandler() const {
 	// Check if allocated
-	if (!bConsole_input_handler_allocated) {
+	if (!m_bConsole_input_handler_allocated) {
 		throw std::runtime_error("ConsoleInputHandler is not allocated");
 	}
 
 	// Check if pointer is valid
-	if (!console_input_handler) { throw std::runtime_error("console_input_handler is nullptr!"); }
+	if (!m_console_input_handler) { throw std::runtime_error("m_console_input_handler is nullptr!"); }
 
 	// Return raw pointer
-	return console_input_handler.get();
+	return m_console_input_handler.get();
 }
 
 ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
 
 	// Check if allocated
-	if (!bConsole_window_allocated) { throw std::runtime_error("console_window is not allocated"); }
+	if (!m_bConsole_window_allocated) { throw std::runtime_error("m_console_window is not allocated"); }
 
 	// Check if pointer is valid
-	if (!console_window) { throw std::runtime_error("console_window is nullptr!"); }
+	if (!m_console_window) { throw std::runtime_error("m_console_window is nullptr!"); }
 
 	// Return raw pointer
-	return console_window.get();
+	return m_console_window.get();
 }
 
 /**
@@ -307,18 +312,18 @@ ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
  */
 void MemoryManagement::Alloc_Example_Descriptor_Heap_Allocator() {
 	// Check if already allocated
-	if (!bExample_Descriptor_Heap_Allocator_allocated) {
+	if (!m_bExample_Descriptor_Heap_Allocator_allocated) {
 		// Create new instance
-		Example_Descriptor_Heap_Allocator = std::make_unique<ExampleDescriptorHeapAllocator>();
+		m_Example_Descriptor_Heap_Allocator = std::make_unique<ExampleDescriptorHeapAllocator>();
 
 		// Mark as allocated
-		bExample_Descriptor_Heap_Allocator_allocated = true;
+		m_bExample_Descriptor_Heap_Allocator_allocated = true;
 	} else {
 		throw std::runtime_error("ExampleDescriptorHeapAllocator is already allocated");
 	}
 
 	// Verify allocation
-	if (!Example_Descriptor_Heap_Allocator) {
+	if (!m_Example_Descriptor_Heap_Allocator) {
 		throw std::runtime_error("ExampleDescriptorHeapAllocator failed to allocate");
 	}
 }
@@ -331,17 +336,17 @@ void MemoryManagement::Alloc_Example_Descriptor_Heap_Allocator() {
  */
 ExampleDescriptorHeapAllocator* MemoryManagement::Get_ExampleDescriptorHeapAllocator() const {
 	// Check if allocated
-	if (!bExample_Descriptor_Heap_Allocator_allocated) {
+	if (!m_bExample_Descriptor_Heap_Allocator_allocated) {
 		throw std::runtime_error("ExampleDescriptorHeapAllocator is not allocated");
 	}
 
 	// Check if pointer is valid
-	if (!Example_Descriptor_Heap_Allocator) {
-		throw std::runtime_error("Example_Descriptor_Heap_Allocator is nullptr!");
+	if (!m_Example_Descriptor_Heap_Allocator) {
+		throw std::runtime_error("m_Example_Descriptor_Heap_Allocator is nullptr!");
 	}
 
 	// Return raw pointer
-	return Example_Descriptor_Heap_Allocator.get();
+	return m_Example_Descriptor_Heap_Allocator.get();
 }
 
 /**
@@ -353,18 +358,42 @@ ExampleDescriptorHeapAllocator* MemoryManagement::Get_ExampleDescriptorHeapAlloc
  */
 void MemoryManagement::Alloc_window_manager() {
 	// Check if already allocated
-	if (!bWindow_manager_allocated) {
+	if (!m_bWindow_manager_allocated) {
 		// Create new instance
-		window_manager = std::make_unique<WindowManager>();
+		m_window_manager = std::make_unique<WindowManager>();
 
 		// Mark as allocated
-		bWindow_manager_allocated = true;
+		m_bWindow_manager_allocated = true;
 	} else {
 		throw std::runtime_error("WindowManager is already allocated");
 	}
 
 	// Verify allocation
-	if (!window_manager) { throw std::runtime_error("window_manager failed to allocate"); }
+	if (!m_window_manager) { throw std::runtime_error("m_window_manager failed to allocate"); }
+}
+
+/**
+ * @brief Allocates OutputConsole object
+ *
+ * Creates the window console.
+ *
+ * @throws std::runtime_error if already allocated or allocation fails
+ */
+void MemoryManagement::Alloc_output_console() {
+
+	// Check if already allocated
+	if (!m_bOutput_console_allocated) {
+		// Create new instance
+		m_output_console = std::make_unique<OutputConsole>();
+
+		// Mark as allocated
+		m_bOutput_console_allocated = true;
+	} else {
+		throw std::runtime_error("OutputConsole is already allocated");
+	}
+
+	// Verify allocation
+	if (!m_output_console) { throw std::runtime_error("m_output_console failed to allocate"); }
 }
 
 /**
@@ -375,25 +404,37 @@ void MemoryManagement::Alloc_window_manager() {
  */
 WindowManager* MemoryManagement::Get_WindowManager() const {
 	// Check if allocated
-	if (!bWindow_manager_allocated) { throw std::runtime_error("window_manager is not allocated"); }
+	if (!m_bWindow_manager_allocated) { throw std::runtime_error("m_window_manager is not allocated"); }
 
 	// Check if pointer is valid
-	if (!window_manager) { throw std::runtime_error("window_manager is nullptr!"); }
+	if (!m_window_manager) { throw std::runtime_error("m_window_manager is nullptr!"); }
 
 	// Return raw pointer
-	return window_manager.get();
+	return m_window_manager.get();
 }
 
 ConfigManager* MemoryManagement::Get_ConfigManager() const {
 
-    // Check if allocated
-    if(!bConfig_manager_allocated) { throw std::runtime_error("config_manager is not allocated"); }
+	// Check if allocated
+	if (!m_bConfig_manager_allocated) { throw std::runtime_error("m_config_manager is not allocated"); }
 
-    // Check if pointer is valid
-    if(!config_manager) { throw std::runtime_error("config_manager is nullptr!"); }
+	// Check if pointer is valid
+	if (!m_config_manager) { throw std::runtime_error("m_config_manager is nullptr!"); }
 
-    // Return raw pointer
-    return config_manager.get();
+	// Return raw pointer
+	return m_config_manager.get();
+}
+
+OutputConsole* MemoryManagement::Get_OutputConsole() const {
+
+	// Check if allocated
+	if (!m_bOutput_console_allocated) { throw std::runtime_error("m_output_console is not allocated"); }
+
+	// Check if pointer is valid
+	if (!m_output_console) { throw std::runtime_error("m_output_console is nullptr!"); }
+
+	// Return raw pointer
+	return m_output_console.get();
 }
 
 // Placeholder implementations for other allocation methods
@@ -402,18 +443,18 @@ ConfigManager* MemoryManagement::Get_ConfigManager() const {
 void MemoryManagement::Alloc_console_window() {
 
 	// Check if already allocated
-	if (!bConsole_window_allocated) {
+	if (!m_bConsole_window_allocated) {
 		// Create new instance
-		console_window = std::make_unique<ConsoleWindow>();
+		m_console_window = std::make_unique<ConsoleWindow>();
 
 		// Mark as allocated
-		bConsole_window_allocated = true;
+		m_bConsole_window_allocated = true;
 	} else {
-		throw std::runtime_error("console_window is already allocated");
+		throw std::runtime_error("m_console_window is already allocated");
 	}
 
 	// Verify allocation
-	if (!console_window) { throw std::runtime_error("console_window failed to allocate"); }
+	if (!m_console_window) { throw std::runtime_error("m_console_window failed to allocate"); }
 }
 
 void MemoryManagement::Alloc_dx_demos() {
