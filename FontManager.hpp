@@ -1,4 +1,4 @@
-﻿// FontManager.hpp - Font Manager Class Declaration
+// FontManager.hpp - Font Manager Class Declaration
 // This header declares the FontManager class which handles loading and managing ImGui fonts
 
 #pragma once  // Prevent multiple inclusion of this header
@@ -8,7 +8,7 @@
 class FontManager {
 private:
     // Pointer to ImGui's IO structure (handles input/output and configuration)
-    ImGuiIO* io;
+    ImGuiIO* m_io;
     
     // Pointer to the default font that will be used when none is explicitly selected
     ImFont* m_defaultFont;
@@ -24,9 +24,7 @@ public:
     // Default constructor - initializes all members to nullptr/empty
     FontManager();
     
-    // Parameterized constructor - takes ImGuiIO pointer for initialization
-    // @param io: Pointer to ImGui's IO structure
-    FontManager(ImGuiIO* io);
+    void GetIo(ImGuiIO* io);
     
     // Destructor - cleans up resources when object is destroyed
     ~FontManager();

@@ -2,8 +2,6 @@
 #include "Classes.hpp"
 #include "Source.hpp"
 
-static UPtr<MemoryManagement> memory;
-
 
 // Data
 ExampleDescriptorHeapAllocator *g_pd3dSrvDescHeapAlloc;
@@ -17,43 +15,47 @@ ComPtr<ID3D12Fence>				   m_fence;
 ComPtr<IDXGISwapChain3>			   m_pSwapChain;
 ComPtr<ID3D12Resource>			   m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
 static D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS] = {};
+MemoryManagement* memory;
 
+OutputConsole* console;
+CommandLineArguments* cmdArgs;
+WindowManager* window;
+FontManager* m_font_manager;
+FontManagerWindow* m_font_manager_window;
+DebugWindow* m_debug_window;
 
 static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
 int Start(_In_ HINSTANCE hInstance) {
 
-	memory = std::make_unique<MemoryManagement>();
+	memory = MemoryManagement::Get_MemoryManagement();
 	memory->AllocAll();
 
-    OutputConsole* console = memory->Get_OutputConsole();
+	console = memory->Get_OutputConsole();
 
-    console->Open();
+	console->Open();
 
-    console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
-  
-    CommandLineArguments* cmdArgs = memory->Get_CommandLineArguments();
+	console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
 
-    console->Out << tc::green << "Memory management initialized" << std::endl;
-    console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
+	cmdArgs = memory->Get_CommandLineArguments();
+
+	console->Out << tc::green << "Memory management initialized" << std::endl;
+	console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 
 	// Main code
 	g_pd3dSrvDescHeapAlloc = memory->Get_ExampleDescriptorHeapAllocator();
-	WindowManager *window  = memory->Get_WindowManager();
+	window  = memory->Get_WindowManager();
 
-
-
-
-
-	OpenWindow(hInstance, cmdArgs, window);
+	OpenWindow(hInstance);
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO &io = ImGui::GetIO();
-	static_cast<void>(io);
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+	ImGuiIO &m_io = ImGui::GetIO();
+	static_cast<void>(m_io);
+	memory->Set_ImGuiIO(&m_io);
+	m_io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+	m_io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;	// Enable Gamepad Controls
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
@@ -66,7 +68,7 @@ int Start(_In_ HINSTANCE hInstance) {
 	// dynamic style scaling, changing this requires resetting
 	// Style + calling this again)
 	style.FontScaleDpi = window->get_main_scale() + 0.2f; // Set initial font scale. (using
-	// io.ConfigDpiScaleFonts=true makes this unnecessary.
+	// m_io.ConfigDpiScaleFonts=true makes this unnecessary.
 	// We leave both here for documentation purpose)
 
 	style.Alpha			  = 0.90f;
@@ -113,18 +115,18 @@ int Start(_In_ HINSTANCE hInstance) {
 	// m_SrvDescHeap->GetGPUDescriptorHandleForHeapStart());
 
 
-	MainLoop(&io, window);
+	MainLoop(&m_io);
 
 	WaitForPendingOperations();
 
 	// Cleanup
-	Cleanup(window);
+	Cleanup();
 
 	return 0;
 }
 
 
-void OpenWindow(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs, WindowManager *window) {
+void OpenWindow(_In_ HINSTANCE hInstance) {
 
 
 	cmdArgs->Open();
@@ -143,13 +145,14 @@ void OpenWindow(_In_ HINSTANCE hInstance, CommandLineArguments *cmdArgs, WindowM
 	::UpdateWindow(window->GetHWND());
 }
 
-void MainLoop(ImGuiIO *io, WindowManager *window) {
+void MainLoop(ImGuiIO *m_io) {
 
-	auto m_font_manager = std::make_unique<FontManager>(io);
-	//m_font_manager->GetIo(io);
-	auto m_font_manager_window =
-		std::make_unique<FontManagerWindow>(m_font_manager.get(), window->GetHWND());
-	auto m_debug_window = std::make_unique<DebugWindow>(io);
+	m_font_manager = memory->Get_FontManager();
+	m_font_manager->GetIo(m_io);
+	m_font_manager_window = memory->Get_FontManagerWindow();
+	m_font_manager_window->GetAux(window->GetHWND(), m_font_manager);
+    m_debug_window = memory->Get_DebugWindow();
+    m_debug_window->GetIo(m_io);
 
 
 	m_font_manager->LoadFonts();
@@ -318,7 +321,7 @@ void MainLoop(ImGuiIO *io, WindowManager *window) {
 	}
 }
 
-void Cleanup(WindowManager *window) {
+void Cleanup() {
 
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
@@ -574,9 +577,9 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 															 LPARAM lParam);
 
 // dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your
+// - When m_io.WantCaptureMouse is true, do not dispatch mouse input data to your
 // main application, or clear/overwrite your copy of the mouse data.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to
+// - When m_io.WantCaptureKeyboard is true, do not dispatch keyboard input data to
 // your main application, or clear/overwrite your copy of the keyboard data.
 // Generally you may always pass all inputs to dear imgui, and hide them from
 // your application based on those two flags.

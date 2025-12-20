@@ -13,7 +13,6 @@
 // This class manages the ImGui UI with file/folder dialog buttons
 class FontManagerWindow {
 
-    FontManagerWindow();
 
     // FontManager instance for managing fonts
     FontManager* m_fontManager;
@@ -37,8 +36,12 @@ class FontManagerWindow {
     int m_totalFontsLoaded;
 
 public:
-   
-    FontManagerWindow(FontManager* fontManager, HWND hwnd);
+
+    FontManagerWindow();
+
+    void GetAux(HWND hwnd, FontManager* fontManager);
+    void GetFontManager(FontManager* fontManager);
+    void GetHwnd(HWND hwnd);
     
     // Destructor
     ~FontManagerWindow();
@@ -53,4 +56,4 @@ public:
     bool bFonstsWereLoaded;
 };
 
-void ExampleUsageInMainLoop(HWND hwnd);
+//void ExampleUsageInMainLoop(HWND hwnd);

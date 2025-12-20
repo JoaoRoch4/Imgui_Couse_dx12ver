@@ -6,11 +6,12 @@
 DebugWindow::DebugWindow()
     : m_io(nullptr), tPsTHread{}, tPyTHread{}, bPsOpen(false),bPyOpen(false), hPsProcessHandle(nullptr),hPyProcessHandle(nullptr) {}
 
-DebugWindow::DebugWindow(ImGuiIO* io) : DebugWindow() {
+void DebugWindow::GetIo(ImGuiIO* io) {
 
-	if (io) m_io = io;
-	else throw std::runtime_error("io is nullptr");
+    if(io) m_io = io;
+    else throw std::runtime_error("io is nullptr");
 }
+
 
 DebugWindow::~DebugWindow() {
 

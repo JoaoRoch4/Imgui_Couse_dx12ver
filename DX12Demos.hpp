@@ -7,7 +7,7 @@ class DxDemos : public Master{
 
 public:
 
-     DxDemos(ImGuiIO* io);
+     DxDemos(ImGuiIO* m_io);
      virtual ~DxDemos();
 
 

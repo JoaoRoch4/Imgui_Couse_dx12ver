@@ -25,11 +25,11 @@
 //    // Setup Dear ImGui context
 //    IMGUI_CHECKVERSION();
 //    ImGui::CreateContext();
-//    ImGuiIO& io = ImGui::GetIO();
-//    (void)io;
-//    io.ConfigFlags |=
+//    ImGuiIO& m_io = ImGui::GetIO();
+//    (void)m_io;
+//    m_io.ConfigFlags |=
 //        ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-//    io.ConfigFlags |=
+//    m_io.ConfigFlags |=
 //        ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
 //
 //    // Setup Dear ImGui style
@@ -45,7 +45,7 @@
 //    // Style + calling this again)
 //    style.FontScaleDpi =
 //        window->get_main_scale() + 0.2f; // Set initial font scale. (using
-//    // io.ConfigDpiScaleFonts=true makes this unnecessary.
+//    // m_io.ConfigDpiScaleFonts=true makes this unnecessary.
 //    // We leave both here for documentation purpose)
 //
 //    style.Alpha = 0.90f;
@@ -97,7 +97,7 @@
 //    // m_SrvDescHeap->GetCPUDescriptorHandleForHeapStart(),
 //    // m_SrvDescHeap->GetGPUDescriptorHandleForHeapStart());
 //
-//    FontManager m_font_manager(&io);
+//    FontManager m_font_manager(&m_io);
 //
 //    m_font_manager.LoadFonts();
 //    m_font_manager.SetDefaultFont();
@@ -186,8 +186,8 @@
 //            ImGui::Text("counter = %d", counter);
 //
 //            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-//                1000.0f / io.Framerate,
-//                io.Framerate);
+//                1000.0f / m_io.Framerate,
+//                m_io.Framerate);
 //            ImGui::End();
 //        }
 //

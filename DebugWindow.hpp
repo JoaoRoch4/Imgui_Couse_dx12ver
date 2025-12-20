@@ -5,7 +5,9 @@
 
 class DebugWindow : public Master {
 public:
-    DebugWindow(ImGuiIO* io);
+    DebugWindow();
+
+    void GetIo(ImGuiIO* io);
 
     virtual ~DebugWindow();
 
@@ -17,7 +19,6 @@ public:
 
 private:
     void Render();
-    DebugWindow();
     void openPowershell();
     void openPy();
 

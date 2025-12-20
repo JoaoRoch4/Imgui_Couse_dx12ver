@@ -35,13 +35,20 @@ public:
 	//DX12Renderer*					Get_DX12Renderer() const;
 
 
+    static MemoryManagement* Get_MemoryManagement();
+
 	CommandLineArguments*			Get_CommandLineArguments() const;
 	ConsoleInputHandler*			Get_ConsoleInputHandler() const;
 	ConsoleWindow*					Get_ConsoleWindow() const;
+	DebugWindow*					Get_DebugWindow() const;
+	FontManager*					Get_FontManager() const;
+	FontManagerWindow*				Get_FontManagerWindow() const;
 	ExampleDescriptorHeapAllocator* Get_ExampleDescriptorHeapAllocator() const;
 	WindowManager*					Get_WindowManager() const;
 	ConfigManager*					Get_ConfigManager() const;
 	OutputConsole*					Get_OutputConsole() const;
+
+
 
 protected:
 	void Alloc_command_line_args();
@@ -63,8 +70,10 @@ protected:
 private:
 	//UPtr<DX12Renderer>					 dx12_renderer;
 
-	UPtr<ExampleDescriptorHeapAllocator> m_Example_Descriptor_Heap_Allocator;
+    std::shared_ptr<MemoryManagement>	   m_memory_management;
 
+
+	UPtr<ExampleDescriptorHeapAllocator> m_Example_Descriptor_Heap_Allocator;
 
 	UPtr<CommandLineArguments> m_command_line_args;
 	UPtr<ConsoleWindow>		   m_console_window;
@@ -90,6 +99,7 @@ private:
 	bool m_bFont_manager_allocated;
 	bool m_bFont_manager_window_allocated;
 	bool m_bFrame_context_allocated;
+    bool m_bmemory_management_allocated;
 	bool m_bWindow_class_allocated;
 	bool m_bWindow_manager_allocated;
 	bool m_bOutput_console_allocated;
@@ -103,4 +113,12 @@ public:
 	bool m_bShow_styleEditor_window;
 	bool m_bShow_Debug_window;
 	bool m_bShow_FileSys_window;
+
+	void Set_ImGuiIO(ImGuiIO* m_io);
+
+	ImGuiIO* Get_ImGuiIO();
+
+private:
+	ImGuiIO* m_io;
+	bool	 bIoPassed;
 };

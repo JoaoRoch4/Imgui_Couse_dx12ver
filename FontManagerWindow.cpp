@@ -1,5 +1,6 @@
-﻿#include "PCH.hpp"
-#include "FontManagerWindow.hpp"
+#include "PCH.hpp"
+#include "Classes.hpp"
+#include "Source.hpp"
 
 FontManagerWindow::FontManagerWindow()
     : m_fontManager(nullptr),           // Store font manager pointer
@@ -10,19 +11,36 @@ FontManagerWindow::FontManagerWindow()
     m_fontsLoaded(false),                 // No fonts loaded yet
     m_totalFontsLoaded(0),                // Zero fonts loaded+
     bShowFontPreview(false),
-bFonstsWereLoaded(false){}
+bFonstsWereLoaded(false){
 
-FontManagerWindow::FontManagerWindow(FontManager* fontManager, HWND hwnd) : FontManagerWindow() {
+}
+
+
+void FontManagerWindow::GetAux(HWND hwnd, FontManager* fontManager) {
+    GetHwnd(hwnd);
+    GetFontManager(fontManager);
+}
+
+void FontManagerWindow::GetFontManager(FontManager* fontManager) {
     if(fontManager)
         m_fontManager = fontManager;
     else throw std::runtime_error("fontManager is nullptr");
+}
 
-    if(hwnd)
+void FontManagerWindow::GetHwnd(HWND hwnd) {
+      if(hwnd)
         m_hwnd = hwnd;
     else throw std::runtime_error("hwnd is nullptr");
-
 }
-FontManagerWindow::~FontManagerWindow() {}
+
+
+FontManagerWindow::~FontManagerWindow() {
+
+    m_fontManager = nullptr;
+    m_selectedFilePath.clear();
+    m_selectedFolderPath.clear();
+    m_statusMessage.clear();
+}
 
 
 void FontManagerWindow::Render() {
@@ -284,41 +302,41 @@ void FontManagerWindow::RenderFontPreview() {
     ImGui::End();
 }
 
-void ExampleUsageInMainLoop(HWND hwnd) {
-    // Get ImGui IO
-    ImGuiIO& io = ImGui::GetIO();
-
-    // Create FontManager
-    FontManager fontManager(&io);
-
-    // Create dialog example UI
-    FontManagerWindow dialogUI(&fontManager, hwnd);
-
-    // Main application loop (pseudo-code)
-    bool running = true;
-    while(running) {
-        // Process Windows messages
-        // ... (message pump code here)
-
-        // Start ImGui frame
-        // ImGui_ImplDX11_NewFrame();
-        // ImGui_ImplWin32_NewFrame();
-        // ImGui::NewFrame();
-
-        // Render our dialog UI
-        dialogUI.Render();
-
-        // Optional: Render font preview window
-        dialogUI.RenderFontPreview();
-
-        // Render ImGui
-        // ImGui::Render();
-        // ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-        // Present frame
-        // g_pSwapChain->Present(1, 0);
-    }
-
-    // Cleanup
-    fontManager.CleanupFonts();
-}
+//void ExampleUsageInMainLoop(HWND hwnd) {
+//    // Get ImGui IO
+//    ImGuiIO& m_io = ImGui::GetIO();
+//
+//    // Create FontManager
+//    FontManager fontManager;
+//
+//    // Create dialog example UI
+//    FontManagerWindow dialogUI(&fontManager, hwnd);
+//
+//    // Main application loop (pseudo-code)
+//    bool running = true;
+//    while(running) {
+//        // Process Windows messages
+//        // ... (message pump code here)
+//
+//        // Start ImGui frame
+//        // ImGui_ImplDX11_NewFrame();
+//        // ImGui_ImplWin32_NewFrame();
+//        // ImGui::NewFrame();
+//
+//        // Render our dialog UI
+//        dialogUI.Render();
+//
+//        // Optional: Render font preview window
+//        dialogUI.RenderFontPreview();
+//
+//        // Render ImGui
+//        // ImGui::Render();
+//        // ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+//
+//        // Present frame
+//        // g_pSwapChain->Present(1, 0);
+//    }
+//
+//    // Cleanup
+//    fontManager.CleanupFonts();
+//}

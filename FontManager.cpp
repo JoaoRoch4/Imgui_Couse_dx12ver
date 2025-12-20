@@ -1,4 +1,4 @@
-﻿// FontManager.cpp - Font Manager Class Implementation
+// FontManager.cpp - Font Manager Class Implementation
 // This file implements all the methods declared in FontManager.hpp
 
 #include "PCH.hpp"           // Include precompiled header
@@ -13,18 +13,27 @@ namespace fs = std::filesystem;
 
 // Default constructor - initializes all pointers to nullptr and vector to empty
 FontManager::FontManager()
-    : io(nullptr),              // ImGuiIO pointer set to null
+    : m_io(nullptr),              // ImGuiIO pointer set to null
       m_defaultFont(nullptr),   // Default font pointer set to null
       m_loadedFonts({})         // Initialize empty vector of font pointers
 {}
 
-// Parameterized constructor - takes ImGuiIO pointer
-// Calls default constructor first, then sets io pointer
-FontManager::FontManager(ImGuiIO* io) 
-    : FontManager()  // Delegate to default constructor
-{ 
-    this->io = io;   // Store the ImGuiIO pointer for later use
+void FontManager::GetIo(ImGuiIO * io) {
+
+    const auto line = __LINE__;
+
+    if(io == nullptr) {
+        str err{ "m_io passed at " };
+        err.append(__FUNCTION__);
+        err.append(" line: ");
+        err.append(std::to_string(line));
+        err.append("is nullptr! ");
+        throw std::runtime_error(err.c_str());
+    }
+    m_io = io;
 }
+
+
 
 // Destructor - currently empty, but could be used for cleanup
 FontManager::~FontManager() 
@@ -37,32 +46,32 @@ FontManager::~FontManager()
 // LoadFonts - Your original implementation with hardcoded font paths
 void FontManager::LoadFonts() {
     // Load font from Windows Fonts folder - Segoe UI
-    ImFont* font2 = io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf");
+    ImFont* font2 = m_io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf");
     IM_ASSERT(font2 != nullptr);  // Assert that font loaded successfully
     m_loadedFonts.push_back(font2);  // Add to our vector of loaded fonts
 
     //// Load DroidSans from relative path
-    //ImFont* font3 = io->Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf");
+    //ImFont* font3 = m_io->Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf");
     //IM_ASSERT(font3 != nullptr);
     //m_loadedFonts.push_back(font3);
 
     //// Load Roboto Medium font
-    //ImFont* font4 = io->Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf");
+    //ImFont* font4 = m_io->Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf");
     //IM_ASSERT(font4 != nullptr);
     //m_loadedFonts.push_back(font4);
 
     //// Load Cousine Regular font
-    //ImFont* font5 = io->Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
+    //ImFont* font5 = m_io->Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
     //IM_ASSERT(font5 != nullptr);
     //m_loadedFonts.push_back(font5);
 
     // Load Arial from Windows Fonts
-    ImFont* font6 = io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\Arial.TTF");
+    ImFont* font6 = m_io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\Arial.TTF");
     IM_ASSERT(font6 != nullptr);
     m_loadedFonts.push_back(font6);
 
     // Load Arial Rounded Bold
-    ImFont* font7 = io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ARLRDBD.TTF");
+    ImFont* font7 = m_io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ARLRDBD.TTF");
     IM_ASSERT(font7 != nullptr);
     m_loadedFonts.push_back(font7);
 }
@@ -215,7 +224,7 @@ int FontManager::LoadFontsFromFolderToMap(const std::string& folderPath) {
                 std::string fontPathStr = filePath.string();
                 
                 // Try to load the font using ImGui
-                ImFont* loadedFont = io->Fonts->AddFontFromFileTTF(fontPathStr.c_str());
+                ImFont* loadedFont = m_io->Fonts->AddFontFromFileTTF(fontPathStr.c_str());
                 
                 // If font loaded successfully (not nullptr)
                 if (loadedFont != nullptr) {
@@ -264,7 +273,7 @@ int FontManager::LoadFontsFromFolderRecursiveToMap(const std::string& folderPath
                     std::string fontPathStr = filePath.string();
                     
                     // Attempt to load the font
-                    ImFont* loadedFont = io->Fonts->AddFontFromFileTTF(fontPathStr.c_str());
+                    ImFont* loadedFont = m_io->Fonts->AddFontFromFileTTF(fontPathStr.c_str());
                     
                     if (loadedFont != nullptr) {
                         // Add to both vector and map
@@ -286,7 +295,7 @@ int FontManager::LoadFontsFromFolderRecursiveToMap(const std::string& folderPath
                     std::string fontName = ExtractFontName(filePath);
                     std::string fontPathStr = filePath.string();
                     
-                    ImFont* loadedFont = io->Fonts->AddFontFromFileTTF(fontPathStr.c_str());
+                    ImFont* loadedFont = m_io->Fonts->AddFontFromFileTTF(fontPathStr.c_str());
                     
                     if (loadedFont != nullptr) {
                         m_loadedFonts.push_back(loadedFont);
@@ -574,7 +583,7 @@ std::string FontManager::OpenFolderBrowserDialog(HWND hwnd) const {
 ImFont* FontManager::LoadSingleFont(const std::string& fontPath) {
     // Attempt to load the font using ImGui's font loading function
     // This function returns nullptr if the file cannot be loaded
-    ImFont* font = io->Fonts->AddFontFromFileTTF(fontPath.c_str());
+    ImFont* font = m_io->Fonts->AddFontFromFileTTF(fontPath.c_str());
     
     // Check if font loaded successfully
     if (font != nullptr) {
@@ -614,7 +623,7 @@ void FontManager::CleanupFonts() {
 // SetDefaultFont - Sets default font to font at index 5 (Arial in your original code)
 void FontManager::SetDefaultFont() {
     return;
-    io->FontDefault = m_loadedFonts.at(5);  // .at() throws if index out of bounds
+    m_io->FontDefault = m_loadedFonts.at(5);  // .at() throws if index out of bounds
 }
 
 // SetDefaultFont - Sets a specific font as the default
@@ -627,7 +636,7 @@ void FontManager::SetDefaultFont(ImFont* font) {
 // @param path: C-string path to font file
 void FontManager::SetDefaultFont(const char* path) {
     // Load the font from the provided path
-    ImFont* fontarg = io->Fonts->AddFontFromFileTTF(path);
+    ImFont* fontarg = m_io->Fonts->AddFontFromFileTTF(path);
     // Note: This function doesn't check if loading succeeded or store the font
     // You might want to add error checking here
 }

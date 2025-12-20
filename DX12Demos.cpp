@@ -4,10 +4,10 @@
 
 DxDemos::DxDemos() : m_io(nullptr) {}
 
-DxDemos::DxDemos(ImGuiIO* io) :DxDemos()  {
+DxDemos::DxDemos(ImGuiIO* m_io) :DxDemos()  {
 
-    if (io) m_io = io;
-	else throw std::runtime_error("io is nullptr");
+    if (m_io) m_io = m_io;
+	else throw std::runtime_error("m_io is nullptr");
 }
 
 DxDemos::~DxDemos() {}

@@ -6,6 +6,7 @@
 #include "Classes.hpp"
 #include "MemoryManagement.hpp"
 
+
 /**
  * @brief Constructor - Initializes all pointers and flags
  * 
@@ -26,7 +27,7 @@ MemoryManagement::MemoryManagement()
   m_frame_context(nullptr),
   m_window_class(nullptr),
   m_window_manager(nullptr),
-    m_output_console(nullptr),
+  m_output_console(nullptr),
   m_bCommand_line_args_allocated(false),
   m_bConsole_window_allocated(false),
   m_bConsole_input_handler_allocated(false),
@@ -46,7 +47,9 @@ MemoryManagement::MemoryManagement()
   m_bShow_styleEditor_window(false),
   m_bShow_Debug_window(false),
   m_bShow_FileSys_window(false),
-    m_bOutput_console_allocated(false)
+  m_bOutput_console_allocated(false),
+  m_io(nullptr),
+  bIoPassed(false)
 
 {}
 
@@ -57,25 +60,27 @@ MemoryManagement::MemoryManagement()
  * We just need to reset the flags to indicate nothing is allocated.
  */
 MemoryManagement::~MemoryManagement() {
-	m_bCommand_line_args_allocated				 = false;
-	m_bConsole_window_allocated					 = false;
-	m_bConsole_input_handler_allocated			 = false;
+	m_bCommand_line_args_allocated				   = false;
+	m_bConsole_window_allocated					   = false;
+	m_bConsole_input_handler_allocated			   = false;
 	//bDx12_renderer_allocated					 = false;
-	m_bDx_demos_allocated							 = false;
-	m_bDebug_window_allocated						 = false;
+	m_bDx_demos_allocated						   = false;
+	m_bDebug_window_allocated					   = false;
 	m_bExample_Descriptor_Heap_Allocator_allocated = false;
-	m_bFont_manager_allocated						 = false;
-	m_bFont_manager_window_allocated				 = false;
-	m_bFrame_context_allocated					 = false;
-	m_bWindow_class_allocated						 = false;
-	m_bWindow_manager_allocated					 = false;
-	m_bShow_demo_window							 = false;
-	m_bShow_another_window						 = false;
-	m_bShow_FontManager_window					 = false;
-	m_bShow_styleEditor_window					 = false;
-	m_bShow_Debug_window							 = false;
-	m_bShow_FileSys_window						 = false;
-    m_bOutput_console_allocated= false;
+	m_bFont_manager_allocated					   = false;
+	m_bFont_manager_window_allocated			   = false;
+	m_bFrame_context_allocated					   = false;
+	m_bWindow_class_allocated					   = false;
+	m_bWindow_manager_allocated					   = false;
+	m_bShow_demo_window							   = false;
+	m_bShow_another_window						   = false;
+	m_bShow_FontManager_window					   = false;
+	m_bShow_styleEditor_window					   = false;
+	m_bShow_Debug_window						   = false;
+	m_bShow_FileSys_window						   = false;
+	m_bOutput_console_allocated					   = false;
+	bIoPassed									   = false;
+	m_io										   = nullptr;
 }
 
 /**
@@ -123,8 +128,8 @@ void MemoryManagement::AllocAll() {
 	// Allocate window manager
 	Alloc_window_manager();
 
-    // Allocate m_console_window
-    Alloc_output_console();
+	// Allocate m_console_window
+	Alloc_output_console();
 }
 
 /**
@@ -152,7 +157,16 @@ void MemoryManagement::Alloc_command_line_args() {
 
 	// Verify allocation succeeded
 	// The pointer should not be null after make_unique
-	if (!m_command_line_args) { throw std::runtime_error("CommandLineArguments failed to allocate"); }
+	if (!m_command_line_args) {
+		throw std::runtime_error("CommandLineArguments failed to allocate");
+	}
+}
+
+
+MemoryManagement* MemoryManagement::Get_MemoryManagement() {
+    static std::unique_ptr<MemoryManagement> instance =
+        std::make_unique<MemoryManagement>();
+    return instance.get();
 }
 
 /**
@@ -239,7 +253,9 @@ ConsoleInputHandler* MemoryManagement::Get_ConsoleInputHandler() const {
 	}
 
 	// Check if pointer is valid
-	if (!m_console_input_handler) { throw std::runtime_error("m_console_input_handler is nullptr!"); }
+	if (!m_console_input_handler) {
+		throw std::runtime_error("m_console_input_handler is nullptr!");
+	}
 
 	// Return raw pointer
 	return m_console_input_handler.get();
@@ -248,13 +264,54 @@ ConsoleInputHandler* MemoryManagement::Get_ConsoleInputHandler() const {
 ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
 
 	// Check if allocated
-	if (!m_bConsole_window_allocated) { throw std::runtime_error("m_console_window is not allocated"); }
+	if (!m_bConsole_window_allocated) {
+		throw std::runtime_error("m_console_window is not allocated");
+	}
 
 	// Check if pointer is valid
 	if (!m_console_window) { throw std::runtime_error("m_console_window is nullptr!"); }
 
 	// Return raw pointer
 	return m_console_window.get();
+}
+
+DebugWindow* MemoryManagement::Get_DebugWindow() const {
+    // Check if allocated
+    if(!m_bDebug_window_allocated) {
+        throw std::runtime_error("m_debug_window is not allocated");
+    }
+
+    // Check if pointer is valid
+    if(!m_debug_window) { throw std::runtime_error("m_debug_window is nullptr!"); }
+
+    // Return raw pointer
+    return m_debug_window.get();
+}
+
+FontManager* MemoryManagement::Get_FontManager() const {
+    // Check if allocated
+    if(!m_bFont_manager_allocated) {
+        throw std::runtime_error("m_font_manager is not allocated");
+    }
+
+    // Check if pointer is valid
+    if(!m_font_manager) { throw std::runtime_error("m_font_manager is nullptr!"); }
+
+    // Return raw pointer
+    return m_font_manager.get();
+}
+
+FontManagerWindow* MemoryManagement::Get_FontManagerWindow() const {
+    // Check if allocated
+    if(!m_bFont_manager_window_allocated) {
+        throw std::runtime_error("m_font_manager_window is not allocated");
+    }
+
+    // Check if pointer is valid
+    if(!m_font_manager_window) { throw std::runtime_error("m_font_manager_window is nullptr!"); }
+
+    // Return raw pointer
+    return m_font_manager_window.get();
 }
 
 /**
@@ -396,6 +453,36 @@ void MemoryManagement::Alloc_output_console() {
 	if (!m_output_console) { throw std::runtime_error("m_output_console failed to allocate"); }
 }
 
+void MemoryManagement::Set_ImGuiIO(ImGuiIO* m_io) {
+	const auto line = __LINE__;
+
+	if (m_io == nullptr) {
+		str err{"m_io passed at "};
+		err.append(__FUNCTION__);
+		err.append(" line: ");
+		err.append(std::to_string(line));
+		err.append("is nullptr! ");
+		throw std::runtime_error(err.c_str());
+	}
+	m_io	  = m_io;
+	bIoPassed = true;
+}
+
+ImGuiIO* MemoryManagement::Get_ImGuiIO() {
+    const auto line = __LINE__;
+
+    if(!bIoPassed) throw std::runtime_error("m_io was wet not passed to be geted");
+    if(m_io == nullptr) {
+        str err{ "m_io passed at " };
+        err.append(__FUNCTION__);
+        err.append(" line: ");
+        err.append(std::to_string(line));
+        err.append("is nullptr! ");
+        throw std::runtime_error(err.c_str());
+    }
+    return m_io;
+}
+
 /**
  * @brief Gets the WindowManager instance
  * 
@@ -404,7 +491,9 @@ void MemoryManagement::Alloc_output_console() {
  */
 WindowManager* MemoryManagement::Get_WindowManager() const {
 	// Check if allocated
-	if (!m_bWindow_manager_allocated) { throw std::runtime_error("m_window_manager is not allocated"); }
+	if (!m_bWindow_manager_allocated) {
+		throw std::runtime_error("m_window_manager is not allocated");
+	}
 
 	// Check if pointer is valid
 	if (!m_window_manager) { throw std::runtime_error("m_window_manager is nullptr!"); }
@@ -416,7 +505,9 @@ WindowManager* MemoryManagement::Get_WindowManager() const {
 ConfigManager* MemoryManagement::Get_ConfigManager() const {
 
 	// Check if allocated
-	if (!m_bConfig_manager_allocated) { throw std::runtime_error("m_config_manager is not allocated"); }
+	if (!m_bConfig_manager_allocated) {
+		throw std::runtime_error("m_config_manager is not allocated");
+	}
 
 	// Check if pointer is valid
 	if (!m_config_manager) { throw std::runtime_error("m_config_manager is nullptr!"); }
@@ -428,7 +519,9 @@ ConfigManager* MemoryManagement::Get_ConfigManager() const {
 OutputConsole* MemoryManagement::Get_OutputConsole() const {
 
 	// Check if allocated
-	if (!m_bOutput_console_allocated) { throw std::runtime_error("m_output_console is not allocated"); }
+	if (!m_bOutput_console_allocated) {
+		throw std::runtime_error("m_output_console is not allocated");
+	}
 
 	// Check if pointer is valid
 	if (!m_output_console) { throw std::runtime_error("m_output_console is nullptr!"); }
@@ -437,8 +530,7 @@ OutputConsole* MemoryManagement::Get_OutputConsole() const {
 	return m_output_console.get();
 }
 
-// Placeholder implementations for other allocation methods
-// These can be implemented as needed
+
 
 void MemoryManagement::Alloc_console_window() {
 
@@ -462,15 +554,54 @@ void MemoryManagement::Alloc_dx_demos() {
 }
 
 void MemoryManagement::Alloc_debug_window() {
-	// TODO: Implement debug window allocation
+
+    // Check if already allocated
+    if(!m_bDebug_window_allocated) {
+        // Create new instance
+        m_debug_window = std::make_unique<DebugWindow>();
+
+        // Mark as allocated
+        m_bDebug_window_allocated = true;
+    } else {
+        throw std::runtime_error("m_debug_window is already allocated");
+    }
+
+    // Verify allocation
+    if(!m_debug_window) { throw std::runtime_error("m_debug_window failed to allocate"); }
 }
 
 void MemoryManagement::Alloc_font_manager() {
-	// TODO: Implement font manager allocation
+
+    // Check if already allocated
+    if(!m_bFont_manager_allocated) {
+        // Create new instance
+        m_font_manager = std::make_unique<FontManager>();
+
+        // Mark as allocated
+        m_bFont_manager_allocated = true;
+    } else {
+        throw std::runtime_error("m_font_manager is already allocated");
+    }
+
+    // Verify allocation
+    if(!m_console_window) { throw std::runtime_error("m_console_window failed to allocate"); }
 }
 
 void MemoryManagement::Alloc_font_manager_window() {
-	// TODO: Implement font manager window allocation
+    // Check if already allocated
+    if(!m_bFont_manager_window_allocated) {
+        // Create new instance
+        m_font_manager_window = std::make_unique<FontManagerWindow>();
+
+        // Mark as allocated
+        m_bFont_manager_window_allocated = true;
+    } else {
+        throw std::runtime_error("m_font_manager_window is already allocated");
+    }
+
+    // Verify allocation
+    if(!m_font_manager_window) { throw std::runtime_error("m_font_manager_window failed to allocate"); }
+	
 }
 
 void MemoryManagement::Alloc_frame_context() {
