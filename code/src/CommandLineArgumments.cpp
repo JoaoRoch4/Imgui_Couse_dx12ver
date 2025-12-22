@@ -146,36 +146,41 @@ int CommandLineArguments::GetArgumentValueInt(const std::wstring& arg, int defau
  * Command line usage: program.exe -help or program.exe -?
  */
 void CommandLineArguments::PrintHelp() {
+
+    OutputConsole* cmd = MemoryManagement::Get_MemoryManagement()->Get_OutputConsole();
     // Print header
-    std::wcout << L"\n=== Command Line Arguments ===" << std::endl;
-    std::wcout << L"\nWindow Configuration:" << std::endl;
+    cmd->Out << tc::bright_blue;
+    cmd->Out << L"\n=== Command Line Arguments ===" << std::endl;
+    cmd->Out << L"\nWindow Configuration:" << std::endl;
     
     // Print window size options
-    std::wcout << L"  -width <pixels>  or -w <pixels>  : Set window width" << std::endl;
-    std::wcout << L"  -height <pixels> or -h <pixels>  : Set window height" << std::endl;
+    cmd->Out << L"  -width <pixels>  or -w <pixels>  : Set window width" << std::endl;
+    cmd->Out << L"  -height <pixels> or -h <pixels>  : Set window height" << std::endl;
     
     // Print window position options
-    std::wcout << L"  -x <pixels>                       : Set window X position" << std::endl;
-    std::wcout << L"  -y <pixels>                       : Set window Y position" << std::endl;
+    cmd->Out << L"  -x <pixels>                       : Set window X position" << std::endl;
+    cmd->Out << L"  -y <pixels>                       : Set window Y position" << std::endl;
     
     // Print window state options
-    std::wcout << L"  -maximized or -maximize           : Start maximized" << std::endl;
-    std::wcout << L"  -fullscreen or -fs                : Start fullscreen (no borders)" << std::endl;
-    std::wcout << L"  -windowed or -window              : Start in windowed mode" << std::endl;
+   cmd->Out << L"  -maximized or -maximize           : Start maximized" << std::endl;
+   cmd->Out << L"  -fullscreen or -fs                : Start fullscreen (no borders)" << std::endl;
+   cmd->Out << L"  -windowed or -window              : Start in windowed mode" << std::endl;
     
     // Print other options
-    std::wcout << L"\nOther Options:" << std::endl;
-    std::wcout << L"  -cmd                              : Show console window" << std::endl;
-    std::wcout << L"  -help                       : Show this help message" << std::endl;
+    cmd->Out << L"\nOther Options:" << std::endl;
+    cmd->Out << L"  -cmd                              : Show console window" << std::endl;
+    cmd->Out << L"  -help                       : Show this help message" << std::endl;
     
     // Print examples
-    std::wcout << L"\nExamples:" << std::endl;
-    std::wcout << L"  program.exe -maximized" << std::endl;
-    std::wcout << L"  program.exe -width 1920 -height 1080" << std::endl;
-    std::wcout << L"  program.exe -fullscreen" << std::endl;
-    std::wcout << L"  program.exe -x 100 -y 100 -width 800 -height 600" << std::endl;
+    cmd->Out << L"\nExamples:" << std::endl;
+    cmd->Out << L"  program.exe -maximized" << std::endl;
+    cmd->Out << L"  program.exe -width 1920 -height 1080" << std::endl;
+    cmd->Out << L"  program.exe -fullscreen" << std::endl;
+    cmd->Out << L"  program.exe -x 100 -y 100 -width 800 -height 600" << std::endl;
     
-    std::wcout << L"\n==============================\n" << std::endl;
+    cmd->Out << L"\n==============================\n" << std::endl;
+
+    cmd->Out << tc::reset;
 }
 
 void CommandLineArguments::ShowCmd() {

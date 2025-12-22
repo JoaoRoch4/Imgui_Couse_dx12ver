@@ -94,7 +94,9 @@
     <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
-    <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\stb;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
@@ -199,6 +201,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4267;4273;4244;</DisableSpecificWarnings>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics>false</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset>NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
     </ClCompile>
     <Link>
       <FixedBaseAddress>false</FixedBaseAddress>
@@ -208,21 +215,199 @@
       <AdditionalOptions>/ignore:4273 /ignore:4217 /ignore:4286
  %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Classes.cpp">
+    <ClCompile Include="code\src\Classes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
     </ClCompile>
-    <ClCompile Include="CommandLineArgumments.cpp" />
-    <ClCompile Include="ConfigManager.cpp" />
-    <ClCompile Include="ConsoleInputHandler.cpp" />
-    <ClCompile Include="ConsoleWindow.cpp" />
-    <ClCompile Include="Conv.cpp" />
-    <ClCompile Include="DarkMode.cpp" />
-    <ClCompile Include="DebugWindow.cpp" />
-    <ClCompile Include="DX12Demos.cpp" />
-    <ClCompile Include="DX12Renderer.cpp" />
-    <ClCompile Include="ExampleDescriptorHeapAllocator.cpp" />
+    <ClCompile Include="code\src\CommandLineArgumments.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\ConfigManager.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\ConsoleInputHandler.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\ConsoleWindow.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\Conv.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\DarkMode.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\DebugWindow.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\DX12Demos.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\DX12Renderer.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\ExampleDescriptorHeapAllocator.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
     <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
@@ -470,42 +655,238 @@
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
-    <ClCompile Include="FontManager.cpp" />
-    <ClCompile Include="FontManagerWindow.cpp" />
-    <ClCompile Include="FrameContext.cpp" />
-    <ClCompile Include="Globals.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainWindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    <ClCompile Include="external\stb\stb_vorbis.c">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
-    <ClCompile Include="MemoryManagement.cpp" />
-    <ClCompile Include="OutputConsole.cpp" />
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="code\src\FontManager.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\FontManagerWindow.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\FrameContext.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\Globals.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\Main\Main.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\MainWindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\MemoryManagement.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\src\OutputConsole.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\pch\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Create</PrecompiledHeader>
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
     </ClCompile>
-    <ClCompile Include="render.cpp" />
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="code\src\render.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
+    <ClCompile Include="code\Main\Source.cpp">
       <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IncludeInUnityFile>
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
     </ClCompile>
-    <ClCompile Include="WindowManager.cpp" />
+    <ClCompile Include="code\src\WindowManager.cpp">
+      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">1</MinFilesInUnityFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
+      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
+      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+      </DisableSpecificWarnings>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes.hpp" />
-    <ClInclude Include="CommandLineArgumments.hpp" />
-    <ClInclude Include="ConfigManager.hpp" />
-    <ClInclude Include="ConsoleInputHandler.hpp" />
-    <ClInclude Include="ConsoleWindow.hpp" />
-    <ClInclude Include="Conv.hpp" />
-    <ClInclude Include="DarkMode.hpp" />
-    <ClInclude Include="DebugWindow.hpp" />
-    <ClInclude Include="DX12Demos.hpp" />
-    <ClInclude Include="DXSample.h" />
-    <ClInclude Include="DXSampleHelper.hpp" />
-    <ClInclude Include="ExampleDescriptorHeapAllocator.hpp" />
+    <ClInclude Include="code\Include\Classes.hpp" />
+    <ClInclude Include="code\Include\CommandLineArgumments.hpp" />
+    <ClInclude Include="code\Include\ConfigManager.hpp" />
+    <ClInclude Include="code\Include\ConsoleInputHandler.hpp" />
+    <ClInclude Include="code\Include\ConsoleWindow.hpp" />
+    <ClInclude Include="code\Include\Conv.hpp" />
+    <ClInclude Include="code\Include\DarkMode.hpp" />
+    <ClInclude Include="code\Include\DebugWindow.hpp" />
+    <ClInclude Include="code\Include\DX12Demos.hpp" />
+    <ClInclude Include="code\Include\DXSample.h" />
+    <ClInclude Include="code\Include\DXSampleHelper.hpp" />
+    <ClInclude Include="code\Include\ExampleDescriptorHeapAllocator.hpp" />
+    <ClInclude Include="code\pch\PCH.hpp" />
     <ClInclude Include="external\imgui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="external\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="external\imgui\imconfig.h" />
@@ -527,19 +908,38 @@
     <ClInclude Include="external\plutovg\source\plutovg-stb-image.h" />
     <ClInclude Include="external\plutovg\source\plutovg-stb-truetype.h" />
     <ClInclude Include="external\plutovg\source\plutovg-utils.h" />
-    <ClInclude Include="FontManager.hpp" />
-    <ClInclude Include="FontManagerWindow.hpp" />
-    <ClInclude Include="FrameContext.hpp" />
-    <ClInclude Include="Globals.hpp" />
-    <ClInclude Include="Main.hpp" />
-    <ClInclude Include="MainWindow.hpp" />
-    <ClInclude Include="Master.hpp" />
-    <ClInclude Include="MemoryManagement.hpp" />
-    <ClInclude Include="OutputConsole.hpp" />
-    <ClInclude Include="PCH.hpp" />
-    <ClInclude Include="render.hpp" />
-    <ClInclude Include="Source.hpp" />
-    <ClInclude Include="WindowManager.hpp" />
+    <ClInclude Include="external\stb\stb_connected_components.h" />
+    <ClInclude Include="external\stb\stb_c_lexer.h" />
+    <ClInclude Include="external\stb\stb_divide.h" />
+    <ClInclude Include="external\stb\stb_ds.h" />
+    <ClInclude Include="external\stb\stb_dxt.h" />
+    <ClInclude Include="external\stb\stb_easy_font.h" />
+    <ClInclude Include="external\stb\stb_herringbone_wang_tile.h" />
+    <ClInclude Include="external\stb\stb_hexwave.h" />
+    <ClInclude Include="external\stb\stb_image.h" />
+    <ClInclude Include="external\stb\stb_image_resize2.h" />
+    <ClInclude Include="external\stb\stb_image_write.h" />
+    <ClInclude Include="external\stb\stb_include.h" />
+    <ClInclude Include="external\stb\stb_leakcheck.h" />
+    <ClInclude Include="external\stb\stb_perlin.h" />
+    <ClInclude Include="external\stb\stb_rect_pack.h" />
+    <ClInclude Include="external\stb\stb_sprintf.h" />
+    <ClInclude Include="external\stb\stb_textedit.h" />
+    <ClInclude Include="external\stb\stb_tilemap_editor.h" />
+    <ClInclude Include="external\stb\stb_truetype.h" />
+    <ClInclude Include="external\stb\stb_voxel_render.h" />
+    <ClInclude Include="code\Include\FontManager.hpp" />
+    <ClInclude Include="code\Include\FontManagerWindow.hpp" />
+    <ClInclude Include="code\Include\FrameContext.hpp" />
+    <ClInclude Include="code\Include\Globals.hpp" />
+    <ClInclude Include="code\Include\Main.hpp" />
+    <ClInclude Include="code\Include\MainWindow.hpp" />
+    <ClInclude Include="code\Include\Master.hpp" />
+    <ClInclude Include="code\Include\MemoryManagement.hpp" />
+    <ClInclude Include="code\Include\OutputConsole.hpp" />
+    <ClInclude Include="code\Include\render.hpp" />
+    <ClInclude Include="code\Main\Source.hpp" />
+    <ClInclude Include="code\Include\WindowManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />

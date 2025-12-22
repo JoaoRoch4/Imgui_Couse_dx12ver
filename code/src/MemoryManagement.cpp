@@ -101,6 +101,8 @@ void MemoryManagement::AllocAll() {
 	// Allocate console input handler (threaded command input)
 	Alloc_console_input_handler();
 
+    Alloc_config_manager();
+
 	// Allocate DX12 renderer
 	//Alloc_dx12_renderer();
 

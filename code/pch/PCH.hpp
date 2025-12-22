@@ -61,6 +61,9 @@
 #include "imgui_freetype.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
+#include "imstb_truetype.h"
+#include "imstb_textedit.h"
+#include "imstb_rectpack.h"
 
 
 

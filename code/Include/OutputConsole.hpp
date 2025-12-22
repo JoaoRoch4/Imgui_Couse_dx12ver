@@ -5,12 +5,7 @@
 class CustomOutput {
     public:
 
-        template <class _Traits>
-        friend std::ios_base& operator<<(std::ios_base& os, _Traits& obj) {
-
-            os << obj;
-            return os;
-        }
+       
 
         template <class elem, class _Traits= std::char_traits<char>>
         friend std::basic_ostream<char, std::char_traits<char>>& operator<<(std::basic_ostream<elem, _Traits>& _Ostr, elem _Val) {
@@ -31,6 +26,7 @@ class CustomOutput {
 
     CustomOutput& operator<<(const long long& valor);
     CustomOutput& operator<<(const long double& valor);
+    CustomOutput& operator<<(const float& valor);
     CustomOutput& operator<<(const char* dado);
     CustomOutput& operator<<(const wchar_t* dado);
     CustomOutput& operator<<(const std::string& dado);
@@ -58,6 +54,8 @@ public:
     void ShowConsole(bool bShow);
 private:
     void CreateConsole();
+
+    void setConsoleFontSize(int size);
     bool m_bWasConsoleCreated;
     bool m_bShouldCreateConsole;
     bool m_bShowConsole;
