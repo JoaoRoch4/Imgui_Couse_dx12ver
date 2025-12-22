@@ -1,305 +1,297 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
 #include "Source.hpp"
+namespace app {
 
 FontManagerWindow::FontManagerWindow()
-    : m_fontManager(nullptr),           // Store font manager pointer
-    m_selectedFilePath(""),               // Initialize empty file path
-    m_selectedFolderPath(""),             // Initialize empty folder path
-    m_statusMessage("Ready"),             // Initial status message
-    m_hwnd(nullptr),                         // Store window handle
-    m_fontsLoaded(false),                 // No fonts loaded yet
-    m_totalFontsLoaded(0),                // Zero fonts loaded+
-    bShowFontPreview(false),
-bFonstsWereLoaded(false){
-
-}
+: m_fontManager(nullptr),	// Store font manager pointer
+  m_selectedFilePath(""),	// Initialize empty file path
+  m_selectedFolderPath(""), // Initialize empty folder path
+  m_statusMessage("Ready"), // Initial status message
+  m_hwnd(nullptr),			// Store window handle
+  m_fontsLoaded(false),		// No fonts loaded yet
+  m_totalFontsLoaded(0),	// Zero fonts loaded+
+  bShowFontPreview(false),
+  bFonstsWereLoaded(false) {}
 
 
 void FontManagerWindow::GetAux(HWND hwnd, FontManager* fontManager) {
-    GetHwnd(hwnd);
-    GetFontManager(fontManager);
+	GetHwnd(hwnd);
+	GetFontManager(fontManager);
 }
 
 void FontManagerWindow::GetFontManager(FontManager* fontManager) {
-    if(fontManager)
-        m_fontManager = fontManager;
-    else throw std::runtime_error("fontManager is nullptr");
+	if (fontManager) m_fontManager = fontManager;
+	else throw std::runtime_error("fontManager is nullptr");
 }
 
 void FontManagerWindow::GetHwnd(HWND hwnd) {
-      if(hwnd)
-        m_hwnd = hwnd;
-    else throw std::runtime_error("hwnd is nullptr");
+	if (hwnd) m_hwnd = hwnd;
+	else throw std::runtime_error("hwnd is nullptr");
 }
 
 
 FontManagerWindow::~FontManagerWindow() {
 
-    m_fontManager = nullptr;
-    m_selectedFilePath.clear();
-    m_selectedFolderPath.clear();
-    m_statusMessage.clear();
+	m_fontManager = nullptr;
+	m_selectedFilePath.clear();
+	m_selectedFolderPath.clear();
+	m_statusMessage.clear();
 }
 
 
 void FontManagerWindow::Render() {
-    // Begin a new ImGui window
-    // "Font Manager Demo" is the window title
-    // The window is resizable and can be moved
-    ImGui::Begin("Font Manager Demo");
+	// Begin a new ImGui window
+	// "Font Manager Demo" is the window title
+	// The window is resizable and can be moved
+	ImGui::Begin("Font Manager Demo");
 
-    ImGui::Checkbox("Show font preview", &bShowFontPreview);
+	ImGui::Checkbox("Show font preview", &bShowFontPreview);
 
-    ImGui::ShowFontSelector("FontManager");
+	ImGui::ShowFontSelector("FontManager");
 
-    if(bShowFontPreview) RenderFontPreview();
+	if (bShowFontPreview) RenderFontPreview();
 
-    // Display a text header
-    ImGui::Text("Font File and Folder Selection");
+	// Display a text header
+	ImGui::Text("Font File and Folder Selection");
 
-    // Add a horizontal separator line for visual separation
-    ImGui::Separator();
+	// Add a horizontal separator line for visual separation
+	ImGui::Separator();
 
-    // ====================================================================
-    // SECTION 1: SINGLE FONT FILE SELECTION
-    // ====================================================================
+	// ====================================================================
+	// SECTION 1: SINGLE FONT FILE SELECTION
+	// ====================================================================
 
-    // Display a sub-header for this section
-    ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "Select Single Font File:");
+	// Display a sub-header for this section
+	ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "Select Single Font File:");
 
-    // Create a button labeled "Browse for Font File..."
-    // When clicked, the button returns true
-    if(ImGui::Button("Browse for Font File...")) {
-        // Button was clicked - open the file dialog
-        // Call FontManager's method to show Windows file picker
-        std::string selectedFile = m_fontManager->OpenFontFileDialog(m_hwnd);
+	// Create a button labeled "Browse for Font File..."
+	// When clicked, the button returns true
+	if (ImGui::Button("Browse for Font File...")) {
+		// Button was clicked - open the file dialog
+		// Call FontManager's method to show Windows file picker
+		std::string selectedFile = m_fontManager->OpenFontFileDialog(m_hwnd);
 
-        // Check if user selected a file (not cancelled)
-        if(!selectedFile.empty()) {
-            // User selected a file - store it
-            m_selectedFilePath = selectedFile;
+		// Check if user selected a file (not cancelled)
+		if (!selectedFile.empty()) {
+			// User selected a file - store it
+			m_selectedFilePath = selectedFile;
 
-            // Update status message to show what was selected
-            m_statusMessage = "File selected: " + selectedFile;
-        } else {
-            // User cancelled the dialog
-            m_statusMessage = "File selection cancelled";
-        }
-    }
+			// Update status message to show what was selected
+			m_statusMessage = "File selected: " + selectedFile;
+		} else {
+			// User cancelled the dialog
+			m_statusMessage = "File selection cancelled";
+		}
+	}
 
-    // Display the currently selected file path (if any)
-    // This shows on the same line as the button
-    ImGui::SameLine();  // Put next item on same line
-    ImGui::Text("Selected: %s",
-        m_selectedFilePath.empty() ? "None" : m_selectedFilePath.c_str());
+	// Display the currently selected file path (if any)
+	// This shows on the same line as the button
+	ImGui::SameLine(); // Put next item on same line
+	ImGui::Text("Selected: %s", m_selectedFilePath.empty() ? "None" : m_selectedFilePath.c_str());
 
-    // Add a button to load the selected font file
-    // Only enabled if a file is selected (not empty)
-    if(!m_selectedFilePath.empty()) {
-        // File is selected - show Load button
-        if(ImGui::Button("Load This Font")) {
-            // Try to load the selected font
-            ImFont* loadedFont = ImGui::GetIO().Fonts->AddFontFromFileTTF(
-                m_selectedFilePath.c_str());
+	// Add a button to load the selected font file
+	// Only enabled if a file is selected (not empty)
+	if (!m_selectedFilePath.empty()) {
+		// File is selected - show Load button
+		if (ImGui::Button("Load This Font")) {
+			// Try to load the selected font
+			ImFont* loadedFont =
+				ImGui::GetIO().Fonts->AddFontFromFileTTF(m_selectedFilePath.c_str());
 
-            // Check if font loaded successfully
-            if(loadedFont != nullptr) {
-                m_statusMessage = "Successfully loaded font!";
-                m_totalFontsLoaded++;
-            } else {
-                m_statusMessage = "ERROR: Failed to load font!";
-            }
-        }
-    }
+			// Check if font loaded successfully
+			if (loadedFont != nullptr) {
+				m_statusMessage = "Successfully loaded font!";
+				m_totalFontsLoaded++;
+			} else {
+				m_statusMessage = "ERROR: Failed to load font!";
+			}
+		}
+	}
 
-    // Add some vertical spacing between sections
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
+	// Add some vertical spacing between sections
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
 
-    // ====================================================================
-    // SECTION 2: FOLDER SELECTION AND BATCH LOADING
-    // ====================================================================
+	// ====================================================================
+	// SECTION 2: FOLDER SELECTION AND BATCH LOADING
+	// ====================================================================
 
-    // Display sub-header for folder section
-    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Select Folder Containing Fonts:");
+	// Display sub-header for folder section
+	ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Select Folder Containing Fonts:");
 
-    // Create a button to browse for folder
-    if(ImGui::Button("Browse for Folder...")) {
-        // Button clicked - open folder browser dialog
-        std::string selectedFolder = m_fontManager->OpenFolderBrowserDialog(m_hwnd);
+	// Create a button to browse for folder
+	if (ImGui::Button("Browse for Folder...")) {
+		// Button clicked - open folder browser dialog
+		std::string selectedFolder = m_fontManager->OpenFolderBrowserDialog(m_hwnd);
 
-        // Check if user selected a folder
-        if(!selectedFolder.empty()) {
-            // Folder selected - store it
-            m_selectedFolderPath = selectedFolder;
-            m_statusMessage = "Folder selected: " + selectedFolder;
-            bFonstsWereLoaded = false;
-        } else {
-            // User cancelled
-            m_statusMessage = "Folder selection cancelled";
-        }
-    }
+		// Check if user selected a folder
+		if (!selectedFolder.empty()) {
+			// Folder selected - store it
+			m_selectedFolderPath = selectedFolder;
+			m_statusMessage		 = "Folder selected: " + selectedFolder;
+			bFonstsWereLoaded	 = false;
+		} else {
+			// User cancelled
+			m_statusMessage = "Folder selection cancelled";
+		}
+	}
 
-    // Display selected folder path
-    ImGui::SameLine();
-    ImGui::Text("Selected: %s",
-        m_selectedFolderPath.empty() ? "None" : m_selectedFolderPath.c_str());
+	// Display selected folder path
+	ImGui::SameLine();
+	ImGui::Text("Selected: %s",
+				m_selectedFolderPath.empty() ? "None" : m_selectedFolderPath.c_str());
 
-    // Show buttons for loading fonts from folder (only if folder selected)
-    if(!bFonstsWereLoaded){
-        if(!m_selectedFolderPath.empty()) {
-            // Button to load fonts from folder (non-recursive)
-            if(ImGui::Button("Load Fonts from This Folder")) {
-                // Load all fonts from the selected folder
-                int loaded = m_fontManager->LoadFontsFromFolderToMap(m_selectedFolderPath);
+	// Show buttons for loading fonts from folder (only if folder selected)
+	if (!bFonstsWereLoaded) {
+		if (!m_selectedFolderPath.empty()) {
+			// Button to load fonts from folder (non-recursive)
+			if (ImGui::Button("Load Fonts from This Folder")) {
+				// Load all fonts from the selected folder
+				int loaded = m_fontManager->LoadFontsFromFolderToMap(m_selectedFolderPath);
 
-                // Update status with number of fonts loaded
-                m_statusMessage = "Loaded " + std::to_string(loaded) + " fonts from folder";
-                m_totalFontsLoaded += loaded;
-                m_fontsLoaded = true;
-                bFonstsWereLoaded = true;
+				// Update status with number of fonts loaded
+				m_statusMessage = "Loaded " + std::to_string(loaded) + " fonts from folder";
+				m_totalFontsLoaded += loaded;
+				m_fontsLoaded	  = true;
+				bFonstsWereLoaded = true;
+			}
 
-            }
+			// Button to load fonts recursively
+			ImGui::SameLine();
+			if (ImGui::Button("Load Fonts Recursively") && bFonstsWereLoaded) {
+				// Load fonts from folder and all subfolders
+				int loaded =
+					m_fontManager->LoadFontsFromFolderRecursiveToMap(m_selectedFolderPath, true);
 
-            // Button to load fonts recursively
-            ImGui::SameLine();
-            if(ImGui::Button("Load Fonts Recursively") && bFonstsWereLoaded) {
-                // Load fonts from folder and all subfolders
-                int loaded = m_fontManager->LoadFontsFromFolderRecursiveToMap(
-                    m_selectedFolderPath, true);
+				m_statusMessage = "Loaded " + std::to_string(loaded) + " fonts recursively";
+				m_totalFontsLoaded += loaded;
+				m_fontsLoaded	  = true;
+				bFonstsWereLoaded = true;
+			}
 
-                m_statusMessage = "Loaded " + std::to_string(loaded) +
-                    " fonts recursively";
-                m_totalFontsLoaded += loaded;
-                m_fontsLoaded = true;
-                bFonstsWereLoaded = true;
+			// Button to search fonts without loading
+			if (ImGui::Button("Search Fonts (Don't Load)") && bFonstsWereLoaded) {
+				// Search for fonts but don't load them into memory
+				std::map<std::string, std::string> foundFonts =
+					m_fontManager->SearchFontsInFolderAsMap(m_selectedFolderPath, false);
 
-            }
+				m_statusMessage = "Found " + std::to_string(foundFonts.size()) + " font files";
+			}
+		}
+	}
 
-            // Button to search fonts without loading
-            if(ImGui::Button("Search Fonts (Don't Load)") && bFonstsWereLoaded) {
-                // Search for fonts but don't load them into memory
-                std::map<std::string, std::string> foundFonts =
-                    m_fontManager->SearchFontsInFolderAsMap(m_selectedFolderPath, false);
+	// Add spacing
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
 
-                m_statusMessage = "Found " + std::to_string(foundFonts.size()) +
-                    " font files";
-            }
-        }
-    }
+	// ====================================================================
+	// SECTION 3: LOADED FONTS DISPLAY
+	// ====================================================================
 
-    // Add spacing
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
+	// Display header for loaded fonts section
+	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Loaded Fonts:");
 
-    // ====================================================================
-    // SECTION 3: LOADED FONTS DISPLAY
-    // ====================================================================
+	// Display total count of loaded fonts
+	ImGui::Text("Total fonts in memory: %zu", m_fontManager->GetFontMap().size());
 
-    // Display header for loaded fonts section
-    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Loaded Fonts:");
+	// Create a child window with scrollbar for font list
+	// This creates a scrollable area to display all loaded fonts
+	ImGui::BeginChild("FontList",							 // ID for this child window
+					  ImVec2(0, 200),						 // Size: full width, 200 pixels height
+					  true,									 // Show border around child window
+					  ImGuiWindowFlags_HorizontalScrollbar); // Enable horizontal scroll
 
-    // Display total count of loaded fonts
-    ImGui::Text("Total fonts in memory: %zu", m_fontManager->GetFontMap().size());
+	// Get reference to the font map
+	const std::map<std::string, ImFont*>& fontMap = m_fontManager->GetFontMap();
 
-    // Create a child window with scrollbar for font list
-    // This creates a scrollable area to display all loaded fonts
-    ImGui::BeginChild("FontList",           // ID for this child window
-        ImVec2(0, 200),        // Size: full width, 200 pixels height
-        true,                  // Show border around child window
-        ImGuiWindowFlags_HorizontalScrollbar);  // Enable horizontal scroll
+	// Iterate through all loaded fonts
+	int fontIndex = 0;
+	for (const auto& pair : fontMap) {
+		// pair.first = font name (string)
+		// pair.second = ImFont pointer
 
-    // Get reference to the font map
-    const std::map<std::string, ImFont*>& fontMap = m_fontManager->GetFontMap();
+		// Create a unique ID for this font entry
+		ImGui::PushID(fontIndex);
 
-    // Iterate through all loaded fonts
-    int fontIndex = 0;
-    for(const auto& pair : fontMap) {
-        // pair.first = font name (string)
-        // pair.second = ImFont pointer
+		// Display font name as text
+		ImGui::Text("%d. %s", fontIndex + 1, pair.first.c_str());
 
-        // Create a unique ID for this font entry
-        ImGui::PushID(fontIndex);
+		// Add button to test this font
+		ImGui::SameLine();
+		if (ImGui::SmallButton("Test")) {
+			// User clicked Test - push this font and show sample text
+			// Note: In a real app, you'd show this in a separate area
+			m_statusMessage = "Testing font: " + pair.first;
+		}
 
-        // Display font name as text
-        ImGui::Text("%d. %s", fontIndex + 1, pair.first.c_str());
+		// Pop the ID to avoid conflicts
+		ImGui::PopID();
 
-        // Add button to test this font
-        ImGui::SameLine();
-        if(ImGui::SmallButton("Test")) {
-            // User clicked Test - push this font and show sample text
-            // Note: In a real app, you'd show this in a separate area
-            m_statusMessage = "Testing font: " + pair.first;
-        }
+		fontIndex++;
+	}
 
-        // Pop the ID to avoid conflicts
-        ImGui::PopID();
+	// End the scrollable child window
+	ImGui::EndChild();
 
-        fontIndex++;
-    }
+	// Add spacing
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
 
-    // End the scrollable child window
-    ImGui::EndChild();
+	// ====================================================================
+	// SECTION 4: STATUS BAR
+	// ====================================================================
 
-    // Add spacing
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
+	// Display status message at the bottom
+	ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), "Status:");
+	ImGui::SameLine();
 
-    // ====================================================================
-    // SECTION 4: STATUS BAR
-    // ====================================================================
+	// Color code the status based on content
+	if (m_statusMessage.find("ERROR") != std::string::npos) {
+		// Error message - show in red
+		ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", m_statusMessage.c_str());
+	} else if (m_statusMessage.find("Success") != std::string::npos) {
+		// Success message - show in green
+		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%s", m_statusMessage.c_str());
+	} else {
+		// Normal message - show in white
+		ImGui::Text("%s", m_statusMessage.c_str());
+	}
 
-    // Display status message at the bottom
-    ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), "Status:");
-    ImGui::SameLine();
-
-    // Color code the status based on content
-    if(m_statusMessage.find("ERROR") != std::string::npos) {
-        // Error message - show in red
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", m_statusMessage.c_str());
-    } else if(m_statusMessage.find("Success") != std::string::npos) {
-        // Success message - show in green
-        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%s", m_statusMessage.c_str());
-    } else {
-        // Normal message - show in white
-        ImGui::Text("%s", m_statusMessage.c_str());
-    }
-
-    // End the ImGui window
-    ImGui::End();
+	// End the ImGui window
+	ImGui::End();
 }
 
 void FontManagerWindow::RenderFontPreview() {
-    // Create a separate window to preview loaded fonts
-    ImGui::Begin("Font Preview");
+	// Create a separate window to preview loaded fonts
+	ImGui::Begin("Font Preview");
 
-    // Sample text to display in each font
-    const char* sampleText = "The quick brown fox jumps over the lazy dog 0123456789";
+	// Sample text to display in each font
+	const char* sampleText = "The quick brown fox jumps over the lazy dog 0123456789";
 
-    // Get the font map
-    const std::map<std::string, ImFont*>& fontMap = m_fontManager->GetFontMap();
+	// Get the font map
+	const std::map<std::string, ImFont*>& fontMap = m_fontManager->GetFontMap();
 
-    // Show preview for each loaded font
-    for(const auto& pair : fontMap) {
-        // Push the font to use it for rendering
-        ImGui::PushFont(pair.second, NULL);
+	// Show preview for each loaded font
+	for (const auto& pair : fontMap) {
+		// Push the font to use it for rendering
+		ImGui::PushFont(pair.second, NULL);
 
-        // Display the font name and sample text
-        ImGui::Text("%s:", pair.first.c_str());
-        ImGui::TextWrapped("%s", sampleText);
+		// Display the font name and sample text
+		ImGui::Text("%s:", pair.first.c_str());
+		ImGui::TextWrapped("%s", sampleText);
 
-        // Pop the font to restore previous font
-        ImGui::PopFont();
+		// Pop the font to restore previous font
+		ImGui::PopFont();
 
-        // Add separator between fonts
-        ImGui::Separator();
-    }
+		// Add separator between fonts
+		ImGui::Separator();
+	}
 
-    ImGui::End();
+	ImGui::End();
 }
 
 //void ExampleUsageInMainLoop(HWND hwnd) {
@@ -340,3 +332,5 @@ void FontManagerWindow::RenderFontPreview() {
 //    // Cleanup
 //    fontManager.CleanupFonts();
 //}
+
+} // namespace app

@@ -2,7 +2,7 @@
 #include "Classes.hpp"
 #include "Source.hpp"
 
-
+using namespace app;
 // Data
 ExampleDescriptorHeapAllocator *g_pd3dSrvDescHeapAlloc;
 
@@ -27,6 +27,9 @@ ConfigManager* configManager;
 WindowClass* window_obj;
 
 static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
+
+FrameContext* WaitForNextFrameContext();
+
 
 int Start(_In_ HINSTANCE hInstance) {
 

@@ -8,6 +8,7 @@
 
 // Demonstrate creating a simple console window, with scrolling, filtering, completion and history.
 // For the console example, we are using a more C++ like approach of declaring a class to hold both data and functions.
+namespace app {
 class ConsoleWindow {
 private:
 	char				  InputBuf[256];
@@ -48,5 +49,4 @@ public:
 	int	 TextEditCallback(ImGuiInputTextCallbackData* data);
 	void ShowExampleAppConsole(bool* p_open) { Render("Example: Console", p_open); }
 };
-
-
+} // namespace app

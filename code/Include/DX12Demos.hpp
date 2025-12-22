@@ -3,6 +3,8 @@
 #include "PCH.hpp"
 #include "Master.hpp"
 
+namespace app {
+
 class DxDemos : public Master{
 
 public:
@@ -23,3 +25,4 @@ private:
 
     ImGuiIO* m_io;
 };
+}

@@ -2,6 +2,7 @@
 #include "Classes.hpp"
 #include "DX12Demos.hpp"
 
+namespace app {
 DxDemos::DxDemos() : m_io(nullptr) {}
 
 DxDemos::DxDemos(ImGuiIO* m_io) :DxDemos()  {
@@ -30,3 +31,4 @@ void DxDemos::Tick() {
 }
 
 void DxDemos::Close() {}
+}

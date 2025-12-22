@@ -2,21 +2,29 @@
 
 #include "DebugWindow.hpp"
 
+namespace app {
+
 
 DebugWindow::DebugWindow()
-    : m_io(nullptr), tPsTHread{}, tPyTHread{}, bPsOpen(false),bPyOpen(false), hPsProcessHandle(nullptr),hPyProcessHandle(nullptr) {}
+: m_io(nullptr),
+  tPsTHread{},
+  tPyTHread{},
+  bPsOpen(false),
+  bPyOpen(false),
+  hPsProcessHandle(nullptr),
+  hPyProcessHandle(nullptr) {}
 
 void DebugWindow::GetIo(ImGuiIO* io) {
 
-    if(io) m_io = io;
-    else throw std::runtime_error("io is nullptr");
+	if (io) m_io = io;
+	else throw std::runtime_error("io is nullptr");
 }
 
 
 DebugWindow::~DebugWindow() {
 
 	if (tPsTHread.joinable()) { tPsTHread.detach(); }
-    if (tPyTHread.joinable()) { tPyTHread.detach(); }
+	if (tPyTHread.joinable()) { tPyTHread.detach(); }
 	bPsOpen			 = false;
 	bPyOpen			 = false;
 	hPsProcessHandle = nullptr;
@@ -159,3 +167,4 @@ bool DebugWindow::IsPsProcessRunning() {
 	if (GetExitCodeProcess(hPsProcessHandle, &exitCode)) { return (exitCode == STILL_ACTIVE); }
 	return false;
 }
+} // namespace app

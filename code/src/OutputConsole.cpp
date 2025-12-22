@@ -1,6 +1,8 @@
 #include "PCH.hpp"
 #include "OutputConsole.hpp"
 
+namespace app {
+
 void OutputConsole::Open() {
 
 	if (!m_bShouldCreateConsole) m_bShouldCreateConsole = true;
@@ -54,33 +56,32 @@ void OutputConsole::CreateConsole() {
 	m_bWasConsoleCreated = true;
 
 	ShowConsole(m_bShowConsole);
-    std::wcout << L"Console Window Created!\n\n";
-    setConsoleFontSize(24);
-    
+	std::wcout << L"Console Window Created!\n\n";
+	setConsoleFontSize(24);
 }
 
 void OutputConsole::setConsoleFontSize(int size) {
 
-    // 1. Obter o handle de saída do console
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	// 1. Obter o handle de saída do console
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    // 2. Preparar a estrutura de informações da fonte
-    CONSOLE_FONT_INFOEX cfi;
-    cfi.cbSize = sizeof(cfi);
-    cfi.nFont = 0;
-    cfi.dwFontSize.X = 0;  // Largura (0 permite que o Windows escolha a melhor largura para a altura)
-    cfi.dwFontSize.Y = size; // Altura da fonte
-    cfi.FontFamily = FF_DONTCARE;
-    cfi.FontWeight = FW_NORMAL; // Use FW_BOLD para negrito
-    std::wcscpy(cfi.FaceName, L"Consolas"); // Nome da fonte (precisa ser wchar_t)
+	// 2. Preparar a estrutura de informações da fonte
+	CONSOLE_FONT_INFOEX cfi;
+	cfi.cbSize = sizeof(cfi);
+	cfi.nFont  = 0;
+	cfi.dwFontSize.X =
+		0; // Largura (0 permite que o Windows escolha a melhor largura para a altura)
+	cfi.dwFontSize.Y = size; // Altura da fonte
+	cfi.FontFamily	 = FF_DONTCARE;
+	cfi.FontWeight	 = FW_NORMAL;			// Use FW_BOLD para negrito
+	std::wcscpy(cfi.FaceName, L"Consolas"); // Nome da fonte (precisa ser wchar_t)
 
-    // 3. Aplicar a nova fonte
-    if(SetCurrentConsoleFontEx(hOut, FALSE, &cfi)) {
-        std::cout << "Font size set to " <<  std::to_string(size) << "! \n";
-    } else {
-        throw std::runtime_error("can't set console font size!");
-    }
-
+	// 3. Aplicar a nova fonte
+	if (SetCurrentConsoleFontEx(hOut, FALSE, &cfi)) {
+		std::cout << "Font size set to " << std::to_string(size) << "! \n";
+	} else {
+		throw std::runtime_error("can't set console font size!");
+	}
 }
 
 void OutputConsole::ShowConsole(bool bShow) {
@@ -139,3 +140,5 @@ CustomOutput& CustomOutput::operator<<(const wchar_t* dado) {
 //	manip(std::wcout);
 //	return *this;
 //}
+
+} // namespace app

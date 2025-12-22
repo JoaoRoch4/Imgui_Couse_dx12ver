@@ -6,6 +6,7 @@
 #include "Classes.hpp"
 #include "ConfigManager.hpp"
 
+namespace app {
 // Include reflectcpp for JSON serialization
 
 /**
@@ -394,3 +395,5 @@ void ConfigManager::SetConfigFilePath(const std::wstring& path) {
 	// Print confirmation with the new path
 	std::wcout << L"Configuration file path set to: " << m_configFilePath << std::endl;
 }
+
+} // namespace app

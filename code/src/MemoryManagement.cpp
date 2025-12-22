@@ -6,8 +6,12 @@
 #include "Classes.hpp"
 #include "MemoryManagement.hpp"
 
+namespace app {
 
-/**
+	void MemoryManagement::Open() {}
+    void MemoryManagement::Tick() {}
+    void MemoryManagement::Close() {}
+	/**
  * @brief Constructor - Initializes all pointers and flags
  * 
  * Sets all unique_ptr members to nullptr and all allocation flags to false.
@@ -495,7 +499,7 @@ ImGuiIO* MemoryManagement::Get_ImGuiIO() {
 ImVec4* MemoryManagement::Get_clear_color_ptr() {
 
 	static std::unique_ptr<ImVec4> clear_color_singleton = std::make_unique<ImVec4>();
-	return m_clear_color_ptr								 = clear_color_singleton.get();
+	return m_clear_color_ptr							 = clear_color_singleton.get();
 }
 
 /**
@@ -638,3 +642,4 @@ void MemoryManagement::Alloc_window_class() {
 	// Verify allocation
 	if (!m_window_class) { throw std::runtime_error("m_window_class failed to allocate"); }
 }
+} // namespace app

@@ -2,6 +2,8 @@
 
 #include "render.hpp"
 
+namespace app {
+
 WindowClass::WindowClass() : currentPath(fs::current_path()), selectedEntry(fs::path{}) {}
 
 WindowClass::~WindowClass() { currentPath.clear(); }
@@ -12,7 +14,7 @@ void WindowClass::Draw(std::string_view label) {
 									   ImGuiWindowFlags_::ImGuiWindowFlags_NoMove |
 									   ImGuiWindowFlags_::ImGuiWindowFlags_NoBringToFrontOnFocus |
 									   ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar};*/
-    constexpr static auto window_flags{ ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar };
+	constexpr static auto window_flags{ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar};
 
 	/*constexpr static auto window_size = ImVec2(0,0);
 	constexpr static auto window_pos  = ImVec2(0.0F, 0.0F);
@@ -65,7 +67,7 @@ void WindowClass::DrawContent() {
 		const bool is_selected	= entry.path() == selectedEntry;
 		const bool is_directory = entry.is_directory();
 		const bool is_file		= entry.is_regular_file();
-		str entry_name			= entry.path().filename().string();
+		str		   entry_name	= entry.path().filename().string();
 
 		if (is_directory) entry_name = "[D] " + entry_name;
 		else if (is_file) entry_name = "[F] " + entry_name;
@@ -187,3 +189,5 @@ bool WindowClass::deleteFile(const fs::path& Path) {
 
 
 void render(WindowClass& window_obj) { window_obj.Draw("Label"); }
+
+} // namespace app

@@ -9,9 +9,13 @@
 #include "Classes.hpp"
 #include "WindowManager.hpp"
 
+extern LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+
+namespace app {
+
 // Forward declaration of window procedure
 // This function handles Windows messages for the application window
-extern LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 /**
  * Constructor - Initializes all member variables
@@ -472,4 +476,5 @@ bool WindowManager::ApplyDarkModeToTitleBar(HWND hwnd, bool enabled) {
 	// E_FAIL = 0x80004005 (generic failure)
 	// E_INVALIDARG = 0x80070057 (invalid argument)
 	return SUCCEEDED(hr);
+}
 }

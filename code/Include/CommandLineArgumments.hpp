@@ -8,8 +8,8 @@
 #include "PCH.hpp"
 
 // Include base class definition
-#include "Master.hpp"
-
+#include "MemoryManagement.hpp"
+namespace app {
 /**
  * @brief Class that handles command line argument parsing
  * 
@@ -20,7 +20,8 @@
  * - Window state (-maximized, -fullscreen, -windowed)
  * - Console mode (-cmd)
  */
-class CommandLineArguments : public Master {
+
+class CommandLineArguments : public MemoryManagement {
 public:
 	// Constructor - Initializes all member variables
 	CommandLineArguments();
@@ -109,10 +110,13 @@ public:
 	inline bool GetbConsoleLaunched() const { return bConsoleLaunched; }
 
 	// Setter for console launched flag
-	inline void SetbConsoleLaunched(bool bisConsoleLaunched) { bConsoleLaunched = bisConsoleLaunched; }
+	inline void SetbConsoleLaunched(bool bisConsoleLaunched) {
+		bConsoleLaunched = bisConsoleLaunched;
+	}
 
 private:
 	bool m_bShowCmd;
 	bool m_bShowHelp;
 	bool m_bShowArgs;
 };
+} // namespace app

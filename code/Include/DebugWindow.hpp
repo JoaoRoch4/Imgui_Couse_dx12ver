@@ -3,38 +3,38 @@
 #include "PCH.hpp"
 #include "Master.hpp"
 
+namespace app {
+
 class DebugWindow : public Master {
 public:
-    DebugWindow();
+	DebugWindow();
 
-    void GetIo(ImGuiIO* io);
+	void GetIo(ImGuiIO* io);
 
-    virtual ~DebugWindow();
+	virtual ~DebugWindow();
 
-  
 
-     virtual void Open()     override;
-     virtual void Tick()     override;
-     virtual void Close()    override;
+	virtual void Open() override;
+	virtual void Tick() override;
+	virtual void Close() override;
 
 private:
-    void Render();
-    void openPowershell();
-    void openPy();
+	void Render();
+	void openPowershell();
+	void openPy();
 
-    void openPowershellTherad();
-    void openPyTherad();
+	void openPowershellTherad();
+	void openPyTherad();
 
-    bool IsPsProcessRunning();
+	bool IsPsProcessRunning();
 
-    ImGuiIO* m_io;
+	ImGuiIO* m_io;
 
-    std::thread tPsTHread;
-    std::thread tPyTHread;
-    std::atomic<bool> bPsOpen;
-    std::atomic<bool> bPyOpen;
-    HANDLE hPsProcessHandle; // Armazena o handle do PowerShell
-    HANDLE hPyProcessHandle;
-
+	std::thread		  tPsTHread;
+	std::thread		  tPyTHread;
+	std::atomic<bool> bPsOpen;
+	std::atomic<bool> bPyOpen;
+	HANDLE			  hPsProcessHandle; // Armazena o handle do PowerShell
+	HANDLE			  hPyProcessHandle;
 };
-
+} // namespace app

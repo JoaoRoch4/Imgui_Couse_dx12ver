@@ -1,3 +1,4 @@
+
 #pragma once
 #include "PCH.hpp"
 
@@ -22,6 +23,5 @@ void OpenWindow(_In_ HINSTANCE hInstance);
 void MainLoop(struct ImGuiIO* m_io);
 int	 Start(_In_ HINSTANCE hInstance);
 
-class FrameContext* WaitForNextFrameContext();
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

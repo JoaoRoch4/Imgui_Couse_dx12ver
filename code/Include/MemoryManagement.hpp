@@ -5,6 +5,8 @@
 #pragma once
 
 #include "pch.hpp"
+#include "Classes.hpp"
+namespace app {
 
 // Forward declarations to avoid circular dependencies
 // These tell the compiler that these types exist without including headers
@@ -23,7 +25,11 @@ class WindowClass;
 class WindowManager;
 class OutputConsole;
 
-class MemoryManagement {
+class MemoryManagement : public Master {
+
+    virtual void Open()            override;
+        virtual void Tick()        override;
+        virtual void Close()       override;
 
 public:
 	MemoryManagement();
@@ -128,3 +134,4 @@ private:
 	ImVec4* m_clear_color_ptr;
 	ImVec4	m_clear_color;
 };
+} // namespace app

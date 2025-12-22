@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PCH.hpp"
-
+namespace app {
 class WindowClass {
 
 public:
@@ -26,4 +26,6 @@ private:
 	fs::path selectedEntry;
 };
 
-void render(WindowClass &window_obj);
+void render(WindowClass& window_obj);
+
+} // namespace app

@@ -7,6 +7,8 @@
 #include "PCH.hpp"
 #include "Master.hpp"
 
+namespace app {
+
 struct AppConfiguration {
 	float clearColorR;
 	float clearColorG;
@@ -47,3 +49,5 @@ private:
 
 	bool m_bConfigLoaded;
 };
+
+} // namespace app

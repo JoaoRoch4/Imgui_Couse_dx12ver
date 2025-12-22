@@ -6,6 +6,8 @@
 
 #include "PCH.hpp"
 
+namespace app {
+
 // Forward declaration to avoid circular dependency
 class CommandLineArguments;
 
@@ -89,7 +91,9 @@ private:
 	int m_windowStyle;
 	int m_scaledWidth;
 	int m_scaledHeight;
-    int m_showCommand;
+	int m_showCommand;
 
-    bool m_bHasAnyWindowArgs;
+	bool m_bHasAnyWindowArgs;
 };
+
+} // namespace app

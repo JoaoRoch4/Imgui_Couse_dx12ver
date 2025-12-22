@@ -1,7 +1,7 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
 
-
+namespace app {
 ConsoleWindow::ConsoleWindow() {
 	ClearLog();
 	memset(InputBuf, 0, sizeof(InputBuf));
@@ -324,4 +324,4 @@ void ConsoleWindow::Strtrim(char* s) {
 	while (str_end > s && str_end[-1] == ' ') str_end--;
 	*str_end = 0;
 }
-
+} // namespace app
