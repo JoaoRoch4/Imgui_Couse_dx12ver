@@ -51,35 +51,11 @@
     <Filter Include="local\pch">
       <UniqueIdentifier>{738e04b5-821c-4eb7-a5c8-89b4e91ce0ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="local\main">
+      <UniqueIdentifier>{b2479ea4-68dd-4ddf-87ca-f39da68ef043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\src\WindowManager.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\Globals.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\FontManager.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\render.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\FrameContext.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\ExampleDescriptorHeapAllocator.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\DarkMode.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\Main\Main.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\MainWindow.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="external\imgui\imgui.cpp">
       <Filter>External\Imgui\src</Filter>
     </ClCompile>
@@ -149,80 +125,80 @@
     <ClCompile Include="external\implot\implot_items.cpp">
       <Filter>External\implot</Filter>
     </ClCompile>
-    <ClCompile Include="code\Main\Source.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\FontManagerWindow.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\DebugWindow.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CommandLineArgumments.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\DX12Demos.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\Classes.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\ConsoleWindow.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\MemoryManagement.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\DX12Renderer.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\ConsoleInputHandler.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\Conv.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\ConfigManager.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\OutputConsole.cpp">
-      <Filter>local\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="external\stb\stb_vorbis.c">
       <Filter>External\stb</Filter>
     </ClCompile>
     <ClCompile Include="code\pch\pch.cpp">
       <Filter>local\pch</Filter>
     </ClCompile>
+    <ClCompile Include="code\Main\Source.cpp">
+      <Filter>local\main</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Main\Main.cpp">
+      <Filter>local\main</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\Classes.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CommandLineArgumments.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\ConfigManager.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\ConsoleInputHandler.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\ConsoleWindow.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\Conv.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\DarkMode.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\DebugWindow.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\DX12Demos.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\DX12Renderer.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\ExampleDescriptorHeapAllocator.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\FontManager.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\FontManagerWindow.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\FrameContext.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\Globals.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\MainWindow.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\MemoryManagement.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\OutputConsole.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\render.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\WindowManager.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\Include\WindowManager.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\Globals.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\FontManager.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\render.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\FrameContext.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\DarkMode.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\Main.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\ExampleDescriptorHeapAllocator.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\MainWindow.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="external\imgui\imconfig.h">
       <Filter>External\Imgui\include</Filter>
     </ClInclude>
@@ -286,51 +262,6 @@
     <ClInclude Include="external\implot\implot.h">
       <Filter>External\implot</Filter>
     </ClInclude>
-    <ClInclude Include="code\Include\FontManagerWindow.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\DebugWindow.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\Classes.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\CommandLineArgumments.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Main\Source.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\DX12Demos.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\Master.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\ConsoleWindow.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\MemoryManagement.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\ConsoleInputHandler.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\DXSampleHelper.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\DXSample.h">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\Conv.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\ConfigManager.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="code\Include\OutputConsole.hpp">
-      <Filter>local\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="external\stb\stb_c_lexer.h">
       <Filter>External\stb</Filter>
     </ClInclude>
@@ -392,10 +323,85 @@
       <Filter>External\stb</Filter>
     </ClInclude>
     <ClInclude Include="code\pch\PCH.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>local\pch</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Main\Source.hpp">
+      <Filter>local\main</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\Main.hpp">
+      <Filter>local\main</Filter>
     </ClInclude>
     <ClInclude Include="code\pch\PCH.hpp">
-      <Filter>local\pch</Filter>
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\Classes.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\CommandLineArgumments.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\ConfigManager.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\ConsoleInputHandler.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\ConsoleWindow.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\Conv.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\DarkMode.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\DebugWindow.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\DX12Demos.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\DX12Renderer.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\DXSample.h">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\DXSampleHelper.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\ExampleDescriptorHeapAllocator.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\FontManager.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\FontManagerWindow.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\FrameContext.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\Globals.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\MainWindow.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\Master.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\MemoryManagement.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\OutputConsole.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\render.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\WindowManager.hpp">
+      <Filter>local\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -403,5 +409,6 @@
     <None Include="vcpkg-configuration.json" />
     <None Include=".clang-format" />
     <None Include="cpp.hint" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

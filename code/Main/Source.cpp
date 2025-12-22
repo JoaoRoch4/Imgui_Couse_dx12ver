@@ -24,6 +24,7 @@ FontManager* m_font_manager;
 FontManagerWindow* m_font_manager_window;
 DebugWindow* m_debug_window;
 ConfigManager* configManager;
+WindowClass* window_obj;
 
 static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
@@ -194,7 +195,8 @@ void MainLoop(ImGuiIO* m_io) {
         << " A=" << clear_color.w << "\n";
 
     // Create window object for file system browser
-    WindowClass window_obj;
+    window_obj = memory->Get_WindowClass();
+
 
     // Track if color was modified this frame
     bool colorModified = false;
@@ -228,7 +230,7 @@ void MainLoop(ImGuiIO* m_io) {
         ImGui::NewFrame();
 
         // Render optional windows
-        if(memory->m_bShow_FileSys_window) { render(window_obj); }
+        if(memory->m_bShow_FileSys_window) { render(*window_obj); }
         if(memory->m_bShow_Debug_window) m_debug_window->Tick();
         if(memory->m_bShow_FontManager_window) m_font_manager_window->Render();
         if(memory->m_bShow_styleEditor_window) ImGui::ShowStyleEditor();

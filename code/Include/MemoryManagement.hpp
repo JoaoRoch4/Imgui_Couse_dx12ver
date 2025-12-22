@@ -35,7 +35,7 @@ public:
 	//DX12Renderer*					Get_DX12Renderer() const;
 
 
-    static MemoryManagement* Get_MemoryManagement();
+	static MemoryManagement* Get_MemoryManagement();
 
 	CommandLineArguments*			Get_CommandLineArguments() const;
 	ConsoleInputHandler*			Get_ConsoleInputHandler() const;
@@ -44,10 +44,10 @@ public:
 	FontManager*					Get_FontManager() const;
 	FontManagerWindow*				Get_FontManagerWindow() const;
 	ExampleDescriptorHeapAllocator* Get_ExampleDescriptorHeapAllocator() const;
+	WindowClass*					Get_WindowClass() const;
 	WindowManager*					Get_WindowManager() const;
 	ConfigManager*					Get_ConfigManager() const;
 	OutputConsole*					Get_OutputConsole() const;
-
 
 
 protected:
@@ -70,7 +70,7 @@ protected:
 private:
 	//UPtr<DX12Renderer>					 dx12_renderer;
 
-    std::shared_ptr<MemoryManagement>	   m_memory_management;
+	std::shared_ptr<MemoryManagement> m_memory_management;
 
 
 	UPtr<ExampleDescriptorHeapAllocator> m_Example_Descriptor_Heap_Allocator;
@@ -99,7 +99,7 @@ private:
 	bool m_bFont_manager_allocated;
 	bool m_bFont_manager_window_allocated;
 	bool m_bFrame_context_allocated;
-    bool m_bmemory_management_allocated;
+	bool m_bmemory_management_allocated;
 	bool m_bWindow_class_allocated;
 	bool m_bWindow_manager_allocated;
 	bool m_bOutput_console_allocated;
@@ -118,7 +118,13 @@ public:
 
 	ImGuiIO* Get_ImGuiIO();
 
+	ImVec4* Get_clear_color_ptr();
+	ImVec4	Get_clear_color() { return m_clear_color; }
+
 private:
 	ImGuiIO* m_io;
 	bool	 bIoPassed;
+
+	ImVec4* m_clear_color_ptr;
+	ImVec4	m_clear_color;
 };

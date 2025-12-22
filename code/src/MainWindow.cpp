@@ -105,7 +105,7 @@
 //    // Our state
 //    bool show_demo_window = false;
 //    bool show_another_window = false;
-//    ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.15f, 1.f);
+//    ImVec4 clear_color_ptr = ImVec4(0.15f, 0.15f, 0.15f, 1.f);
 //
 //    WindowClass window_obj;
 //
@@ -176,7 +176,7 @@
 //            ImGui::ColorEdit3(
 //                "clear color",
 //                std::bit_cast<float*>(std::ref(
-//                    clear_color))); // Edit 3 floats representing a color
+//                    clear_color_ptr))); // Edit 3 floats representing a color
 //
 //            if(ImGui::Button(
 //                "Button")) // Buttons return true when clicked (most
@@ -224,10 +224,10 @@
 //        m_CommandList->ResourceBarrier(1, &barrier);
 //
 //        // Render Dear ImGui graphics
-//        const float clear_color_with_alpha[4]={ clear_color.x * clear_color.w,
-//                                              clear_color.y * clear_color.w,
-//                                              clear_color.z * clear_color.w,
-//                                              clear_color.w };
+//        const float clear_color_with_alpha[4]={ clear_color_ptr.x * clear_color_ptr.w,
+//                                              clear_color_ptr.y * clear_color_ptr.w,
+//                                              clear_color_ptr.z * clear_color_ptr.w,
+//                                              clear_color_ptr.w };
 //        m_CommandList->ClearRenderTargetView(
 //            m_MainRenderTargetDescriptor[backBufferIdx],
 //            clear_color_with_alpha,

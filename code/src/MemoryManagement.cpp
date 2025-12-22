@@ -49,7 +49,8 @@ MemoryManagement::MemoryManagement()
   m_bShow_FileSys_window(false),
   m_bOutput_console_allocated(false),
   m_io(nullptr),
-  bIoPassed(false)
+  bIoPassed(false),
+  m_clear_color_ptr(nullptr)
 
 {}
 
@@ -101,7 +102,7 @@ void MemoryManagement::AllocAll() {
 	// Allocate console input handler (threaded command input)
 	Alloc_console_input_handler();
 
-    Alloc_config_manager();
+	Alloc_config_manager();
 
 	// Allocate DX12 renderer
 	//Alloc_dx12_renderer();
@@ -166,9 +167,8 @@ void MemoryManagement::Alloc_command_line_args() {
 
 
 MemoryManagement* MemoryManagement::Get_MemoryManagement() {
-    static std::unique_ptr<MemoryManagement> instance =
-        std::make_unique<MemoryManagement>();
-    return instance.get();
+	static std::unique_ptr<MemoryManagement> instance = std::make_unique<MemoryManagement>();
+	return instance.get();
 }
 
 /**
@@ -278,42 +278,38 @@ ConsoleWindow* MemoryManagement::Get_ConsoleWindow() const {
 }
 
 DebugWindow* MemoryManagement::Get_DebugWindow() const {
-    // Check if allocated
-    if(!m_bDebug_window_allocated) {
-        throw std::runtime_error("m_debug_window is not allocated");
-    }
+	// Check if allocated
+	if (!m_bDebug_window_allocated) { throw std::runtime_error("m_debug_window is not allocated"); }
 
-    // Check if pointer is valid
-    if(!m_debug_window) { throw std::runtime_error("m_debug_window is nullptr!"); }
+	// Check if pointer is valid
+	if (!m_debug_window) { throw std::runtime_error("m_debug_window is nullptr!"); }
 
-    // Return raw pointer
-    return m_debug_window.get();
+	// Return raw pointer
+	return m_debug_window.get();
 }
 
 FontManager* MemoryManagement::Get_FontManager() const {
-    // Check if allocated
-    if(!m_bFont_manager_allocated) {
-        throw std::runtime_error("m_font_manager is not allocated");
-    }
+	// Check if allocated
+	if (!m_bFont_manager_allocated) { throw std::runtime_error("m_font_manager is not allocated"); }
 
-    // Check if pointer is valid
-    if(!m_font_manager) { throw std::runtime_error("m_font_manager is nullptr!"); }
+	// Check if pointer is valid
+	if (!m_font_manager) { throw std::runtime_error("m_font_manager is nullptr!"); }
 
-    // Return raw pointer
-    return m_font_manager.get();
+	// Return raw pointer
+	return m_font_manager.get();
 }
 
 FontManagerWindow* MemoryManagement::Get_FontManagerWindow() const {
-    // Check if allocated
-    if(!m_bFont_manager_window_allocated) {
-        throw std::runtime_error("m_font_manager_window is not allocated");
-    }
+	// Check if allocated
+	if (!m_bFont_manager_window_allocated) {
+		throw std::runtime_error("m_font_manager_window is not allocated");
+	}
 
-    // Check if pointer is valid
-    if(!m_font_manager_window) { throw std::runtime_error("m_font_manager_window is nullptr!"); }
+	// Check if pointer is valid
+	if (!m_font_manager_window) { throw std::runtime_error("m_font_manager_window is nullptr!"); }
 
-    // Return raw pointer
-    return m_font_manager_window.get();
+	// Return raw pointer
+	return m_font_manager_window.get();
 }
 
 /**
@@ -408,6 +404,17 @@ ExampleDescriptorHeapAllocator* MemoryManagement::Get_ExampleDescriptorHeapAlloc
 	return m_Example_Descriptor_Heap_Allocator.get();
 }
 
+WindowClass* MemoryManagement::Get_WindowClass() const {
+	// Check if allocated
+	if (!m_bWindow_class_allocated) { throw std::runtime_error("m_window_class is not allocated"); }
+
+	// Check if pointer is valid
+	if (!m_window_class) { throw std::runtime_error("m_window_class is nullptr!"); }
+
+	// Return raw pointer
+	return m_window_class.get();
+}
+
 /**
  * @brief Allocates WindowManager object
  * 
@@ -471,18 +478,24 @@ void MemoryManagement::Set_ImGuiIO(ImGuiIO* m_io) {
 }
 
 ImGuiIO* MemoryManagement::Get_ImGuiIO() {
-    const auto line = __LINE__;
+	const auto line = __LINE__;
 
-    if(!bIoPassed) throw std::runtime_error("m_io was wet not passed to be geted");
-    if(m_io == nullptr) {
-        str err{ "m_io passed at " };
-        err.append(__FUNCTION__);
-        err.append(" line: ");
-        err.append(std::to_string(line));
-        err.append("is nullptr! ");
-        throw std::runtime_error(err.c_str());
-    }
-    return m_io;
+	if (!bIoPassed) throw std::runtime_error("m_io was wet not passed to be geted");
+	if (m_io == nullptr) {
+		str err{"m_io passed at "};
+		err.append(__FUNCTION__);
+		err.append(" line: ");
+		err.append(std::to_string(line));
+		err.append("is nullptr! ");
+		throw std::runtime_error(err.c_str());
+	}
+	return m_io;
+}
+
+ImVec4* MemoryManagement::Get_clear_color_ptr() {
+
+	static std::unique_ptr<ImVec4> clear_color_singleton = std::make_unique<ImVec4>();
+	return m_clear_color_ptr								 = clear_color_singleton.get();
 }
 
 /**
@@ -533,7 +546,6 @@ OutputConsole* MemoryManagement::Get_OutputConsole() const {
 }
 
 
-
 void MemoryManagement::Alloc_console_window() {
 
 	// Check if already allocated
@@ -557,53 +569,54 @@ void MemoryManagement::Alloc_dx_demos() {
 
 void MemoryManagement::Alloc_debug_window() {
 
-    // Check if already allocated
-    if(!m_bDebug_window_allocated) {
-        // Create new instance
-        m_debug_window = std::make_unique<DebugWindow>();
+	// Check if already allocated
+	if (!m_bDebug_window_allocated) {
+		// Create new instance
+		m_debug_window = std::make_unique<DebugWindow>();
 
-        // Mark as allocated
-        m_bDebug_window_allocated = true;
-    } else {
-        throw std::runtime_error("m_debug_window is already allocated");
-    }
+		// Mark as allocated
+		m_bDebug_window_allocated = true;
+	} else {
+		throw std::runtime_error("m_debug_window is already allocated");
+	}
 
-    // Verify allocation
-    if(!m_debug_window) { throw std::runtime_error("m_debug_window failed to allocate"); }
+	// Verify allocation
+	if (!m_debug_window) { throw std::runtime_error("m_debug_window failed to allocate"); }
 }
 
 void MemoryManagement::Alloc_font_manager() {
 
-    // Check if already allocated
-    if(!m_bFont_manager_allocated) {
-        // Create new instance
-        m_font_manager = std::make_unique<FontManager>();
+	// Check if already allocated
+	if (!m_bFont_manager_allocated) {
+		// Create new instance
+		m_font_manager = std::make_unique<FontManager>();
 
-        // Mark as allocated
-        m_bFont_manager_allocated = true;
-    } else {
-        throw std::runtime_error("m_font_manager is already allocated");
-    }
+		// Mark as allocated
+		m_bFont_manager_allocated = true;
+	} else {
+		throw std::runtime_error("m_font_manager is already allocated");
+	}
 
-    // Verify allocation
-    if(!m_console_window) { throw std::runtime_error("m_console_window failed to allocate"); }
+	// Verify allocation
+	if (!m_console_window) { throw std::runtime_error("m_console_window failed to allocate"); }
 }
 
 void MemoryManagement::Alloc_font_manager_window() {
-    // Check if already allocated
-    if(!m_bFont_manager_window_allocated) {
-        // Create new instance
-        m_font_manager_window = std::make_unique<FontManagerWindow>();
+	// Check if already allocated
+	if (!m_bFont_manager_window_allocated) {
+		// Create new instance
+		m_font_manager_window = std::make_unique<FontManagerWindow>();
 
-        // Mark as allocated
-        m_bFont_manager_window_allocated = true;
-    } else {
-        throw std::runtime_error("m_font_manager_window is already allocated");
-    }
+		// Mark as allocated
+		m_bFont_manager_window_allocated = true;
+	} else {
+		throw std::runtime_error("m_font_manager_window is already allocated");
+	}
 
-    // Verify allocation
-    if(!m_font_manager_window) { throw std::runtime_error("m_font_manager_window failed to allocate"); }
-	
+	// Verify allocation
+	if (!m_font_manager_window) {
+		throw std::runtime_error("m_font_manager_window failed to allocate");
+	}
 }
 
 void MemoryManagement::Alloc_frame_context() {
@@ -611,5 +624,17 @@ void MemoryManagement::Alloc_frame_context() {
 }
 
 void MemoryManagement::Alloc_window_class() {
-	// TODO: Implement window class allocation
+	// Check if already allocated
+	if (!m_bWindow_class_allocated) {
+		// Create new instance
+		m_window_class = std::make_unique<WindowClass>();
+
+		// Mark as allocated
+		m_bWindow_class_allocated = true;
+	} else {
+		throw std::runtime_error("m_window_class is already allocated");
+	}
+
+	// Verify allocation
+	if (!m_window_class) { throw std::runtime_error("m_window_class failed to allocate"); }
 }

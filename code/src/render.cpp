@@ -8,16 +8,17 @@ WindowClass::~WindowClass() { currentPath.clear(); }
 
 void WindowClass::Draw(std::string_view label) {
 
-	constexpr static auto window_flags{ImGuiWindowFlags_::ImGuiWindowFlags_NoResize |
+	/*constexpr static auto window_flags{ImGuiWindowFlags_::ImGuiWindowFlags_NoResize |
 									   ImGuiWindowFlags_::ImGuiWindowFlags_NoMove |
 									   ImGuiWindowFlags_::ImGuiWindowFlags_NoBringToFrontOnFocus |
-									   ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar};
+									   ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar};*/
+    constexpr static auto window_flags{ ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar };
 
-	constexpr static auto window_size = ImVec2(1920.0F, 1080.0F);
+	/*constexpr static auto window_size = ImVec2(0,0);
 	constexpr static auto window_pos  = ImVec2(0.0F, 0.0F);
 
 	ImGui::SetNextWindowSize(window_size);
-	ImGui::SetNextWindowPos(window_pos);
+	ImGui::SetNextWindowPos(window_pos);*/
 
 	ImGui::Begin(label.data(), nullptr, window_flags);
 	{
