@@ -1,10 +1,17 @@
 #pragma once
 
 #include "PCH.hpp"
+#include "MemoryManagement.hpp"
+
+
 namespace app {
-class WindowClass {
+class WindowClass : public MemoryManagement {
 
 public:
+	virtual void Open() override;
+	virtual void Tick() override;
+	virtual void Close() override;
+
 	WindowClass();
 	~WindowClass();
 
@@ -22,10 +29,10 @@ protected:
 	bool deleteFile(const fs::path& Path);
 
 private:
-	fs::path currentPath;
-	fs::path selectedEntry;
+	fs::path		  currentPath;
+	fs::path		  selectedEntry;
+	MemoryManagement* memory;
 };
 
-void render(WindowClass& window_obj);
 
 } // namespace app

@@ -12,7 +12,12 @@ DebugWindow::DebugWindow()
   bPsOpen(false),
   bPyOpen(false),
   hPsProcessHandle(nullptr),
-  hPyProcessHandle(nullptr) {}
+  hPyProcessHandle(nullptr),
+  memory(nullptr)
+  {
+    memory = MemoryManagement::Get_MemoryManagement();
+
+  }
 
 void DebugWindow::GetIo(ImGuiIO* io) {
 
@@ -29,11 +34,12 @@ DebugWindow::~DebugWindow() {
 	bPyOpen			 = false;
 	hPsProcessHandle = nullptr;
 	hPyProcessHandle = nullptr;
+    memory = nullptr;
 }
 
 void DebugWindow::Render() {
 
-	ImGui::Begin("Debug Window!"); // Create a window called "Hello, world!"
+	ImGui::Begin("Debug Window!", &memory->m_bShow_Debug_window); // Create a window called "Hello, world!"
 	// and append into it.
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io->Framerate,
@@ -65,7 +71,8 @@ void DebugWindow::Render() {
 	ImGui::End();
 }
 
-void DebugWindow::Open() { Render(); }
+void DebugWindow::Open() {
+ }
 
 void DebugWindow::Tick() {
 	Render();

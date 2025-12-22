@@ -1,11 +1,11 @@
 #pragma once
 
 #include "PCH.hpp"
-#include "Master.hpp"
+#include "MemoryManagement.hpp"
 
 namespace app {
 
-class DebugWindow : public Master {
+class DebugWindow : public MemoryManagement {
 public:
 	DebugWindow();
 
@@ -36,5 +36,7 @@ private:
 	std::atomic<bool> bPyOpen;
 	HANDLE			  hPsProcessHandle; // Armazena o handle do PowerShell
 	HANDLE			  hPyProcessHandle;
+
+    MemoryManagement* memory;
 };
 } // namespace app

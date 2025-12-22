@@ -2,15 +2,8 @@
 #include "CommandLineArgumments.hpp"
 #include "Source.hpp"
 #include "Classes.hpp"
+#include "Main.hpp"
 
-int ErrorMsg(std::runtime_error& e) {
-
-    auto what = e.what();
-   auto LVl =  ConvStatic::strtoWstr(what);
-	
-	MessageBox(NULL, LVl.c_str(), L"Error", MB_ICONERROR | MB_OK);
-	return EXIT_FAILURE;
-}
 
 _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE	  hInstance,
 										   _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine,
@@ -24,12 +17,9 @@ _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE	  hInstance,
 		Start(hInstance);
 
 
-	} catch (std::runtime_error& e) {
-        return ErrorMsg(e);
-    }
+	} catch (std::exception& e) { return ErrorMsg(e); } catch (...) {
+		return UnkExcpt();
+	}
 
 	return 0;
 }
-
-
-

@@ -9,7 +9,7 @@
 ////
 ////*********************************************************
 //
-//#include "pch.hpp"
+#include "pch.hpp"
 //#include "DX12Renderer.hpp"
 //#include "Classes.hpp"
 //

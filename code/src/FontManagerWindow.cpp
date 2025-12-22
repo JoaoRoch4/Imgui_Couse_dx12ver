@@ -1,6 +1,7 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
 #include "Source.hpp"
+#include "FontManagerWindow.hpp"
 namespace app {
 
 FontManagerWindow::FontManagerWindow()
@@ -12,7 +13,11 @@ FontManagerWindow::FontManagerWindow()
   m_fontsLoaded(false),		// No fonts loaded yet
   m_totalFontsLoaded(0),	// Zero fonts loaded+
   bShowFontPreview(false),
-  bFonstsWereLoaded(false) {}
+  bFonstsWereLoaded(false),
+  memory(nullptr)
+  {
+    memory = MemoryManagement::Get_MemoryManagement();
+  }
 
 
 void FontManagerWindow::GetAux(HWND hwnd, FontManager* fontManager) {
@@ -30,6 +35,14 @@ void FontManagerWindow::GetHwnd(HWND hwnd) {
 	else throw std::runtime_error("hwnd is nullptr");
 }
 
+void FontManagerWindow::Open() {}
+
+void FontManagerWindow::Tick() {
+    Render();
+}
+
+void FontManagerWindow::Close() {}
+
 
 FontManagerWindow::~FontManagerWindow() {
 
@@ -37,6 +50,7 @@ FontManagerWindow::~FontManagerWindow() {
 	m_selectedFilePath.clear();
 	m_selectedFolderPath.clear();
 	m_statusMessage.clear();
+    memory = nullptr;
 }
 
 
@@ -44,7 +58,7 @@ void FontManagerWindow::Render() {
 	// Begin a new ImGui window
 	// "Font Manager Demo" is the window title
 	// The window is resizable and can be moved
-	ImGui::Begin("Font Manager Demo");
+	ImGui::Begin("Font Manager Demo", &memory->m_bShow_FontManager_window);
 
 	ImGui::Checkbox("Show font preview", &bShowFontPreview);
 

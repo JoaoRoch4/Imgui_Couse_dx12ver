@@ -5,7 +5,7 @@
 #pragma once
 
 #include "pch.hpp"
-#include "Classes.hpp"
+#include "Master.hpp"
 namespace app {
 
 // Forward declarations to avoid circular dependencies
@@ -27,9 +27,9 @@ class OutputConsole;
 
 class MemoryManagement : public Master {
 
-    virtual void Open()            override;
-        virtual void Tick()        override;
-        virtual void Close()       override;
+	virtual void Open() override;
+	virtual void Tick() override;
+	virtual void Close() override;
 
 public:
 	MemoryManagement();
@@ -57,20 +57,20 @@ public:
 
 
 protected:
-	void Alloc_command_line_args();
-	void Alloc_console_window();
-	void Alloc_console_input_handler();
-	void Alloc_config_manager();
+	HRESULT Alloc_command_line_args();
+	HRESULT Alloc_console_window();
+	HRESULT Alloc_console_input_handler();
+	HRESULT Alloc_config_manager();
 	//void Alloc_dx12_renderer();
-	void Alloc_dx_demos();
-	void Alloc_debug_window();
-	void Alloc_Example_Descriptor_Heap_Allocator();
-	void Alloc_font_manager();
-	void Alloc_font_manager_window();
-	void Alloc_frame_context();
-	void Alloc_window_class();
-	void Alloc_window_manager();
-	void Alloc_output_console();
+	HRESULT Alloc_dx_demos();
+	HRESULT Alloc_debug_window();
+	HRESULT Alloc_Example_Descriptor_Heap_Allocator();
+	HRESULT Alloc_font_manager();
+	HRESULT Alloc_font_manager_window();
+	HRESULT Alloc_frame_context();
+	HRESULT Alloc_window_class();
+	HRESULT Alloc_window_manager();
+	HRESULT Alloc_output_console();
 
 
 private:

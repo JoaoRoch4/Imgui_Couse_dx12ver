@@ -70,7 +70,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <SpectreMitigation>Spectre</SpectreMitigation>
-    <EnableUnitySupport>true</EnableUnitySupport>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -97,7 +97,11 @@
     <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\stb;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;</ExternalIncludePath>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;$(IncludePath)</IncludePath>
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
+    <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
+    <PublicIncludeDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicModuleDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;$(PublicModuleDirectories)</PublicModuleDirectories>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
@@ -626,6 +630,7 @@
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
+    <None Include="ClassDiagram3.cd" />
     <None Include="cpp.hint" />
     <None Include="vcpkg-configuration.json" />
     <None Include="vcpkg.json" />

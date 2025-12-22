@@ -4,7 +4,7 @@
 
 using namespace app;
 // Data
-ExampleDescriptorHeapAllocator *g_pd3dSrvDescHeapAlloc;
+ExampleDescriptorHeapAllocator* g_pd3dSrvDescHeapAlloc;
 
 ComPtr<ID3D12Device>			   m_Device;
 ComPtr<ID3D12DescriptorHeap>	   m_RtvDescHeap;
@@ -15,19 +15,30 @@ ComPtr<ID3D12Fence>				   m_fence;
 ComPtr<IDXGISwapChain3>			   m_pSwapChain;
 ComPtr<ID3D12Resource>			   m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
 static D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS] = {};
-MemoryManagement* memory;
-
-OutputConsole* console;
-CommandLineArguments* cmdArgs;
-WindowManager* window;
-FontManager* m_font_manager;
-FontManagerWindow* m_font_manager_window;
-DebugWindow* m_debug_window;
-ConfigManager* configManager;
-WindowClass* window_obj;
-
+/**
+ * Array of frame contexts for frames in flight.
+ * Each frame gets its own command allocator to avoid conflicts.
+ */
 static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
+MemoryManagement*	  memory;
+OutputConsole*		  console;
+CommandLineArguments* cmdArgs;
+WindowManager*		  window;
+FontManager*		  m_font_manager;
+FontManagerWindow*	  m_font_manager_window;
+DebugWindow*		  m_debug_window;
+ConfigManager*		  configManager;
+WindowClass*		  window_obj;
+
+
+/**
+ * @brief Gets next available frame context for rendering
+ * @return Pointer to frame context that is ready for recording
+ *
+ * Waits for the frame to become available (GPU finished processing it),
+ * then waits for the swap chain waitable object for frame latency control.
+ */
 FrameContext* WaitForNextFrameContext();
 
 
@@ -48,19 +59,19 @@ int Start(_In_ HINSTANCE hInstance) {
 	console->Out << tc::green << "Memory management initialized" << std::endl;
 	console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 
-    configManager = memory->Get_ConfigManager();
+	configManager = memory->Get_ConfigManager();
 
 
 	// Main code
 	g_pd3dSrvDescHeapAlloc = memory->Get_ExampleDescriptorHeapAllocator();
-	window  = memory->Get_WindowManager();
+	window				   = memory->Get_WindowManager();
 
 	OpenWindow(hInstance);
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO &m_io = ImGui::GetIO();
+	ImGuiIO& m_io = ImGui::GetIO();
 	static_cast<void>(m_io);
 	memory->Set_ImGuiIO(&m_io);
 	m_io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
@@ -71,7 +82,7 @@ int Start(_In_ HINSTANCE hInstance) {
 	// ImGui::StyleColorsLight();
 
 	// Setup scaling
-	ImGuiStyle &style = ImGui::GetStyle();
+	ImGuiStyle& style = ImGui::GetStyle();
 	style.ScaleAllSizes(
 		window->get_main_scale()); // Bake a fixed style scale. (until we have a solution for
 	// dynamic style scaling, changing this requires resetting
@@ -103,12 +114,12 @@ int Start(_In_ HINSTANCE hInstance) {
 	// provide callbacks. (current version of the backend will only allocate one
 	// descriptor, future versions will need to allocate more)
 	init_info.SrvDescriptorHeap	   = m_SrvDescHeap.get();
-	init_info.SrvDescriptorAllocFn = [](ImGui_ImplDX12_InitInfo *,
-										D3D12_CPU_DESCRIPTOR_HANDLE *out_cpu_handle,
-										D3D12_GPU_DESCRIPTOR_HANDLE *out_gpu_handle) {
+	init_info.SrvDescriptorAllocFn = [](ImGui_ImplDX12_InitInfo*,
+										D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle,
+										D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
 		return g_pd3dSrvDescHeapAlloc->Alloc(out_cpu_handle, out_gpu_handle);
 	};
-	init_info.SrvDescriptorFreeFn = [](ImGui_ImplDX12_InitInfo *,
+	init_info.SrvDescriptorFreeFn = [](ImGui_ImplDX12_InitInfo*,
 									   D3D12_CPU_DESCRIPTOR_HANDLE cpu_handle,
 									   D3D12_GPU_DESCRIPTOR_HANDLE gpu_handle) {
 		return g_pd3dSrvDescHeapAlloc->Free(cpu_handle, gpu_handle);
@@ -152,306 +163,288 @@ void OpenWindow(_In_ HINSTANCE hInstance) {
 	// Show the window
 	::ShowWindow(window->GetHWND(), SW_SHOWMAXIMIZED);
 	::UpdateWindow(window->GetHWND());
-
-
 }
 
 void MainLoop(ImGuiIO* m_io) {
-    // Get font manager and initialize
-    m_font_manager = memory->Get_FontManager();
-    m_font_manager->GetIo(m_io);
+	// Get font manager and initialize
+	m_font_manager = memory->Get_FontManager();
+	m_font_manager->GetIo(m_io);
 
-    m_font_manager_window = memory->Get_FontManagerWindow();
-    m_font_manager_window->GetAux(window->GetHWND(), m_font_manager);
+	m_font_manager_window = memory->Get_FontManagerWindow();
+	m_font_manager_window->GetAux(window->GetHWND(), m_font_manager);
 
-    m_debug_window = memory->Get_DebugWindow();
-    m_debug_window->GetIo(m_io);
-
-    // Load fonts
-    m_font_manager->LoadFonts();
-    m_font_manager->SetDefaultFont();
-
-    // ========================================================================
-    // STEP 1: Initialize ConfigManager and load saved settings
-    // ========================================================================
-
-    // Get ConfigManager instance from MemoryManagement
-    configManager = memory->Get_ConfigManager();
-
-    // Call Open() to load configuration from disk
-    // This will load config.json if it exists
-    configManager->Open();
-
-    // ========================================================================
-    // STEP 2: Load the saved clear color (or use default)
-    // ========================================================================
-
-    // Get the clear color from configuration
-    // If config.json exists, this will be the saved value
-    // If not, it will be the default value from constructor (0.15, 0.15, 0.15, 1.0)
-    ImVec4 clear_color = configManager->GetClearColorAsImVec4();
-
-    // Optional: Print the loaded color to console
-    console->Out << "Loaded clear color: R=" << clear_color.x
-        << " G=" << clear_color.y
-        << " B=" << clear_color.z
-        << " A=" << clear_color.w << "\n";
-
-    // Create window object for file system browser
-    window_obj = memory->Get_WindowClass();
+	m_debug_window = memory->Get_DebugWindow();
+	m_debug_window->GetIo(m_io);
 
 
-    // Track if color was modified this frame
-    bool colorModified = false;
+	// Load fonts
+	m_font_manager->LoadFonts();
+	m_font_manager->SetDefaultFont();
 
-    // ========================================================================
-    // MAIN LOOP
-    // ========================================================================
-    bool done = false;
-    while(!done) {
-        // Poll and handle Windows messages
-        MSG msg;
-        while(::PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE)) {
-            ::TranslateMessage(&msg);
-            ::DispatchMessage(&msg);
-            if(msg.message == WM_QUIT) done = true;
-        }
-        if(done) break;
+	// ========================================================================
+	// STEP 1: Initialize ConfigManager and load saved settings
+	// ========================================================================
 
-        // Handle window occlusion and minimization
-        if((m_SwapChainOccluded &&
-            m_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
-            ::IsIconic(window->GetHWND())) {
-            ::Sleep(10);
-            continue;
-        }
-        m_SwapChainOccluded = false;
+	// Get ConfigManager instance from MemoryManagement
+	configManager = memory->Get_ConfigManager();
 
-        // Start ImGui frame
-        ImGui_ImplDX12_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
+	// Call Open() to load configuration from disk
+	// This will load config.json if it exists
+	configManager->Open();
 
-        // Render optional windows
-        if(memory->m_bShow_FileSys_window) { render(*window_obj); }
-        if(memory->m_bShow_Debug_window) m_debug_window->Tick();
-        if(memory->m_bShow_FontManager_window) m_font_manager_window->Render();
-        if(memory->m_bShow_styleEditor_window) ImGui::ShowStyleEditor();
-        if(memory->m_bShow_demo_window) ImGui::ShowDemoWindow(&memory->m_bShow_demo_window);
+	// ========================================================================
+	// STEP 2: Load the saved clear color (or use default)
+	// ========================================================================
 
-        // ====================================================================
-        // MAIN WINDOW WITH COLOR PICKER AND SAVE FUNCTIONALITY
-        // ====================================================================
-        {
-            static float f = 0.0f;
-            static int counter = 0;
+	// Get the clear color from configuration
+	// If config.json exists, this will be the saved value
+	// If not, it will be the default value from constructor (0.15, 0.15, 0.15, 1.0)
+	ImVec4 clear_color = configManager->GetClearColorAsImVec4();
 
-            // Reset color modification flag for this frame
-            colorModified = false;
+	// Optional: Print the loaded color to console
+	console->Out << "Loaded clear color: R=" << clear_color.x << " G=" << clear_color.y
+				 << " B=" << clear_color.z << " A=" << clear_color.w << "\n";
 
-            ImGui::Begin("Hello, world!");
-            ShowExampleAppMainMenuBar();
+	// Create window object for file system browser
+	window_obj = memory->Get_WindowClass();
+	window_obj->Open();
 
-            ig::Separator();
-            ImGui::Text("Background Color Settings");
-            ig::Separator();
 
-            // ================================================================
-            // STEP 3: Color picker that modifies clear_color
-            // ================================================================
+	// Track if color was modified this frame
+	bool colorModified = false;
 
-            // ColorEdit3 returns true when the color is modified
-            // We use this to detect when to save the configuration
-            if(ImGui::ColorEdit3("Background Color",
-                std::bit_cast<float*>(std::ref(clear_color)))) {
-                // Color was modified by user
-                colorModified = true;
-            }
+	// ========================================================================
+	// MAIN LOOP
+	// ========================================================================
+	bool done = false;
+	while (!done) {
+		// Poll and handle Windows messages
+		MSG msg;
+		while (::PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE)) {
+			::TranslateMessage(&msg);
+			::DispatchMessage(&msg);
+			if (msg.message == WM_QUIT) done = true;
+		}
+		if (done) break;
 
-            // Show current color values
-            ImGui::Text("Current color: R=%.2f G=%.2f B=%.2f A=%.2f",
-                clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+		// Handle window occlusion and minimization
+		if ((m_SwapChainOccluded &&
+			 m_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
+			::IsIconic(window->GetHWND())) {
+			::Sleep(10);
+			continue;
+		}
+		m_SwapChainOccluded = false;
 
-            ig::Separator();
+		// Start ImGui frame
+		ImGui_ImplDX12_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
 
-            // ================================================================
-            // STEP 4: Manual save button (optional)
-            // ================================================================
+		// Render optional windows
+		if (memory->m_bShow_FileSys_window) window_obj->Tick();
+		if (memory->m_bShow_Debug_window) m_debug_window->Tick();
 
-            // Provide a manual save button as alternative
-            if(ImGui::Button("Save Color to Config")) {
-                // Update ConfigManager with current color
-                configManager->SetClearColor(clear_color.x,
-                    clear_color.y,
-                    clear_color.z,
-                    clear_color.w);
+		if (memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
+		if (memory->m_bShow_styleEditor_window) ImGui::ShowStyleEditor();
+		if (memory->m_bShow_demo_window) ImGui::ShowDemoWindow(&memory->m_bShow_demo_window);
 
-                // Save to disk
-                if(configManager->SaveConfiguration()) {
-                    console->Out << tc::green << "Background color saved successfully!\n"
-                        << tc::reset;
-                } else {
-                    console->Out << tc::red << "Failed to save background color!\n"
-                        << tc::reset;
-                }
-            }
+		// ====================================================================
+		// MAIN WINDOW WITH COLOR PICKER AND SAVE FUNCTIONALITY
+		// ====================================================================
+		{
+			static float f		 = 0.0f;
+			static int	 counter = 0;
 
-            // Show when file was last saved
-            ImGui::SameLine();
-            ImGui::TextDisabled("(?)");
-            if(ImGui::IsItemHovered()) {
-                ImGui::BeginTooltip();
-                ImGui::Text("Config file location:");
-                ImGui::Text("%ls", configManager->GetConfigFilePath().c_str());
-                ImGui::EndTooltip();
-            }
+			// Reset color modification flag for this frame
+			colorModified = false;
 
-            ig::Separator();
+			ImGui::Begin("Hello, world!");
+			ShowExampleAppMainMenuBar();
 
-            // ================================================================
-            // STEP 5: Auto-save when color changes (recommended approach)
-            // ================================================================
+			ig::Separator();
+			ImGui::Text("Background Color Settings");
+			ig::Separator();
 
-            // If color was modified this frame, automatically save it
-            if(colorModified) {
-                // Update ConfigManager with new color
-                configManager->SetClearColor(clear_color.x,
-                    clear_color.y,
-                    clear_color.z,
-                    clear_color.w);
+			// ================================================================
+			// STEP 3: Color picker that modifies clear_color
+			// ================================================================
 
-                // Auto-save to disk
-                configManager->SaveConfiguration();
+			// ColorEdit3 returns true when the color is modified
+			// We use this to detect when to save the configuration
+			if (ImGui::ColorEdit3("Background Color",
+								  std::bit_cast<float*>(std::ref(clear_color)))) {
+				// Color was modified by user
+				colorModified = true;
+			}
 
-             
+			// Show current color values
+			ImGui::Text("Current color: R=%.2f G=%.2f B=%.2f A=%.2f", clear_color.x, clear_color.y,
+						clear_color.z, clear_color.w);
 
-                // Optional: Show feedback to user
-                console->Out << "Color auto-saved: R=" << clear_color.x
-                    << " G=" << clear_color.y
-                    << " B=" << clear_color.z << "\n";
+			ig::Separator();
 
-               
-            }
+			// ================================================================
+			// STEP 4: Manual save button (optional)
+			// ================================================================
 
-            ig::Separator();
+			// Provide a manual save button as alternative
+			if (ImGui::Button("Save Color to Config")) {
+				// Update ConfigManager with current color
+				configManager->SetClearColor(clear_color.x, clear_color.y, clear_color.z,
+											 clear_color.w);
 
-            // Rest of your UI code...
-            ImGui::Text("Other Settings");
+				// Save to disk
+				if (configManager->SaveConfiguration()) {
+					console->Out << tc::green << "Background color saved successfully!\n"
+								 << tc::reset;
+				} else {
+					console->Out << tc::red << "Failed to save background color!\n" << tc::reset;
+				}
+			}
 
-            ImGui::Checkbox("Demo Window", &memory->m_bShow_demo_window);
-            ImGui::Checkbox("Another Window", &memory->m_bShow_another_window);
-            ImGui::Checkbox("Style Editor", &memory->m_bShow_styleEditor_window);
+			// Show when file was last saved
+			ImGui::SameLine();
+			ImGui::TextDisabled("(?)");
+			if (ImGui::IsItemHovered()) {
+				ImGui::BeginTooltip();
+				ImGui::Text("Config file location:");
+				ImGui::Text("%ls", configManager->GetConfigFilePath().c_str());
+				ImGui::EndTooltip();
+			}
 
-            ig::Separator();
+			ig::Separator();
 
-            ImGui::Checkbox("Debug Window", &memory->m_bShow_Debug_window);
-            ImGui::Checkbox("Font Manager Window", &memory->m_bShow_FontManager_window);
-            ImGui::Checkbox("File System Window", &memory->m_bShow_FileSys_window);
+			// ================================================================
+			// STEP 5: Auto-save when color changes (recommended approach)
+			// ================================================================
 
-            ig::Separator();
+			// If color was modified this frame, automatically save it
+			if (colorModified) {
+				// Update ConfigManager with new color
+				configManager->SetClearColor(clear_color.x, clear_color.y, clear_color.z,
+											 clear_color.w);
 
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+				// Auto-save to disk
+				configManager->SaveConfiguration();
 
-            if(ImGui::Button("--")) counter--;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-            ImGui::SameLine();
-            if(ImGui::Button("++")) counter++;
-            ImGui::SameLine();
-            if(ImGui::Button("Reset")) counter = 0;
 
-            ImGui::End();
-        }
+				// Optional: Show feedback to user
+				console->Out << "Color auto-saved: R=" << clear_color.x << " G=" << clear_color.y
+							 << " B=" << clear_color.z << "\n";
+			}
 
-        // Another window example
-        if(memory->m_bShow_another_window) {
-            ImGui::Begin("Another Window", &memory->m_bShow_another_window);
-            ImGui::Text("Hello from another window!");
-            if(ImGui::Button("Close Me")) memory->m_bShow_another_window = false;
-            ImGui::End();
-        }
+			ig::Separator();
 
-        // Rendering
-        ImGui::Render();
+			// Rest of your UI code...
+			ImGui::Text("Other Settings");
 
-        // Get frame context and back buffer
-        FrameContext* frameCtx = WaitForNextFrameContext();
-        UINT backBufferIdx = m_pSwapChain->GetCurrentBackBufferIndex();
-        frameCtx->CommandAllocator->Reset();
+			ImGui::Checkbox("Demo Window", &memory->m_bShow_demo_window);
+			ImGui::Checkbox("Another Window", &memory->m_bShow_another_window);
+			ImGui::Checkbox("Style Editor", &memory->m_bShow_styleEditor_window);
 
-        // Transition to render target state
-        D3D12_RESOURCE_BARRIER barrier = {};
-        barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-        barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-        barrier.Transition.pResource = m_mainRenderTargetResource[backBufferIdx].get();
-        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-        barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+			ig::Separator();
 
-        m_CommandList->Reset(frameCtx->CommandAllocator.get(), nullptr);
-        m_CommandList->ResourceBarrier(1, &barrier);
+			ImGui::Checkbox("Debug Window", &memory->m_bShow_Debug_window);
+			ImGui::Checkbox("Font Manager Window", &memory->m_bShow_FontManager_window);
+			ImGui::Checkbox("File System Window", &memory->m_bShow_FileSys_window);
 
-        // ====================================================================
-        // STEP 6: Use clear_color for rendering
-        // ====================================================================
+			ig::Separator();
 
-        // Convert ImVec4 to float array with alpha premultiplied
-        const float clear_color_with_alpha[4] = {
-            clear_color.x * clear_color.w,  // Red * Alpha
-            clear_color.y * clear_color.w,  // Green * Alpha
-            clear_color.z * clear_color.w,  // Blue * Alpha
-            clear_color.w                   // Alpha
-        };
+			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
 
-        // Clear render target with the configured color
-        m_CommandList->ClearRenderTargetView(
-            m_mainRenderTargetDescriptor[backBufferIdx],
-            clear_color_with_alpha,
-            0,
-            nullptr
-        );
+			if (ImGui::Button("--")) counter--;
+			ImGui::SameLine();
+			ImGui::Text("counter = %d", counter);
+			ImGui::SameLine();
+			if (ImGui::Button("++")) counter++;
+			ImGui::SameLine();
+			if (ImGui::Button("Reset")) counter = 0;
 
-        // Set render target and descriptor heaps
-        m_CommandList->OMSetRenderTargets(
-            1,
-            &m_mainRenderTargetDescriptor[backBufferIdx],
-            FALSE,
-            nullptr
-        );
+			ImGui::End();
+		}
 
-        ID3D12DescriptorHeap* ppHeaps[] = { m_SrvDescHeap.get() };
-        m_CommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+		// Another window example
+		if (memory->m_bShow_another_window) {
+			ImGui::Begin("Another Window", &memory->m_bShow_another_window);
+			ImGui::Text("Hello from another window!");
+			if (ImGui::Button("Close Me")) memory->m_bShow_another_window = false;
+			ImGui::End();
+		}
 
-        // Render ImGui draw data
-        ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), m_CommandList.get());
+		// Rendering
+		ImGui::Render();
 
-        // Transition to present state
-        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-        barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-        m_CommandList->ResourceBarrier(1, &barrier);
-        m_CommandList->Close();
+		// Get frame context and back buffer
+		FrameContext* frameCtx		= WaitForNextFrameContext();
+		UINT		  backBufferIdx = m_pSwapChain->GetCurrentBackBufferIndex();
+		frameCtx->CommandAllocator->Reset();
 
-        // Execute command list
-        ID3D12CommandList* ppCommandLists[] = { m_CommandList.get() };
-        m_CommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-        m_CommandQueue->Signal(m_fence.get(), ++m_fenceLastSignaledValue);
-        frameCtx->FenceValue = m_fenceLastSignaledValue;
+		// Transition to render target state
+		D3D12_RESOURCE_BARRIER barrier = {};
+		barrier.Type				   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		barrier.Flags				   = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		barrier.Transition.pResource   = m_mainRenderTargetResource[backBufferIdx].get();
+		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+		barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
-        // Present
-        HRESULT hr = m_pSwapChain->Present(1, 0);
-        m_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
-        g_frameIndex++;
-    }
+		m_CommandList->Reset(frameCtx->CommandAllocator.get(), nullptr);
+		m_CommandList->ResourceBarrier(1, &barrier);
 
-    // ========================================================================
-    // STEP 7: Save configuration on exit
-    // ========================================================================
+		// ====================================================================
+		// STEP 6: Use clear_color for rendering
+		// ====================================================================
 
-    // Save final configuration before closing
-    // This ensures any unsaved changes are persisted
-    configManager->Close();
+		// Convert ImVec4 to float array with alpha premultiplied
+		const float clear_color_with_alpha[4] = {
+			clear_color.x * clear_color.w, // Red * Alpha
+			clear_color.y * clear_color.w, // Green * Alpha
+			clear_color.z * clear_color.w, // Blue * Alpha
+			clear_color.w				   // Alpha
+		};
 
-    console->Out << tc::green << "Configuration saved on exit\n" << tc::reset;
+		// Clear render target with the configured color
+		m_CommandList->ClearRenderTargetView(m_mainRenderTargetDescriptor[backBufferIdx],
+											 clear_color_with_alpha, 0, nullptr);
+
+		// Set render target and descriptor heaps
+		m_CommandList->OMSetRenderTargets(1, &m_mainRenderTargetDescriptor[backBufferIdx], FALSE,
+										  nullptr);
+
+		ID3D12DescriptorHeap* ppHeaps[] = {m_SrvDescHeap.get()};
+		m_CommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
+		// Render ImGui draw data
+		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), m_CommandList.get());
+
+		// Transition to present state
+		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+		barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PRESENT;
+		m_CommandList->ResourceBarrier(1, &barrier);
+		m_CommandList->Close();
+
+		// Execute command list
+		ID3D12CommandList* ppCommandLists[] = {m_CommandList.get()};
+		m_CommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+		m_CommandQueue->Signal(m_fence.get(), ++m_fenceLastSignaledValue);
+		frameCtx->FenceValue = m_fenceLastSignaledValue;
+
+		// Present
+		HRESULT hr			= m_pSwapChain->Present(1, 0);
+		m_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
+		g_frameIndex++;
+	}
+
+	// ========================================================================
+	// STEP 7: Save configuration on exit
+	// ========================================================================
+
+	// Save final configuration before closing
+	// This ensures any unsaved changes are persisted
+	configManager->Close();
+
+	console->Out << tc::green << "Configuration saved on exit\n" << tc::reset;
 }
 void Cleanup() {
 
@@ -541,7 +534,7 @@ bool CreateDeviceD3D(HWND hWnd) {
 
 	// [DEBUG] Enable debug interface
 #ifdef DX12_ENABLE_DEBUG_LAYER
-	ID3D12Debug *pdx12Debug = nullptr;
+	ID3D12Debug* pdx12Debug = nullptr;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&pdx12Debug))))
 		pdx12Debug->EnableDebugLayer();
 #endif
@@ -553,7 +546,7 @@ bool CreateDeviceD3D(HWND hWnd) {
 	// [DEBUG] Setup debug interface to break on any warnings/errors
 #ifdef DX12_ENABLE_DEBUG_LAYER
 	if (pdx12Debug != nullptr) {
-		ID3D12InfoQueue *pInfoQueue = nullptr;
+		ID3D12InfoQueue* pInfoQueue = nullptr;
 		m_Device->QueryInterface(IID_PPV_ARGS(&pInfoQueue));
 		pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 		pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
@@ -630,8 +623,8 @@ bool CreateDeviceD3D(HWND hWnd) {
 	if (m_fenceEvent == nullptr) return false;
 
 	{
-		IDXGIFactory5	*dxgiFactory = nullptr;
-		IDXGISwapChain1 *swapChain1	 = nullptr;
+		IDXGIFactory5*	 dxgiFactory = nullptr;
+		IDXGISwapChain1* swapChain1	 = nullptr;
 		if (CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)) != S_OK) return false;
 
 		BOOL allow_tearing = FALSE;
@@ -693,8 +686,8 @@ void WaitForPendingOperations() {
 	::WaitForSingleObject(m_fenceEvent, INFINITE);
 }
 
-FrameContext *WaitForNextFrameContext() {
-	FrameContext *m_frame_context = &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
+FrameContext* WaitForNextFrameContext() {
+	FrameContext* m_frame_context = &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
 	if (m_fence->GetCompletedValue() < m_frame_context->FenceValue) {
 		m_fence->SetEventOnCompletion(m_frame_context->FenceValue, m_fenceEvent);
 		HANDLE waitableObjects[] = {m_hSwapChainWaitableObject, m_fenceEvent};
@@ -799,7 +792,7 @@ void ShowExampleMenuFile() {
 	if (ImGui::BeginMenu("Colors")) {
 		float sz = ImGui::GetTextLineHeight();
 		for (int i = 0; i < ImGuiCol_COUNT; i++) {
-			const char *name = ImGui::GetStyleColorName((ImGuiCol)i);
+			const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
 			ImVec2		p	 = ImGui::GetCursorScreenPos();
 			ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz),
 													  ImGui::GetColorU32((ImGuiCol)i));
@@ -827,4 +820,18 @@ void ShowExampleMenuFile() {
 	if (ImGui::MenuItem("Checked", NULL, true)) {}
 	ImGui::Separator();
 	if (ImGui::MenuItem("Quit", "Alt+F4")) { exit(EXIT_SUCCESS); }
+}
+
+int ErrorMsg(std::exception& e) {
+
+	auto what = e.what();
+	auto LVl  = ConvStatic::strtoWstr(what);
+
+	MessageBox(NULL, LVl.c_str(), L"Error", MB_ICONERROR | MB_OK);
+	return EXIT_FAILURE;
+}
+
+int UnkExcpt() {
+	MessageBox(NULL, L"unknow Excepition", L"Error", MB_ICONERROR | MB_OK);
+	return EXIT_FAILURE;
 }

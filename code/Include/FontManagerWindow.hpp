@@ -5,6 +5,7 @@
 
 #include "PCH.hpp"
 #include "FontManager.hpp"
+#include "MemoryManagement.hpp"
 
 namespace app {
 
@@ -13,7 +14,7 @@ namespace app {
 // ============================================================================
 
 // This class manages the ImGui UI with file/folder dialog buttons
-class FontManagerWindow {
+class FontManagerWindow : public MemoryManagement{
 
 
 	// FontManager instance for managing fonts
@@ -37,6 +38,12 @@ class FontManagerWindow {
 	// Counter for total fonts loaded
 	int m_totalFontsLoaded;
 
+    MemoryManagement* memory;
+
+
+    // Main render function - called every frame to draw the UI
+    void Render();
+
 public:
 	FontManagerWindow();
 
@@ -44,11 +51,13 @@ public:
 	void GetFontManager(FontManager* fontManager);
 	void GetHwnd(HWND hwnd);
 
+    virtual void Open() override;
+    virtual void Tick() override;
+    virtual void Close() override;
+
 	// Destructor
 	~FontManagerWindow();
 
-	// Main render function - called every frame to draw the UI
-	void Render();
 	// Method to display a font preview window (bonus feature)
 	void RenderFontPreview();
 
