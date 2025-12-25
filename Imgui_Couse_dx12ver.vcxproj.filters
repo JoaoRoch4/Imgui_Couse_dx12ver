@@ -131,9 +131,6 @@
     <ClCompile Include="code\pch\pch.cpp">
       <Filter>local\pch</Filter>
     </ClCompile>
-    <ClCompile Include="code\Main\Source.cpp">
-      <Filter>local\main</Filter>
-    </ClCompile>
     <ClCompile Include="code\Main\Main.cpp">
       <Filter>local\main</Filter>
     </ClCompile>
@@ -198,6 +195,9 @@
       <Filter>local\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="code\src\Helpers.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\App.cpp">
       <Filter>local\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -328,9 +328,6 @@
     <ClInclude Include="code\pch\PCH.hpp">
       <Filter>local\pch</Filter>
     </ClInclude>
-    <ClInclude Include="code\Main\Source.hpp">
-      <Filter>local\main</Filter>
-    </ClInclude>
     <ClInclude Include="code\Include\Main.hpp">
       <Filter>local\main</Filter>
     </ClInclude>
@@ -409,6 +406,9 @@
     <ClInclude Include="code\Include\Helpers.hpp">
       <Filter>local\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="code\Include\App.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
@@ -419,5 +419,6 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
+    <None Include="REFACTORING_SUMMARY.md" />
   </ItemGroup>
 </Project>

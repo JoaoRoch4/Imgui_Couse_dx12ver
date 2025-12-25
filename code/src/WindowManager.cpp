@@ -105,7 +105,7 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 	m_wc->style = CS_HREDRAW | CS_VREDRAW;
 
 	// Pointer to the m_window procedure function that handles messages
-	m_wc->lpfnWndProc = WndProc;
+	m_wc->lpfnWndProc = App::WndProc;
 
 	// Application instance handle
 	m_wc->hInstance = hInstance;

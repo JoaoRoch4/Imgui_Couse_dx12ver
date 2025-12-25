@@ -226,6 +226,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="code\src\App.cpp" />
     <ClCompile Include="code\src\Classes.cpp" />
     <ClCompile Include="code\src\CommandLineArgumments.cpp" />
     <ClCompile Include="code\src\ConfigManager.cpp" />
@@ -538,26 +539,9 @@
       <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
       <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
     </ClCompile>
-    <ClCompile Include="code\Main\Source.cpp">
-      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IncludeInUnityFile>
-      <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">2</MinFilesInUnityFile>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
-      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
-      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
-      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
-      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
-      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
-      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
-      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
-      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
-      </DisableSpecificWarnings>
-      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
-      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="code\Include\App.hpp" />
     <ClInclude Include="code\Include\Classes.hpp" />
     <ClInclude Include="code\Include\CommandLineArgumments.hpp" />
     <ClInclude Include="code\Include\ConfigManager.hpp" />
@@ -625,7 +609,6 @@
     <ClInclude Include="external\stb\stb_truetype.h" />
     <ClInclude Include="external\stb\stb_voxel_render.h" />
     <ClInclude Include="code\Include\Main.hpp" />
-    <ClInclude Include="code\Main\Source.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
@@ -634,6 +617,7 @@
     <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
     <None Include="cpp.hint" />
+    <None Include="REFACTORING_SUMMARY.md" />
     <None Include="vcpkg-configuration.json" />
     <None Include="vcpkg.json" />
   </ItemGroup>

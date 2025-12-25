@@ -3,10 +3,8 @@
 // Handles initialization and exception management
 
 #include "pch.hpp"
-#include "CommandLineArgumments.hpp"
-#include "Source.hpp"
-#include "Classes.hpp"
-#include "Main.hpp"
+#include "App.hpp"
+#include "Helpers.hpp"
 
 /**
  * @brief Windows application entry point
@@ -36,9 +34,9 @@ _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE	  hInstance,
 	UNREFERENCED_PARAMETER(nCmdShow);
 
 	try {
-		// Start the main application initialization and rendering loop
-		// All application logic is handled within the Start() function
-		Start(hInstance);
+		// Create and run the application
+		App app;
+		return app.Run(hInstance);
 
 	// Handle known exceptions (std::exception and derived classes)
 	} catch (std::exception& e) { 

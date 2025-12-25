@@ -14,7 +14,7 @@ class CommandLineArguments;
 class ConsoleWindow;
 class ConsoleInputHandler;
 class ConfigManager;
-//class DX12Renderer;
+// class DX12Renderer;
 class DxDemos;
 class DebugWindow;
 class ExampleDescriptorHeapAllocator;
@@ -38,7 +38,7 @@ public:
 
 	void AllocAll();
 
-	//DX12Renderer*					Get_DX12Renderer() const;
+	// DX12Renderer*					Get_DX12Renderer() const;
 
 
 	static MemoryManagement*		Get_MemoryManagement();
@@ -61,7 +61,7 @@ protected:
 	HRESULT Alloc_console_window();
 	HRESULT Alloc_console_input_handler();
 	HRESULT Alloc_config_manager();
-	//void Alloc_dx12_renderer();
+	HRESULT Alloc_dx12_renderer();
 	HRESULT Alloc_dx_demos();
 	HRESULT Alloc_debug_window();
 	HRESULT Alloc_Example_Descriptor_Heap_Allocator();
@@ -74,7 +74,7 @@ protected:
 
 
 private:
-	//UPtr<DX12Renderer>					 dx12_renderer;
+	// UPtr<DX12Renderer>					 dx12_renderer;
 
 	std::shared_ptr<MemoryManagement> m_memory_management;
 
@@ -86,6 +86,7 @@ private:
 	UPtr<ConsoleInputHandler>  m_console_input_handler;
 	UPtr<ConfigManager>		   m_config_manager;
 	UPtr<DxDemos>			   m_dx_demos;
+	UPtr<DX12Renderer>		   m_dx12_renderer;
 	UPtr<DebugWindow>		   m_debug_window;
 	UPtr<FontManager>		   m_font_manager;
 	UPtr<FontManagerWindow>	   m_font_manager_window;
@@ -98,7 +99,7 @@ private:
 	bool m_bConsole_window_allocated;
 	bool m_bConsole_input_handler_allocated;
 	bool m_bConfig_manager_allocated;
-	//bool bDx12_renderer_allocated;
+	bool m_bDx12_renderer_allocated;
 	bool m_bDx_demos_allocated;
 	bool m_bDebug_window_allocated;
 	bool m_bExample_Descriptor_Heap_Allocator_allocated;
@@ -111,7 +112,7 @@ private:
 	bool m_bOutput_console_allocated;
 
 
-	//imgui flags
+	// imgui flags
 public:
 	bool m_bShow_demo_window;
 	bool m_bShow_another_window;

@@ -25,3 +25,4 @@
 #include "MemoryManagement.hpp"
 #include "WindowManager.hpp"
 #include "OutputConsole.hpp"
+#include "App.hpp"
