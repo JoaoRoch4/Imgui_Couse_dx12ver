@@ -619,6 +619,8 @@
     <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
     <None Include="cpp.hint" />
+    <None Include="docs\Dynamic_Color_Implementation_Summary.md" />
+    <None Include="docs\StyleManager_Color_Utilities.md" />
     <None Include="FINAL_REFACTORING_SUMMARY.md" />
     <None Include="IMGUI_CONTEXT_SHUTDOWN_FIX.md" />
     <None Include="REFACTORING_SUMMARY.md" />

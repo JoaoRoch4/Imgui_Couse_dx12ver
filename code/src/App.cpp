@@ -293,11 +293,18 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
         ImGui::Begin("Style Editor", &m_memory->m_bShow_styleEditor_window);
         
         // Add custom save/load buttons at the top - Load button first
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 0.8f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.6f, 1.0f));
+        // Use StyleManager helper functions for theme-aware colors
+        StyleManager* styleManager = m_memory->Get_StyleManager();
+        
+        // Load button with info styling (blue-tinted)
+        ImVec4 loadButtonColor = StyleManager::GetInfoButtonColor();
+        ImVec4 loadButtonHovered = StyleManager::GetHoveredColor(loadButtonColor);
+        ImVec4 loadButtonActive = StyleManager::GetActiveColor(loadButtonColor);
+        
+        ImGui::PushStyleColor(ImGuiCol_Button, loadButtonColor);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, loadButtonHovered);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, loadButtonActive);
         if (ImGui::Button("Load Style Configuration", ImVec2(200, 30))) {
-            StyleManager* styleManager = m_memory->Get_StyleManager();
             if (styleManager->LoadConfiguration()) {
                 styleManager->ApplyStyleToImGui();
                 m_console->Out << tc::green << "Style configuration loaded successfully!\n" << tc::reset;
@@ -309,12 +316,16 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
         
         ImGui::SameLine();
         
-        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
-        if (ImGui::Button("Save Style Configuration", ImVec2(200, 30))) {
-            StyleManager* styleManager = m_memory->Get_StyleManager();
-            if (styleManager->SaveConfiguration()) {
+        // Save button with success styling (green-tinted)
+        ImVec4 saveButtonColor = StyleManager::GetSuccessButtonColor();
+        ImVec4 saveButtonHovered = StyleManager::GetHoveredColor(saveButtonColor, 1.1f);
+        ImVec4 saveButtonActive = StyleManager::GetActiveColor(saveButtonColor, 0.9f);
+        
+        ImGui::PushStyleColor(ImGuiCol_Button, saveButtonColor);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, saveButtonHovered);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, saveButtonActive);
+        if(ImGui::Button("Save Style Configuration", ImVec2(200, 30))) {
+            if(styleManager->SaveConfiguration()) {
                 m_console->Out << tc::green << "Style configuration saved successfully!\n" << tc::reset;
             } else {
                 m_console->Out << tc::red << "Failed to save style configuration!\n" << tc::reset;
@@ -326,7 +337,6 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
         ImGui::TextDisabled("(?)");
         if (ImGui::IsItemHovered()) {
             ImGui::BeginTooltip();
-            StyleManager* styleManager = m_memory->Get_StyleManager();
             ImGui::Text("Style config file location:");
             ImGui::Text("%ls", styleManager->GetConfigFilePath().c_str());
             ImGui::EndTooltip();
@@ -357,8 +367,22 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
             styleManager->ApplyPresetClassic();
             m_console->Out << "Applied Classic theme preset\n";
         }
-        ImGui::SameLine();
-        ImGui::TextDisabled("(Presets don't auto-save)");
+        
+        ImGui::Separator();
+        ImGui::Spacing();
+        
+        // Save current style button
+        if (ImGui::Button("Save Current Style to JSON", ImVec2(250, 0))) {
+            StyleManager* styleManager = m_memory->Get_StyleManager();
+            if (styleManager->SaveConfiguration()) {
+                m_console->Out << tc::green << "Style saved to JSON successfully!\n" << tc::reset;
+            } else {
+                m_console->Out << tc::red << "Failed to save style to JSON!\n" << tc::reset;
+            }
+        }
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Save your current style changes to style_config.json");
+        }
         
         ImGui::Separator();
         ImGui::Spacing();
