@@ -1,14 +1,7 @@
 
+
 #pragma once
 #include "PCH.hpp"
-
-
-static UINT	  g_frameIndex = 0;
-static HANDLE m_fenceEvent;
-static UINT64 m_fenceLastSignaledValue	 = 0;
-static bool	  m_SwapChainTearingSupport	 = false;
-static bool	  m_SwapChainOccluded		 = false;
-static HANDLE m_hSwapChainWaitableObject = nullptr;
 
 
 

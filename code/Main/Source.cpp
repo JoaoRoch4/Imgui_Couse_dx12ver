@@ -3,19 +3,8 @@
 #include "Source.hpp"
 
 using namespace app;
-// Data
-ExampleDescriptorHeapAllocator*	   m_HeapAlloc;
-ComPtr<ID3D12Device>			   m_Device;
-ComPtr<ID3D12DescriptorHeap>	   m_RtvDescHeap;
-ComPtr<ID3D12DescriptorHeap>	   m_SrvDescHeap;
-ComPtr<ID3D12CommandQueue>		   m_CommandQueue;
-ComPtr<ID3D12GraphicsCommandList>  m_CommandList;
-ComPtr<ID3D12Fence>				   m_fence;
-ComPtr<IDXGISwapChain3>			   m_pSwapChain;
-ComPtr<ID3D12Resource>			   m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
-static D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS] = {};
-static FrameContext				   m_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
+// Application objects
 MemoryManagement*	  m_memory;
 OutputConsole*		  m_console;
 CommandLineArguments* m_cmdArgs;
@@ -26,41 +15,38 @@ DebugWindow*		  m_debug_window;
 ConfigManager*		  m_configManager;
 WindowClass*		  m_window_obj;
 
-/**
- * @brief Gets next available frame context for rendering
- * @return Pointer to frame context that is ready for recording
- *
- * Waits for the frame to become available (GPU finished processing it),
- * then waits for the swap chain waitable object for frame latency control.
- */
-FrameContext* WaitForNextFrameContext();
-
+// DirectX 12 Renderer and related objects
+DX12Renderer* m_renderer;
+app::ExampleDescriptorHeapAllocator* m_HeapAlloc;
 
 int Start(_In_ HINSTANCE hInstance) {
 
-	m_memory = MemoryManagement::Get_MemoryManagement();
-	m_memory->AllocAll();
+m_memory = MemoryManagement::Get_MemoryManagement();
+m_memory->AllocAll();
 
-	m_console = m_memory->Get_OutputConsole();
+m_console = m_memory->Get_OutputConsole();
 
-	m_console->Open();
-
-
-	m_console->Out << tc::green << "\nHello From m_console class!\n" << tc::reset;
-
-	m_cmdArgs = m_memory->Get_CommandLineArguments();
-
-	m_console->Out << tc::green << "Memory management initialized" << std::endl;
-	m_console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
-
-	m_configManager = m_memory->Get_ConfigManager();
+m_console->Open();
 
 
-	// Main code
-	m_HeapAlloc = m_memory->Get_ExampleDescriptorHeapAllocator();
-	m_window	= m_memory->Get_WindowManager();
+m_console->Out << tc::green << "\nHello From m_console class!\n" << tc::reset;
 
-	OpenWindow(hInstance);
+m_cmdArgs = m_memory->Get_CommandLineArguments();
+
+m_console->Out << tc::green << "Memory management initialized" << std::endl;
+m_console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
+
+m_configManager = m_memory->Get_ConfigManager();
+
+
+// Main code
+m_HeapAlloc = m_memory->Get_ExampleDescriptorHeapAllocator();
+m_window	= m_memory->Get_WindowManager();
+	
+// Create DX12 Renderer
+m_renderer = new DX12Renderer();
+
+OpenWindow(hInstance);
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
@@ -98,8 +84,8 @@ int Start(_In_ HINSTANCE hInstance) {
 
 	ImGui_ImplDX12_InitInfo init_info = {};
 
-	init_info.Device			= m_Device.get();
-	init_info.CommandQueue		= m_CommandQueue.get();
+	init_info.Device			= m_renderer->GetDevice();
+	init_info.CommandQueue		= m_renderer->GetCommandQueue();
 	init_info.NumFramesInFlight = APP_NUM_FRAMES_IN_FLIGHT;
 	init_info.RTVFormat			= DXGI_FORMAT_R8G8B8A8_UNORM;
 	init_info.DSVFormat			= DXGI_FORMAT_UNKNOWN;
@@ -107,7 +93,7 @@ int Start(_In_ HINSTANCE hInstance) {
 	// Allocating SRV descriptors (for textures) is up to the application, so we
 	// provide callbacks. (current version of the backend will only allocate one
 	// descriptor, future versions will need to allocate more)
-	init_info.SrvDescriptorHeap	   = m_SrvDescHeap.get();
+	init_info.SrvDescriptorHeap	   = m_renderer->GetSrvDescHeap();
 	init_info.SrvDescriptorAllocFn = [](ImGui_ImplDX12_InitInfo*,
 										D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle,
 										D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
@@ -119,19 +105,8 @@ int Start(_In_ HINSTANCE hInstance) {
 		return m_HeapAlloc->Free(cpu_handle, gpu_handle);
 	};
 	ImGui_ImplDX12_Init(&init_info);
-
-	// Before 1.91.6: our signature was using a single descriptor. From 1.92,
-	// specifying SrvDescriptorAllocFn/SrvDescriptorFreeFn will be required to
-	// benefit from new features.
-	// ImGui_ImplDX12_Init(m_Device, APP_NUM_FRAMES_IN_FLIGHT,
-	// DXGI_FORMAT_R8G8B8A8_UNORM, m_SrvDescHeap,
-	// m_SrvDescHeap->GetCPUDescriptorHandleForHeapStart(),
-	// m_SrvDescHeap->GetGPUDescriptorHandleForHeapStart());
-
-
 	MainLoop(&m_io);
-
-	WaitForPendingOperations();
+	m_renderer->WaitForPendingOperations();
 
 	// Cleanup
 	Cleanup();
@@ -148,8 +123,8 @@ void OpenWindow(_In_ HINSTANCE hInstance) {
 	m_window->WMCreateWindow(hInstance, m_cmdArgs);
 
 	// Initialize Direct3D
-	if (!CreateDeviceD3D(m_window->GetHWND())) {
-		CleanupDeviceD3D();
+	if (!m_renderer->CreateDeviceD3D(m_window->GetHWND(), m_HeapAlloc)) {
+		m_renderer->CleanupDeviceD3D();
 		::UnregisterClassW(m_window->GetWc()->lpszClassName, m_window->GetWc()->hInstance);
 		throw std::runtime_error("failed CreateDeviceD3D");
 	}
@@ -222,13 +197,13 @@ void MainLoop(ImGuiIO* m_io) {
 		if (done) break;
 
 		// Handle m_window occlusion and minimization
-		if ((m_SwapChainOccluded &&
-			 m_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
+	if ((m_renderer->GetSwapChainOccluded() &&
+		 m_renderer->GetSwapChain()->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
 			::IsIconic(m_window->GetHWND())) {
 			::Sleep(10);
 			continue;
 		}
-		m_SwapChainOccluded = false;
+	m_renderer->SetSwapChainOccluded(false);
 
 		// Start ImGui frame
 		ImGui_ImplDX12_NewFrame();
@@ -370,21 +345,21 @@ void MainLoop(ImGuiIO* m_io) {
 		ImGui::Render();
 
 		// Get frame context and back buffer
-		FrameContext* frameCtx		= WaitForNextFrameContext();
-		UINT		  backBufferIdx = m_pSwapChain->GetCurrentBackBufferIndex();
+		FrameContext* frameCtx		= m_renderer->WaitForNextFrameContext();
+		UINT		  backBufferIdx = m_renderer->GetSwapChain()->GetCurrentBackBufferIndex();
 		frameCtx->CommandAllocator->Reset();
 
 		// Transition to render target state
 		D3D12_RESOURCE_BARRIER barrier = {};
 		barrier.Type				   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 		barrier.Flags				   = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource   = m_mainRenderTargetResource[backBufferIdx].get();
+		barrier.Transition.pResource   = m_renderer->GetRenderTarget(backBufferIdx);
 		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
 		barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
-		m_CommandList->Reset(frameCtx->CommandAllocator.get(), nullptr);
-		m_CommandList->ResourceBarrier(1, &barrier);
+		m_renderer->GetCommandList()->Reset(frameCtx->CommandAllocator.get(), nullptr);
+		m_renderer->GetCommandList()->ResourceBarrier(1, &barrier);
 
 		// ====================================================================
 		// STEP 6: Use clear_color for rendering
@@ -399,35 +374,36 @@ void MainLoop(ImGuiIO* m_io) {
 		};
 
 		// Clear render target with the configured color
-		m_CommandList->ClearRenderTargetView(m_mainRenderTargetDescriptor[backBufferIdx],
-											 clear_color_with_alpha, 0, nullptr);
+		m_renderer->GetCommandList()->ClearRenderTargetView(m_renderer->GetRenderTargetDescriptor(backBufferIdx),
+													 clear_color_with_alpha, 0, nullptr);
 
 		// Set render target and descriptor heaps
-		m_CommandList->OMSetRenderTargets(1, &m_mainRenderTargetDescriptor[backBufferIdx], FALSE,
-										  nullptr);
+		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_renderer->GetRenderTargetDescriptor(backBufferIdx);
+		m_renderer->GetCommandList()->OMSetRenderTargets(1, &rtvHandle, FALSE,
+											  nullptr);
 
-		ID3D12DescriptorHeap* ppHeaps[] = {m_SrvDescHeap.get()};
-		m_CommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+		ID3D12DescriptorHeap* ppHeaps[] = {m_renderer->GetSrvDescHeap()};
+		m_renderer->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 		// Render ImGui draw data
-		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), m_CommandList.get());
+		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), m_renderer->GetCommandList());
 
 		// Transition to present state
 		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 		barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PRESENT;
-		m_CommandList->ResourceBarrier(1, &barrier);
-		m_CommandList->Close();
+		m_renderer->GetCommandList()->ResourceBarrier(1, &barrier);
+		m_renderer->GetCommandList()->Close();
 
 		// Execute command list
-		ID3D12CommandList* ppCommandLists[] = {m_CommandList.get()};
-		m_CommandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-		m_CommandQueue->Signal(m_fence.get(), ++m_fenceLastSignaledValue);
-		frameCtx->FenceValue = m_fenceLastSignaledValue;
+		ID3D12CommandList* ppCommandLists[] = {m_renderer->GetCommandList()};
+		m_renderer->GetCommandQueue()->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+		m_renderer->GetCommandQueue()->Signal(m_renderer->GetFence(), ++m_renderer->GetFenceLastSignaledValue());
+		frameCtx->FenceValue = m_renderer->GetFenceLastSignaledValue();
 
 		// Present
-		HRESULT hr			= m_pSwapChain->Present(1, 0);
-		m_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
-		g_frameIndex++;
+		HRESULT hr			= m_renderer->GetSwapChain()->Present(1, 0);
+		m_renderer->SetSwapChainOccluded(hr == DXGI_STATUS_OCCLUDED);
+		m_renderer->GetFrameIndex()++;
 	}
 
 	// ========================================================================
@@ -447,7 +423,12 @@ void Cleanup() {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	CleanupDeviceD3D();
+	if (m_renderer) {
+		m_renderer->CleanupDeviceD3D();
+		delete m_renderer;
+		m_renderer = nullptr;
+	}
+	
 	::DestroyWindow(m_window->GetHWND());
 	::UnregisterClassW(m_window->GetWc()->lpszClassName, m_window->GetWc()->hInstance);
 
@@ -462,244 +443,6 @@ void Cleanup() {
 	m_debug_window		  = nullptr;
 	m_configManager		  = nullptr;
 	m_window_obj		  = nullptr;
-}
-
-// Helper functions
-
-bool CreateDeviceD3D(HWND hWnd) {
-	// Setup swap chain
-	// This is a basic setup. Optimally could handle fullscreen mode differently.
-	// See #8979 for suggestions.
-	DXGI_SWAP_CHAIN_DESC1 sd;
-	{
-		// Zero out the structure to ensure clean values
-		ZeroMemory(&sd, sizeof(sd));
-
-		// Number of back buffers (double or triple buffering)
-		sd.BufferCount = APP_NUM_BACK_BUFFERS;
-
-		// Width = 0 and Height = 0 means "use the m_window size automatically"
-		// DirectX will detect the correct client area size
-		sd.Width  = 0;
-		sd.Height = 0;
-
-		// Pixel format: RGBA with 8 bits per channel, unnormalized
-		sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-		// Flag that allows using waitable object for frame latency synchronization
-		sd.Flags = DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
-
-		// Buffer usage: as render target (rendering destination)
-		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-
-		// Sample Count = 1 means no multisampling anti-aliasing (MSAA)
-		// Quality = 0 is the default quality level
-		sd.SampleDesc.Count	  = 1;
-		sd.SampleDesc.Quality = 0;
-
-		// DXGI_SWAP_EFFECT_FLIP_DISCARD is the most modern and efficient mode
-		// It discards the previous buffer content when flipping
-		sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-
-		// DXGI_ALPHA_MODE_UNSPECIFIED means we're not using m_window transparency
-		sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
-
-		// *** FIX FOR WINDOW STRETCHING PROBLEM ***
-		// BEFORE (original code that causes the problem):
-		// sd.Scaling = DXGI_SCALING_STRETCH;  // ❌ Causes stretching/distortion
-
-		// AFTER (applied fix):
-		// Option 1: No scaling (most accurate, recommended)
-		sd.Scaling = DXGI_SCALING_NONE;
-
-		// Option 2: Alternative - maintains aspect ratio (if you prefer)
-		// sd.Scaling = DXGI_SCALING_ASPECT_RATIO_STRETCH;
-
-		// EXPLANATION OF SCALING MODES:
-		//
-		// DXGI_SCALING_STRETCH:
-		// - Stretches the image to fill the entire m_window
-		// - Can distort the image if proportions change
-		// - Causes the problem you were experiencing
-		//
-		// DXGI_SCALING_NONE:
-		// - Does not apply any scaling
-		// - Image is rendered at 1:1 pixel ratio
-		// - Most accurate and without distortions
-		// - Recommended for most cases
-		//
-		// DXGI_SCALING_ASPECT_RATIO_STRETCH:
-		// - Stretches the image while maintaining original aspect ratio
-		// - Adds black bars if necessary
-		// - Useful if you want to maintain fixed aspect ratio
-
-		// Not using stereo mode (stereoscopic 3D)
-		sd.Stereo = FALSE;
-	}
-
-	// [DEBUG] Enable debug interface
-#ifdef DX12_ENABLE_DEBUG_LAYER
-	ID3D12Debug* pdx12Debug = nullptr;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&pdx12Debug))))
-		pdx12Debug->EnableDebugLayer();
-#endif
-
-	// Create device
-	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-	if (D3D12CreateDevice(nullptr, featureLevel, IID_PPV_ARGS(&m_Device)) != S_OK) return false;
-
-	// [DEBUG] Setup debug interface to break on any warnings/errors
-#ifdef DX12_ENABLE_DEBUG_LAYER
-	if (pdx12Debug != nullptr) {
-		ID3D12InfoQueue* pInfoQueue = nullptr;
-		m_Device->QueryInterface(IID_PPV_ARGS(&pInfoQueue));
-		pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-		pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-		pInfoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-
-		// Disable breaking on this warning because of a suspected bug in the D3D12
-		// SDK layer, see #9084 for details.
-		const int D3D12_MESSAGE_ID_FENCE_ZERO_WAIT_ = 1424; // not in all copies of d3d12sdklayers.h
-		D3D12_MESSAGE_ID disabledMessages[]			= {
-			static_cast<D3D12_MESSAGE_ID>(D3D12_MESSAGE_ID_FENCE_ZERO_WAIT_)};
-		D3D12_INFO_QUEUE_FILTER filter = {};
-		filter.DenyList.NumIDs		   = 1;
-		filter.DenyList.pIDList		   = disabledMessages;
-		pInfoQueue->AddStorageFilterEntries(&filter);
-
-		pInfoQueue->Release();
-		pdx12Debug->Release();
-	}
-#endif
-
-	{
-		D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-		desc.Type						= D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		desc.NumDescriptors				= APP_NUM_BACK_BUFFERS;
-		desc.Flags						= D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		desc.NodeMask					= 1;
-		if (m_Device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_RtvDescHeap)) != S_OK)
-			return false;
-
-		SIZE_T rtvDescriptorSize =
-			m_Device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_RtvDescHeap->GetCPUDescriptorHandleForHeapStart();
-		for (UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++) {
-			m_mainRenderTargetDescriptor[i] = rtvHandle;
-			rtvHandle.ptr += rtvDescriptorSize;
-		}
-	}
-
-	{
-		D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-		desc.Type						= D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		desc.NumDescriptors				= APP_SRV_HEAP_SIZE;
-		desc.Flags						= D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		if (m_Device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(m_SrvDescHeap.put())) != S_OK)
-			return false;
-		m_HeapAlloc->Create(m_Device.get(), m_SrvDescHeap.get());
-	}
-
-	{
-		D3D12_COMMAND_QUEUE_DESC desc = {};
-		desc.Type					  = D3D12_COMMAND_LIST_TYPE_DIRECT;
-		desc.Flags					  = D3D12_COMMAND_QUEUE_FLAG_NONE;
-		desc.NodeMask				  = 1;
-		if (m_Device->CreateCommandQueue(&desc, IID_PPV_ARGS(&m_CommandQueue)) != S_OK)
-			return false;
-	}
-
-	for (UINT i = 0; i < APP_NUM_FRAMES_IN_FLIGHT; i++)
-		if (m_Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-											 IID_PPV_ARGS(&m_frameContext[i].CommandAllocator)) !=
-			S_OK)
-			return false;
-
-	if (m_Device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT,
-									m_frameContext[0].CommandAllocator.get(), nullptr,
-									IID_PPV_ARGS(&m_CommandList)) != S_OK ||
-		m_CommandList->Close() != S_OK)
-		return false;
-
-	if (m_Device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)) != S_OK)
-		return false;
-
-	m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-	if (m_fenceEvent == nullptr) return false;
-
-	{
-		IDXGIFactory5*	 dxgiFactory = nullptr;
-		IDXGISwapChain1* swapChain1	 = nullptr;
-		if (CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)) != S_OK) return false;
-
-		BOOL allow_tearing = FALSE;
-		dxgiFactory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allow_tearing,
-										 sizeof(allow_tearing));
-		m_SwapChainTearingSupport = (allow_tearing == TRUE);
-		if (m_SwapChainTearingSupport) sd.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
-
-		if (dxgiFactory->CreateSwapChainForHwnd(m_CommandQueue.get(), hWnd, &sd, nullptr, nullptr,
-												&swapChain1) != S_OK)
-			return false;
-		if (swapChain1->QueryInterface(IID_PPV_ARGS(&m_pSwapChain)) != S_OK) return false;
-		if (m_SwapChainTearingSupport)
-			dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
-
-		swapChain1->Release();
-		dxgiFactory->Release();
-		m_pSwapChain->SetMaximumFrameLatency(APP_NUM_BACK_BUFFERS);
-		m_hSwapChainWaitableObject = m_pSwapChain->GetFrameLatencyWaitableObject();
-	}
-
-	CreateRenderTarget();
-	return true;
-}
-
-void CleanupDeviceD3D() {
-	CleanupRenderTarget();
-
-	if (m_hSwapChainWaitableObject != nullptr) {
-		CloseHandle(m_hSwapChainWaitableObject);
-		m_hSwapChainWaitableObject = nullptr;
-	}
-
-
-	if (m_fenceEvent) { CloseHandle(m_fenceEvent); }
-}
-
-void CreateRenderTarget() {
-	for (UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++) {
-		ComPtr<ID3D12Resource> pBackBuffer;
-		m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(pBackBuffer.put()));
-		m_Device->CreateRenderTargetView(pBackBuffer.get(), nullptr,
-										 m_mainRenderTargetDescriptor[i]);
-		m_mainRenderTargetResource[i] = pBackBuffer;
-	}
-}
-
-void CleanupRenderTarget() {
-	WaitForPendingOperations();
-
-	for (UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++)
-		if (m_mainRenderTargetResource[i]) { m_mainRenderTargetResource[i].detach(); }
-}
-
-void WaitForPendingOperations() {
-	m_CommandQueue->Signal(m_fence.get(), ++m_fenceLastSignaledValue);
-
-	m_fence->SetEventOnCompletion(m_fenceLastSignaledValue, m_fenceEvent);
-	::WaitForSingleObject(m_fenceEvent, INFINITE);
-}
-
-FrameContext* WaitForNextFrameContext() {
-	FrameContext* m_frame_context = &m_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
-	if (m_fence->GetCompletedValue() < m_frame_context->FenceValue) {
-		m_fence->SetEventOnCompletion(m_frame_context->FenceValue, m_fenceEvent);
-		HANDLE waitableObjects[] = {m_hSwapChainWaitableObject, m_fenceEvent};
-		::WaitForMultipleObjects(2, waitableObjects, TRUE, INFINITE);
-	} else ::WaitForSingleObject(m_hSwapChainWaitableObject, INFINITE);
-
-	return m_frame_context;
 }
 
 // Forward declare message handler from imgui_impl_win32.cpp
@@ -718,16 +461,16 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	switch (msg) {
 		case WM_SIZE:
-			if (m_Device != nullptr && wParam != SIZE_MINIMIZED) {
-				CleanupRenderTarget();
-				DXGI_SWAP_CHAIN_DESC1 desc = {};
-				m_pSwapChain->GetDesc1(&desc);
-				HRESULT result = m_pSwapChain->ResizeBuffers(0, static_cast<UINT> LOWORD(lParam),
-															 static_cast<UINT> HIWORD(lParam),
-															 desc.Format, desc.Flags);
-				IM_ASSERT(FAILED(result) && "Failed to resize swapchain.");
-				CreateRenderTarget();
-			}
+		if (m_renderer && m_renderer->GetDevice() != nullptr && wParam != SIZE_MINIMIZED) {
+			m_renderer->CleanupRenderTarget();
+			DXGI_SWAP_CHAIN_DESC1 desc = {};
+			m_renderer->GetSwapChain()->GetDesc1(&desc);
+			HRESULT result = m_renderer->GetSwapChain()->ResizeBuffers(0, static_cast<UINT> LOWORD(lParam),
+														 static_cast<UINT> HIWORD(lParam),
+														 desc.Format, desc.Flags);
+			IM_ASSERT(FAILED(result) && "Failed to resize swapchain.");
+			m_renderer->CreateRenderTarget();
+		}
 			return 0;
 		case WM_SYSCOMMAND:
 			if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
