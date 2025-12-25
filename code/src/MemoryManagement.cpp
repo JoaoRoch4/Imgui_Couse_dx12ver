@@ -124,10 +124,10 @@ void MemoryManagement::AllocAll() {
 	// Allocate command line arguments parser
 	Alloc_command_line_args();
 
-	// Allocate console window (ImGui console)
+	// Allocate m_console m_window (ImGui m_console)
 	Alloc_console_window();
 
-	// Allocate console input handler (threaded command input)
+	// Allocate m_console input handler (threaded command input)
 	Alloc_console_input_handler();
 
 	Alloc_config_manager();
@@ -138,7 +138,7 @@ void MemoryManagement::AllocAll() {
 	// Allocate DirectX demos
 	Alloc_dx_demos();
 
-	// Allocate debug window
+	// Allocate debug m_window
 	Alloc_debug_window();
 
 	// Allocate descriptor heap allocator for ImGui
@@ -147,16 +147,16 @@ void MemoryManagement::AllocAll() {
 	// Allocate font manager
 	Alloc_font_manager();
 
-	// Allocate font manager window
+	// Allocate font manager m_window
 	Alloc_font_manager_window();
 
 	// Allocate frame context
 	Alloc_frame_context();
 
-	// Allocate window class (file system browser)
+	// Allocate m_window class (file system browser)
 	Alloc_window_class();
 
-	// Allocate window manager
+	// Allocate m_window manager
 	Alloc_window_manager();
 
 	// Allocate m_console_window
@@ -244,8 +244,8 @@ CommandLineArguments* MemoryManagement::Get_CommandLineArguments() const {
 /**
 * @brief Allocates the ConsoleInputHandler object
 *
-* Creates a new ConsoleInputHandler instance for threaded console input processing.
-* This handler manages asynchronous input from the console in a separate thread.
+* Creates a new ConsoleInputHandler instance for threaded m_console input processing.
+* This handler manages asynchronous input from the m_console in a separate thread.
 *
 * @return S_OK on successful allocation
 * @return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED) if already allocated
@@ -559,8 +559,8 @@ WindowClass* MemoryManagement::Get_WindowClass() const {
 /**
 * @brief Allocates the WindowManager object
 *
-* Creates the window manager responsible for Win32 window creation and management.
-* Handles window lifecycle, DPI awareness, and window state (windowed/fullscreen).
+* Creates the m_window manager responsible for Win32 m_window creation and management.
+* Handles m_window lifecycle, DPI awareness, and m_window state (windowed/fullscreen).
 *
 * @return S_OK on successful allocation
 * @return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED) if already allocated
@@ -597,7 +597,7 @@ HRESULT MemoryManagement::Alloc_window_manager() {
 /**
 * @brief Allocates the OutputConsole object
 *
-* Creates the output console window for application logging and debug output.
+* Creates the output m_console m_window for application logging and debug output.
 * Provides a visual interface for viewing application messages and errors.
 *
 * @return S_OK on successful allocation
@@ -765,7 +765,7 @@ OutputConsole* MemoryManagement::Get_OutputConsole() const {
 /**
 * @brief Allocates the ConsoleWindow object
 * 
-* Creates the ImGui-based console window for command input and output display.
+* Creates the ImGui-based m_console m_window for command input and output display.
 * 
 * @return S_OK on successful allocation
 * @return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED) if already allocated
@@ -808,7 +808,7 @@ HRESULT MemoryManagement::Alloc_dx_demos() {
 /**
 * @brief Allocates the DebugWindow object
 * 
-* Creates the debug window for displaying application debug information and metrics.
+* Creates the debug m_window for displaying application debug information and metrics.
 * 
 * @return S_OK on successful allocation
 * @return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED) if already allocated
@@ -870,7 +870,7 @@ HRESULT MemoryManagement::Alloc_font_manager() {
 /**
 * @brief Allocates the FontManagerWindow object
 * 
-* Creates the UI window for the font manager, allowing users to select and preview fonts.
+* Creates the UI m_window for the font manager, allowing users to select and preview fonts.
 * 
 * @return S_OK on successful allocation
 * @return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED) if already allocated
@@ -913,7 +913,7 @@ HRESULT MemoryManagement::Alloc_frame_context() {
 /**
 * @brief Allocates the WindowClass object
 * 
-* Creates the window class wrapper, typically used for file system browser or other utility windows.
+* Creates the m_window class wrapper, typically used for file system browser or other utility windows.
 * 
 * @return S_OK on successful allocation
 * @return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED) if already allocated

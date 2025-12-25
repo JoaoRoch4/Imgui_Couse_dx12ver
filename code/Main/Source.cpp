@@ -4,8 +4,7 @@
 
 using namespace app;
 // Data
-ExampleDescriptorHeapAllocator* g_pd3dSrvDescHeapAlloc;
-
+ExampleDescriptorHeapAllocator*	   m_HeapAlloc;
 ComPtr<ID3D12Device>			   m_Device;
 ComPtr<ID3D12DescriptorHeap>	   m_RtvDescHeap;
 ComPtr<ID3D12DescriptorHeap>	   m_SrvDescHeap;
@@ -15,22 +14,17 @@ ComPtr<ID3D12Fence>				   m_fence;
 ComPtr<IDXGISwapChain3>			   m_pSwapChain;
 ComPtr<ID3D12Resource>			   m_mainRenderTargetResource[APP_NUM_BACK_BUFFERS];
 static D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS] = {};
-/**
- * Array of frame contexts for frames in flight.
- * Each frame gets its own command allocator to avoid conflicts.
- */
-static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
+static FrameContext				   m_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
 MemoryManagement*	  m_memory;
-OutputConsole*		  console;
-CommandLineArguments* cmdArgs;
-WindowManager*		  window;
+OutputConsole*		  m_console;
+CommandLineArguments* m_cmdArgs;
+WindowManager*		  m_window;
 FontManager*		  m_font_manager;
 FontManagerWindow*	  m_font_manager_window;
 DebugWindow*		  m_debug_window;
-ConfigManager*		  configManager;
-WindowClass*		  window_obj;
-
+ConfigManager*		  m_configManager;
+WindowClass*		  m_window_obj;
 
 /**
  * @brief Gets next available frame context for rendering
@@ -47,24 +41,24 @@ int Start(_In_ HINSTANCE hInstance) {
 	m_memory = MemoryManagement::Get_MemoryManagement();
 	m_memory->AllocAll();
 
-	console = m_memory->Get_OutputConsole();
+	m_console = m_memory->Get_OutputConsole();
 
-	console->Open();
+	m_console->Open();
 
 
-	console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
+	m_console->Out << tc::green << "\nHello From m_console class!\n" << tc::reset;
 
-	cmdArgs = m_memory->Get_CommandLineArguments();
+	m_cmdArgs = m_memory->Get_CommandLineArguments();
 
-	console->Out << tc::green << "Memory management initialized" << std::endl;
-	console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
+	m_console->Out << tc::green << "Memory management initialized" << std::endl;
+	m_console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 
-	configManager = m_memory->Get_ConfigManager();
+	m_configManager = m_memory->Get_ConfigManager();
 
 
 	// Main code
-	g_pd3dSrvDescHeapAlloc = m_memory->Get_ExampleDescriptorHeapAllocator();
-	window				   = m_memory->Get_WindowManager();
+	m_HeapAlloc = m_memory->Get_ExampleDescriptorHeapAllocator();
+	m_window	= m_memory->Get_WindowManager();
 
 	OpenWindow(hInstance);
 
@@ -84,10 +78,10 @@ int Start(_In_ HINSTANCE hInstance) {
 	// Setup scaling
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ScaleAllSizes(
-		window->get_main_scale()); // Bake a fixed style scale. (until we have a solution for
+		m_window->get_main_scale()); // Bake a fixed style scale. (until we have a solution for
 	// dynamic style scaling, changing this requires resetting
 	// Style + calling this again)
-	style.FontScaleDpi = window->get_main_scale() + 0.2f; // Set initial font scale. (using
+	style.FontScaleDpi = m_window->get_main_scale() + 0.2f; // Set initial font scale. (using
 	// m_io.ConfigDpiScaleFonts=true makes this unnecessary.
 	// We leave both here for documentation purpose)
 
@@ -100,7 +94,7 @@ int Start(_In_ HINSTANCE hInstance) {
 	ImPlot::CreateContext();
 
 	// Setup Platform/Renderer backends
-	ImGui_ImplWin32_Init(window->GetHWND());
+	ImGui_ImplWin32_Init(m_window->GetHWND());
 
 	ImGui_ImplDX12_InitInfo init_info = {};
 
@@ -117,12 +111,12 @@ int Start(_In_ HINSTANCE hInstance) {
 	init_info.SrvDescriptorAllocFn = [](ImGui_ImplDX12_InitInfo*,
 										D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle,
 										D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
-		return g_pd3dSrvDescHeapAlloc->Alloc(out_cpu_handle, out_gpu_handle);
+		return m_HeapAlloc->Alloc(out_cpu_handle, out_gpu_handle);
 	};
 	init_info.SrvDescriptorFreeFn = [](ImGui_ImplDX12_InitInfo*,
 									   D3D12_CPU_DESCRIPTOR_HANDLE cpu_handle,
 									   D3D12_GPU_DESCRIPTOR_HANDLE gpu_handle) {
-		return g_pd3dSrvDescHeapAlloc->Free(cpu_handle, gpu_handle);
+		return m_HeapAlloc->Free(cpu_handle, gpu_handle);
 	};
 	ImGui_ImplDX12_Init(&init_info);
 
@@ -149,20 +143,20 @@ int Start(_In_ HINSTANCE hInstance) {
 void OpenWindow(_In_ HINSTANCE hInstance) {
 
 
-	cmdArgs->Open();
+	m_cmdArgs->Open();
 
-	window->WMCreateWindow(hInstance, cmdArgs);
+	m_window->WMCreateWindow(hInstance, m_cmdArgs);
 
 	// Initialize Direct3D
-	if (!CreateDeviceD3D(window->GetHWND())) {
+	if (!CreateDeviceD3D(m_window->GetHWND())) {
 		CleanupDeviceD3D();
-		::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
+		::UnregisterClassW(m_window->GetWc()->lpszClassName, m_window->GetWc()->hInstance);
 		throw std::runtime_error("failed CreateDeviceD3D");
 	}
 
-	// Show the window
-	::ShowWindow(window->GetHWND(), SW_SHOWMAXIMIZED);
-	::UpdateWindow(window->GetHWND());
+	// Show the m_window
+	::ShowWindow(m_window->GetHWND(), SW_SHOWMAXIMIZED);
+	::UpdateWindow(m_window->GetHWND());
 }
 
 void MainLoop(ImGuiIO* m_io) {
@@ -171,7 +165,7 @@ void MainLoop(ImGuiIO* m_io) {
 	m_font_manager->GetIo(m_io);
 
 	m_font_manager_window = m_memory->Get_FontManagerWindow();
-	m_font_manager_window->GetAux(window->GetHWND(), m_font_manager);
+	m_font_manager_window->GetAux(m_window->GetHWND(), m_font_manager);
 
 	m_debug_window = m_memory->Get_DebugWindow();
 	m_debug_window->GetIo(m_io);
@@ -186,11 +180,11 @@ void MainLoop(ImGuiIO* m_io) {
 	// ========================================================================
 
 	// Get ConfigManager instance from MemoryManagement
-	configManager = m_memory->Get_ConfigManager();
+	m_configManager = m_memory->Get_ConfigManager();
 
 	// Call Open() to load configuration from disk
 	// This will load config.json if it exists
-	configManager->Open();
+	m_configManager->Open();
 
 	// ========================================================================
 	// STEP 2: Load the saved clear color (or use default)
@@ -199,15 +193,15 @@ void MainLoop(ImGuiIO* m_io) {
 	// Get the clear color from configuration
 	// If config.json exists, this will be the saved value
 	// If not, it will be the default value from constructor (0.15, 0.15, 0.15, 1.0)
-	ImVec4 clear_color = configManager->GetClearColorAsImVec4();
+	ImVec4 clear_color = m_configManager->GetClearColorAsImVec4();
 
-	// Optional: Print the loaded color to console
-	console->Out << "Loaded clear color: R=" << clear_color.x << " G=" << clear_color.y
-				 << " B=" << clear_color.z << " A=" << clear_color.w << "\n";
+	// Optional: Print the loaded color to m_console
+	m_console->Out << "Loaded clear color: R=" << clear_color.x << " G=" << clear_color.y
+				   << " B=" << clear_color.z << " A=" << clear_color.w << "\n";
 
-	// Create window object for file system browser
-	window_obj = m_memory->Get_WindowClass();
-	window_obj->Open();
+	// Create m_window object for file system browser
+	m_window_obj = m_memory->Get_WindowClass();
+	m_window_obj->Open();
 
 
 	// Track if color was modified this frame
@@ -227,10 +221,10 @@ void MainLoop(ImGuiIO* m_io) {
 		}
 		if (done) break;
 
-		// Handle window occlusion and minimization
+		// Handle m_window occlusion and minimization
 		if ((m_SwapChainOccluded &&
 			 m_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
-			::IsIconic(window->GetHWND())) {
+			::IsIconic(m_window->GetHWND())) {
 			::Sleep(10);
 			continue;
 		}
@@ -242,7 +236,7 @@ void MainLoop(ImGuiIO* m_io) {
 		ImGui::NewFrame();
 
 		// Render optional windows
-		if (m_memory->m_bShow_FileSys_window) window_obj->Tick();
+		if (m_memory->m_bShow_FileSys_window) m_window_obj->Tick();
 		if (m_memory->m_bShow_Debug_window) m_debug_window->Tick();
 
 		if (m_memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
@@ -291,15 +285,15 @@ void MainLoop(ImGuiIO* m_io) {
 			// Provide a manual save button as alternative
 			if (ImGui::Button("Save Color to Config")) {
 				// Update ConfigManager with current color
-				configManager->SetClearColor(clear_color.x, clear_color.y, clear_color.z,
-											 clear_color.w);
+				m_configManager->SetClearColor(clear_color.x, clear_color.y, clear_color.z,
+											   clear_color.w);
 
 				// Save to disk
-				if (configManager->SaveConfiguration()) {
-					console->Out << tc::green << "Background color saved successfully!\n"
-								 << tc::reset;
+				if (m_configManager->SaveConfiguration()) {
+					m_console->Out << tc::green << "Background color saved successfully!\n"
+								   << tc::reset;
 				} else {
-					console->Out << tc::red << "Failed to save background color!\n" << tc::reset;
+					m_console->Out << tc::red << "Failed to save background color!\n" << tc::reset;
 				}
 			}
 
@@ -309,7 +303,7 @@ void MainLoop(ImGuiIO* m_io) {
 			if (ImGui::IsItemHovered()) {
 				ImGui::BeginTooltip();
 				ImGui::Text("Config file location:");
-				ImGui::Text("%ls", configManager->GetConfigFilePath().c_str());
+				ImGui::Text("%ls", m_configManager->GetConfigFilePath().c_str());
 				ImGui::EndTooltip();
 			}
 
@@ -322,16 +316,16 @@ void MainLoop(ImGuiIO* m_io) {
 			// If color was modified this frame, automatically save it
 			if (colorModified) {
 				// Update ConfigManager with new color
-				configManager->SetClearColor(clear_color.x, clear_color.y, clear_color.z,
-											 clear_color.w);
+				m_configManager->SetClearColor(clear_color.x, clear_color.y, clear_color.z,
+											   clear_color.w);
 
 				// Auto-save to disk
-				configManager->SaveConfiguration();
+				m_configManager->SaveConfiguration();
 
 
 				// Optional: Show feedback to user
-				console->Out << "Color auto-saved: R=" << clear_color.x << " G=" << clear_color.y
-							 << " B=" << clear_color.z << "\n";
+				m_console->Out << "Color auto-saved: R=" << clear_color.x << " G=" << clear_color.y
+							   << " B=" << clear_color.z << "\n";
 			}
 
 			ig::Separator();
@@ -364,10 +358,10 @@ void MainLoop(ImGuiIO* m_io) {
 			ImGui::End();
 		}
 
-		// Another window example
+		// Another m_window example
 		if (m_memory->m_bShow_another_window) {
 			ImGui::Begin("Another Window", &m_memory->m_bShow_another_window);
-			ImGui::Text("Hello from another window!");
+			ImGui::Text("Hello from another m_window!");
 			if (ImGui::Button("Close Me")) m_memory->m_bShow_another_window = false;
 			ImGui::End();
 		}
@@ -442,9 +436,9 @@ void MainLoop(ImGuiIO* m_io) {
 
 	// Save final configuration before closing
 	// This ensures any unsaved changes are persisted
-	configManager->Close();
+	m_configManager->Close();
 
-	console->Out << tc::green << "Configuration saved on exit\n" << tc::reset;
+	m_console->Out << tc::green << "Configuration saved on exit\n" << tc::reset;
 }
 
 void Cleanup() {
@@ -454,20 +448,20 @@ void Cleanup() {
 	ImGui::DestroyContext();
 
 	CleanupDeviceD3D();
-	::DestroyWindow(window->GetHWND());
-	::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
+	::DestroyWindow(m_window->GetHWND());
+	::UnregisterClassW(m_window->GetWc()->lpszClassName, m_window->GetWc()->hInstance);
 
 	ImPlot::DestroyContext();
 
-	m_memory				  = nullptr;
-	console				  = nullptr;
-	cmdArgs				  = nullptr;
-	window				  = nullptr;
+	m_memory			  = nullptr;
+	m_console			  = nullptr;
+	m_cmdArgs			  = nullptr;
+	m_window			  = nullptr;
 	m_font_manager		  = nullptr;
 	m_font_manager_window = nullptr;
 	m_debug_window		  = nullptr;
-	configManager		  = nullptr;
-	window_obj			  = nullptr;
+	m_configManager		  = nullptr;
+	m_window_obj		  = nullptr;
 }
 
 // Helper functions
@@ -484,7 +478,7 @@ bool CreateDeviceD3D(HWND hWnd) {
 		// Number of back buffers (double or triple buffering)
 		sd.BufferCount = APP_NUM_BACK_BUFFERS;
 
-		// Width = 0 and Height = 0 means "use the window size automatically"
+		// Width = 0 and Height = 0 means "use the m_window size automatically"
 		// DirectX will detect the correct client area size
 		sd.Width  = 0;
 		sd.Height = 0;
@@ -507,7 +501,7 @@ bool CreateDeviceD3D(HWND hWnd) {
 		// It discards the previous buffer content when flipping
 		sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-		// DXGI_ALPHA_MODE_UNSPECIFIED means we're not using window transparency
+		// DXGI_ALPHA_MODE_UNSPECIFIED means we're not using m_window transparency
 		sd.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
 
 		// *** FIX FOR WINDOW STRETCHING PROBLEM ***
@@ -524,7 +518,7 @@ bool CreateDeviceD3D(HWND hWnd) {
 		// EXPLANATION OF SCALING MODES:
 		//
 		// DXGI_SCALING_STRETCH:
-		// - Stretches the image to fill the entire window
+		// - Stretches the image to fill the entire m_window
 		// - Can distort the image if proportions change
 		// - Causes the problem you were experiencing
 		//
@@ -603,7 +597,7 @@ bool CreateDeviceD3D(HWND hWnd) {
 		desc.Flags						= D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 		if (m_Device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(m_SrvDescHeap.put())) != S_OK)
 			return false;
-		g_pd3dSrvDescHeapAlloc->Create(m_Device.get(), m_SrvDescHeap.get());
+		m_HeapAlloc->Create(m_Device.get(), m_SrvDescHeap.get());
 	}
 
 	{
@@ -617,12 +611,12 @@ bool CreateDeviceD3D(HWND hWnd) {
 
 	for (UINT i = 0; i < APP_NUM_FRAMES_IN_FLIGHT; i++)
 		if (m_Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-											 IID_PPV_ARGS(&g_frameContext[i].CommandAllocator)) !=
+											 IID_PPV_ARGS(&m_frameContext[i].CommandAllocator)) !=
 			S_OK)
 			return false;
 
 	if (m_Device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT,
-									g_frameContext[0].CommandAllocator.get(), nullptr,
+									m_frameContext[0].CommandAllocator.get(), nullptr,
 									IID_PPV_ARGS(&m_CommandList)) != S_OK ||
 		m_CommandList->Close() != S_OK)
 		return false;
@@ -698,7 +692,7 @@ void WaitForPendingOperations() {
 }
 
 FrameContext* WaitForNextFrameContext() {
-	FrameContext* m_frame_context = &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
+	FrameContext* m_frame_context = &m_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
 	if (m_fence->GetCompletedValue() < m_frame_context->FenceValue) {
 		m_fence->SetEventOnCompletion(m_frame_context->FenceValue, m_fenceEvent);
 		HANDLE waitableObjects[] = {m_hSwapChainWaitableObject, m_fenceEvent};
@@ -743,7 +737,3 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	}
 	return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }
-
-
-
-

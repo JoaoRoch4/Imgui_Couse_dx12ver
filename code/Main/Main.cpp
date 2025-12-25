@@ -11,7 +11,7 @@
 /**
  * @brief Windows application entry point
  * 
- * This is the main entry point for a Windows GUI application (not console).
+ * This is the main entry point for a Windows GUI application (not m_console).
  * It initializes the application and handles top-level exception management.
  * 
  * The function is marked with _Use_decl_annotations_ to enable SAL (Source Code
@@ -20,7 +20,7 @@
  * @param hInstance Handle to the current instance of the application
  * @param hPrevInstance Always NULL in Win32 (legacy parameter, unused)
  * @param lpCmdLine Command line arguments as a Unicode string (unused - parsed elsewhere)
- * @param nCmdShow Controls how the window is shown (unused - controlled internally)
+ * @param nCmdShow Controls how the m_window is shown (unused - controlled internally)
  * 
  * @return 0 on successful execution
  * @return Non-zero error code if an exception occurs

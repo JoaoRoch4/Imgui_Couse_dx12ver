@@ -61,7 +61,7 @@ void ConsoleWindow::Render(const char* title, bool* p_open) {
 		ImGui::EndPopup();
 	}
 
-	ImGui::TextWrapped("This example implements a console with basic coloring, completion (TAB "
+	ImGui::TextWrapped("This example implements a m_console with basic coloring, completion (TAB "
 					   "key) and history (Up/Down keys). A more elaborate "
 					   "implementation may want to store entries along with extra data such as "
 					   "timestamp, emitter, etc.");
@@ -178,7 +178,7 @@ void ConsoleWindow::Render(const char* title, bool* p_open) {
 		reclaim_focus = true;
 	}
 
-	// Auto-focus on window apparition
+	// Auto-focus on m_window apparition
 	ImGui::SetItemDefaultFocus();
 	if (reclaim_focus) ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
 
@@ -218,8 +218,8 @@ void ConsoleWindow::ExecCommand(const char* command_line) {
 }
 
 int ConsoleWindow::TextEditCallbackStub(ImGuiInputTextCallbackData* data) {
-	ConsoleWindow* console = (ConsoleWindow*)data->UserData;
-	return console->TextEditCallback(data);
+	ConsoleWindow* m_console = (ConsoleWindow*)data->UserData;
+	return m_console->TextEditCallback(data);
 }
 
 int ConsoleWindow::TextEditCallback(ImGuiInputTextCallbackData* data) {

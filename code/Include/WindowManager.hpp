@@ -1,6 +1,6 @@
 // WindowManager.hpp
 // Header file for WindowManager class
-// This class manages window creation and configuration
+// This class manages m_window creation and configuration
 
 #pragma once
 
@@ -12,7 +12,7 @@ namespace app {
 class CommandLineArguments;
 
 /**
- * @brief Class that manages the application window
+ * @brief Class that manages the application m_window
  * 
  * This class handles:
  * - Window creation and registration
@@ -27,10 +27,10 @@ public:
 	~WindowManager();
 
 
-	bool WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArguments* cmdArgs);
+	bool WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArguments* m_cmdArgs);
 
 
-	bool WMCreateWindowWithArgs(_In_ HINSTANCE hInstance, CommandLineArguments* cmdArgs);
+	bool WMCreateWindowWithArgs(_In_ HINSTANCE hInstance, CommandLineArguments* m_cmdArgs);
 
 
 	inline WNDCLASSEX* GetWc() const { return m_wc; }
@@ -45,27 +45,27 @@ public:
 	inline float get_main_scale() const { return m_main_scale; }
 
 
-	int GetWindowWidth(CommandLineArguments* cmdArgs);
+	int GetWindowWidth(CommandLineArguments* m_cmdArgs);
 
 
-	int GetWindowHeight(CommandLineArguments* cmdArgs);
+	int GetWindowHeight(CommandLineArguments* m_cmdArgs);
 
 
-	int GetWindowX(CommandLineArguments* cmdArgs);
+	int GetWindowX(CommandLineArguments* m_cmdArgs);
 
 
-	int GetWindowY(CommandLineArguments* cmdArgs);
+	int GetWindowY(CommandLineArguments* m_cmdArgs);
 
-	bool ShouldStartMaximized(CommandLineArguments* cmdArgs);
-
-
-	bool ShouldStartFullscreen(CommandLineArguments* cmdArgs);
+	bool ShouldStartMaximized(CommandLineArguments* m_cmdArgs);
 
 
-	bool ShouldStartWindowed(CommandLineArguments* cmdArgs);
+	bool ShouldStartFullscreen(CommandLineArguments* m_cmdArgs);
 
 
-	bool HasAnyWindowArguments(CommandLineArguments* cmdArgs);
+	bool ShouldStartWindowed(CommandLineArguments* m_cmdArgs);
+
+
+	bool HasAnyWindowArguments(CommandLineArguments* m_cmdArgs);
 
 
 	int GetMonitorWidth();
@@ -77,10 +77,10 @@ private:
 	bool ApplyDarkModeToTitleBar(HWND hwnd, bool enabled);
 
 	// Member variables
-	WNDCLASSEX* m_wc; // Pointer to window class structure
+	WNDCLASSEX* m_wc; // Pointer to m_window class structure
 
-	RECT* m_windowRect; // Pointer to window rectangle
-	HWND  m_hwnd;		// Handle to the created window
+	RECT* m_windowRect; // Pointer to m_window rectangle
+	HWND  m_hwnd;		// Handle to the created m_window
 
 	float m_main_scale; // DPI scale factor for the main monitor
 

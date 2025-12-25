@@ -32,7 +32,7 @@
 //    virtual void OnRender();
 //    virtual void OnDestroy();
 //
-//        bool LoadPipeline(class WindowManager *window);
+//        bool LoadPipeline(class WindowManager *m_window);
 //
 //
 //private:

@@ -31,7 +31,7 @@
 //}
 //
 //// Load the rendering pipeline dependencies.
-//bool DX12Renderer::LoadPipeline(WindowManager *window)
+//bool DX12Renderer::LoadPipeline(WindowManager *m_window)
 //{
 //   
 //    UINT dxgiFactoryFlags = 0;
@@ -97,7 +97,7 @@
 //    ComPtr<IDXGISwapChain1> swapChain;
 //    ThrowIfFailed(factory->CreateSwapChainForHwnd(
 //        m_commandQueue.get(),        // Swap chain needs the queue so that it can force a flush on it.
-//        window->GetHWND(),
+//        m_window->GetHWND(),
 //        &swapChainDesc,
 //        nullptr,
 //        nullptr,
@@ -105,7 +105,7 @@
 //        ));
 //
 //    // This sample does not support fullscreen transitions.
-//    ThrowIfFailed(factory->MakeWindowAssociation(window->GetHWND(), DXGI_MWA_NO_ALT_ENTER));
+//    ThrowIfFailed(factory->MakeWindowAssociation(m_window->GetHWND(), DXGI_MWA_NO_ALT_ENTER));
 //
 //
 //    ThrowIfFailed(swapChain.try_as(__uuidof(m_swapChain.get())));

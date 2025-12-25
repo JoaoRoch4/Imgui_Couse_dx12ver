@@ -1,6 +1,6 @@
 // WindowManager.cpp
 // Implementation file for WindowManager class
-// Manages window creation and configuration with command line support
+// Manages m_window creation and configuration with command line support
 
 // Include precompiled header
 #include "PCH.hpp"
@@ -9,8 +9,8 @@
 #include "Classes.hpp"
 #include "WindowManager.hpp"
 
-// Forward declaration of window procedure
-// This function handles Windows messages for the application window
+// Forward declaration of m_window procedure
+// This function handles Windows messages for the application m_window
 extern LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
@@ -20,7 +20,7 @@ namespace app {
  * Constructor - Initializes all member variables
  * 
  * Initializes pointers to nullptr and numeric values to 0
- * Ensures safe state before window creation
+ * Ensures safe state before m_window creation
  */
 WindowManager::WindowManager()
 : m_wc(nullptr),		 // Window class pointer (not yet allocated)
@@ -32,9 +32,9 @@ WindowManager::WindowManager()
   m_windowX_pos(),       // Window X position
   m_windowY_pos(),       // Window Y position
   m_windowStyle(),       // Window style flags
-  m_scaledWidth(),       // DPI-scaled window width
-  m_scaledHeight(),      // DPI-scaled window height
-  m_showCommand(),       // Show window command (SW_SHOW, SW_SHOWMAXIMIZED, etc.)
+  m_scaledWidth(),       // DPI-scaled m_window width
+  m_scaledHeight(),      // DPI-scaled m_window height
+  m_showCommand(),       // Show m_window command (SW_SHOW, SW_SHOWMAXIMIZED, etc.)
   m_bHasAnyWindowArgs(false) {} // Flag indicating if command line args were provided
 
 /**
@@ -64,7 +64,7 @@ WindowManager::~WindowManager() {
 }
 
 /**
- * Creates the main application window with command line arguments support
+ * Creates the main application m_window with command line arguments support
  * 
  * This version reads command line arguments to configure:
  * - Window size (width and height)
@@ -76,10 +76,10 @@ WindowManager::~WindowManager() {
  * - Starts maximized with borders
  * 
  * @param hInstance The application instance handle
- * @param cmdArgs Pointer to CommandLineArguments object with parsed arguments
+ * @param m_cmdArgs Pointer to CommandLineArguments object with parsed arguments
  * @return true on success, false on failure
  */
-bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArguments* cmdArgs) {
+bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArguments* m_cmdArgs) {
 
 	// Make process DPI aware so we can handle high-DPI displays correctly
 	// This ensures proper scaling on monitors with different DPI settings
@@ -91,8 +91,8 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 	m_main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(
 		::MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY));
 
-	// Create and initialize the window class structure
-	// WNDCLASSEX contains window class attributes like style and icon
+	// Create and initialize the m_window class structure
+	// WNDCLASSEX contains m_window class attributes like style and icon
 	WNDCLASSEX wc = {};
 	m_wc		  = &wc;
 
@@ -100,47 +100,47 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 	m_wc->cbSize = sizeof(WNDCLASSEX);
 
 	// Window class style flags
-	// CS_HREDRAW: Redraw entire window if width changes
-	// CS_VREDRAW: Redraw entire window if height changes
+	// CS_HREDRAW: Redraw entire m_window if width changes
+	// CS_VREDRAW: Redraw entire m_window if height changes
 	m_wc->style = CS_HREDRAW | CS_VREDRAW;
 
-	// Pointer to the window procedure function that handles messages
+	// Pointer to the m_window procedure function that handles messages
 	m_wc->lpfnWndProc = WndProc;
 
 	// Application instance handle
 	m_wc->hInstance = hInstance;
 
-	// Cursor to display when mouse is over window (standard arrow)
+	// Cursor to display when mouse is over m_window (standard arrow)
 	m_wc->hCursor = LoadCursor(NULL, IDC_ARROW);
 
-	// Class name for this window type (used to create windows of this class)
+	// Class name for this m_window type (used to create windows of this class)
 	m_wc->lpszClassName = L"ImGui Example";
 
-	// Register the window class with Windows
+	// Register the m_window class with Windows
 	// Must be done before creating windows of this class
 	::RegisterClassEx(m_wc);
 
 
-	// Check if ANY window configuration arguments were passed
+	// Check if ANY m_window configuration arguments were passed
 	// If no arguments, we'll use monitor resolution and maximize
-	m_bHasAnyWindowArgs = HasAnyWindowArguments(cmdArgs);
+	m_bHasAnyWindowArgs = HasAnyWindowArguments(m_cmdArgs);
 
-	// Get window dimensions using WindowManager methods
+	// Get m_window dimensions using WindowManager methods
 	// These methods check command line args and use monitor resolution as default
-	m_windowWidth = GetWindowWidth(cmdArgs);
-	m_windowHeigh = GetWindowHeight(cmdArgs);
+	m_windowWidth = GetWindowWidth(m_cmdArgs);
+	m_windowHeigh = GetWindowHeight(m_cmdArgs);
 
-	// Get window position from command line or use Windows default
+	// Get m_window position from command line or use Windows default
 	// CW_USEDEFAULT lets Windows choose the best position
-	m_windowX_pos = GetWindowX(cmdArgs);
-	m_windowY_pos = GetWindowY(cmdArgs);
+	m_windowX_pos = GetWindowX(m_cmdArgs);
+	m_windowY_pos = GetWindowY(m_cmdArgs);
 
-	// Determine window style based on command line arguments
-	m_windowStyle = WS_OVERLAPPEDWINDOW; // Default: standard window with borders
+	// Determine m_window style based on command line arguments
+	m_windowStyle = WS_OVERLAPPEDWINDOW; // Default: standard m_window with borders
 
 	// Check if fullscreen mode was requested
-	if (ShouldStartFullscreen(cmdArgs)) {
-		// WS_POPUP creates a borderless window (true fullscreen)
+	if (ShouldStartFullscreen(m_cmdArgs)) {
+		// WS_POPUP creates a borderless m_window (true fullscreen)
 		m_windowStyle = WS_POPUP;
 
 		// For fullscreen, use entire screen dimensions
@@ -150,21 +150,21 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 		m_windowY_pos = 0;
 	}
 	// Check if explicitly requesting windowed mode
-	else if (ShouldStartWindowed(cmdArgs)) {
+	else if (ShouldStartWindowed(m_cmdArgs)) {
 		// Keep default WS_OVERLAPPEDWINDOW style
 		m_windowStyle = WS_OVERLAPPEDWINDOW;
 	}
 
-	// Apply DPI scaling to window dimensions
-	// This ensures the window is the correct physical size on high-DPI displays
+	// Apply DPI scaling to m_window dimensions
+	// This ensures the m_window is the correct physical size on high-DPI displays
 	m_scaledWidth  = static_cast<int>(m_windowWidth * m_main_scale);
 	m_scaledHeight = static_cast<int>(m_windowHeigh * m_main_scale);
 
-	// Define the window rectangle
+	// Define the m_window rectangle
 	RECT windowRect = {0, 0, static_cast<LONG>(m_scaledWidth), static_cast<LONG>(m_scaledHeight)};
 	m_windowRect	= &windowRect;
 
-	// Adjust window rectangle to account for borders (if not fullscreen)
+	// Adjust m_window rectangle to account for borders (if not fullscreen)
 	if (m_windowStyle != WS_POPUP) {
 		// This increases the dimensions to include title bar, borders, etc.
 		AdjustWindowRect(&windowRect, m_windowStyle, FALSE);
@@ -184,7 +184,7 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 								 m_windowY_pos,					  // Y position
 								 m_scaledWidth,					  // Width (scaled for DPI)
 								 m_scaledHeight,				  // Height (scaled for DPI)
-								 nullptr,						  // Parent window (none)
+								 nullptr,						  // Parent m_window (none)
 								 nullptr,						  // Menu (none)
 								 m_wc->hInstance,				  // Application instance
 								 nullptr);						  // Additional data (none)
@@ -200,25 +200,25 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 								 0,								  // Y position (top-left)
 								 GetMonitorWidth(),				  // Width (full monitor)
 								 GetMonitorHeight(),			  // Height (full monitor)
-								 nullptr,						  // Parent window (none)
+								 nullptr,						  // Parent m_window (none)
 								 nullptr,						  // Menu (none)
 								 m_wc->hInstance,				  // Application instance
 								 nullptr);						  // Additional data (none)
 	};
 
-	// Create the window based on the determined style
+	// Create the m_window based on the determined style
 	if (m_windowStyle == WS_POPUP) {
 		// Use fullscreen lambda for borderless fullscreen
 		fullscreen();
 	} else {
-		// Use windowed lambda for standard window with borders
+		// Use windowed lambda for standard m_window with borders
 		windowed();
 	}
 
-	// Check if window creation failed
+	// Check if m_window creation failed
 	if (!m_hwnd) {
 		// Output error and return failure
-		std::cout << ("Error: Failed to create window\n");
+		std::cout << ("Error: Failed to create m_window\n");
 		return false;
 	}
 
@@ -232,7 +232,7 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 		}
 	}
 
-	// Determine how to show the window
+	// Determine how to show the m_window
 	m_showCommand = SW_SHOWDEFAULT; // Default: show in default state
 
 	// If NO arguments were passed, automatically start maximized
@@ -240,21 +240,21 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 	if (!m_bHasAnyWindowArgs) {
 		m_showCommand = SW_SHOWMAXIMIZED;
 		std::cout
-			<< ("No window arguments provided - starting maximized with monitor resolution\n");
+			<< ("No m_window arguments provided - starting maximized with monitor resolution\n");
 	}
 	// If -maximized was specified explicitly, start maximized
-	else if (ShouldStartMaximized(cmdArgs) && m_windowStyle != WS_POPUP) {
+	else if (ShouldStartMaximized(m_cmdArgs) && m_windowStyle != WS_POPUP) {
 		m_showCommand = SW_SHOWMAXIMIZED;
 	}
 	// If -fullscreen, just show normally (already sized correctly)
-	else if (ShouldStartFullscreen(cmdArgs)) {
+	else if (ShouldStartFullscreen(m_cmdArgs)) {
 		m_showCommand = SW_SHOW;
 	}
 
-	// Show the window with the determined show command
+	// Show the m_window with the determined show command
 	::ShowWindow(m_hwnd, m_showCommand);
 
-	// Force window update to ensure it's drawn
+	// Force m_window update to ensure it's drawn
 	::UpdateWindow(m_hwnd);
 
 	// Return success
@@ -265,24 +265,24 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 // ===== Window Configuration Helper Methods =====
 
 /**
- * Gets the requested window width from command line arguments
+ * Gets the requested m_window width from command line arguments
  * Uses monitor width as default if not specified
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
+ * @param m_cmdArgs Pointer to CommandLineArguments object
  * @return Window width in pixels
  */
-int WindowManager::GetWindowWidth(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, use monitor width
-	if (!cmdArgs) { return GetMonitorWidth(); }
+int WindowManager::GetWindowWidth(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, use monitor width
+	if (!m_cmdArgs) { return GetMonitorWidth(); }
 
 	// Get monitor width as default
 	int defaultWidth = GetMonitorWidth();
 
 	// Try -width first, then -w, then default
-	int width = cmdArgs->GetArgumentValueInt(L"-width", -1);
+	int width = m_cmdArgs->GetArgumentValueInt(L"-width", -1);
 	if (width > 0) return width;
 
-	width = cmdArgs->GetArgumentValueInt(L"-w", -1);
+	width = m_cmdArgs->GetArgumentValueInt(L"-w", -1);
 	if (width > 0) return width;
 
 	// No valid width specified, return monitor width
@@ -290,24 +290,24 @@ int WindowManager::GetWindowWidth(CommandLineArguments* cmdArgs) {
 }
 
 /**
- * Gets the requested window height from command line arguments
+ * Gets the requested m_window height from command line arguments
  * Uses monitor height as default if not specified
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
+ * @param m_cmdArgs Pointer to CommandLineArguments object
  * @return Window height in pixels
  */
-int WindowManager::GetWindowHeight(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, use monitor height
-	if (!cmdArgs) { return GetMonitorHeight(); }
+int WindowManager::GetWindowHeight(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, use monitor height
+	if (!m_cmdArgs) { return GetMonitorHeight(); }
 
 	// Get monitor height as default
 	int defaultHeight = GetMonitorHeight();
 
 	// Try -height first, then -h, then default
-	int height = cmdArgs->GetArgumentValueInt(L"-height", -1);
+	int height = m_cmdArgs->GetArgumentValueInt(L"-height", -1);
 	if (height > 0) return height;
 
-	height = cmdArgs->GetArgumentValueInt(L"-h", -1);
+	height = m_cmdArgs->GetArgumentValueInt(L"-h", -1);
 	if (height > 0) return height;
 
 	// No valid height specified, return monitor height
@@ -315,95 +315,95 @@ int WindowManager::GetWindowHeight(CommandLineArguments* cmdArgs) {
 }
 
 /**
- * Gets the requested window X position from command line
+ * Gets the requested m_window X position from command line
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
+ * @param m_cmdArgs Pointer to CommandLineArguments object
  * @return Window X position in pixels, or CW_USEDEFAULT
  */
-int WindowManager::GetWindowX(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, use default
-	if (!cmdArgs) { return CW_USEDEFAULT; }
+int WindowManager::GetWindowX(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, use default
+	if (!m_cmdArgs) { return CW_USEDEFAULT; }
 
 	// Get X position, use CW_USEDEFAULT if not specified
-	return cmdArgs->GetArgumentValueInt(L"-x", CW_USEDEFAULT);
+	return m_cmdArgs->GetArgumentValueInt(L"-x", CW_USEDEFAULT);
 }
 
 /**
- * Gets the requested window Y position from command line
+ * Gets the requested m_window Y position from command line
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
+ * @param m_cmdArgs Pointer to CommandLineArguments object
  * @return Window Y position in pixels, or CW_USEDEFAULT
  */
-int WindowManager::GetWindowY(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, use default
-	if (!cmdArgs) { return CW_USEDEFAULT; }
+int WindowManager::GetWindowY(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, use default
+	if (!m_cmdArgs) { return CW_USEDEFAULT; }
 
 	// Get Y position, use CW_USEDEFAULT if not specified
-	return cmdArgs->GetArgumentValueInt(L"-y", CW_USEDEFAULT);
+	return m_cmdArgs->GetArgumentValueInt(L"-y", CW_USEDEFAULT);
 }
 
 /**
- * Checks if window should start maximized
+ * Checks if m_window should start maximized
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
+ * @param m_cmdArgs Pointer to CommandLineArguments object
  * @return true if should start maximized, false otherwise
  */
-bool WindowManager::ShouldStartMaximized(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, return false
-	if (!cmdArgs) { return false; }
+bool WindowManager::ShouldStartMaximized(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, return false
+	if (!m_cmdArgs) { return false; }
 
 	// Check if -maximized or -maximize argument exists
-	return cmdArgs->HasArgument(L"-maximized") || cmdArgs->HasArgument(L"-maximize");
+	return m_cmdArgs->HasArgument(L"-maximized") || m_cmdArgs->HasArgument(L"-maximize");
 }
 
 /**
- * Checks if window should start in fullscreen mode
+ * Checks if m_window should start in fullscreen mode
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
+ * @param m_cmdArgs Pointer to CommandLineArguments object
  * @return true if should start fullscreen, false otherwise
  */
-bool WindowManager::ShouldStartFullscreen(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, return false
-	if (!cmdArgs) { return false; }
+bool WindowManager::ShouldStartFullscreen(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, return false
+	if (!m_cmdArgs) { return false; }
 
 	// Check if -fullscreen or -fs argument exists
-	return cmdArgs->HasArgument(L"-fullscreen") || cmdArgs->HasArgument(L"-fs");
+	return m_cmdArgs->HasArgument(L"-fullscreen") || m_cmdArgs->HasArgument(L"-fs");
 }
 
 /**
- * Checks if window should start in windowed mode
+ * Checks if m_window should start in windowed mode
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
+ * @param m_cmdArgs Pointer to CommandLineArguments object
  * @return true if should start windowed, false otherwise
  */
-bool WindowManager::ShouldStartWindowed(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, return true (default is windowed)
-	if (!cmdArgs) { return true; }
+bool WindowManager::ShouldStartWindowed(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, return true (default is windowed)
+	if (!m_cmdArgs) { return true; }
 
-	// Check if -windowed or -window argument exists
-	return cmdArgs->HasArgument(L"-windowed") || cmdArgs->HasArgument(L"-window");
+	// Check if -windowed or -m_window argument exists
+	return m_cmdArgs->HasArgument(L"-windowed") || m_cmdArgs->HasArgument(L"-m_window");
 }
 
 /**
- * Checks if any window configuration arguments were passed
+ * Checks if any m_window configuration arguments were passed
  * 
  * This determines if we should use default behavior (maximized)
  * or custom configuration from command line
  * 
- * @param cmdArgs Pointer to CommandLineArguments object
- * @return true if any window arguments exist, false otherwise
+ * @param m_cmdArgs Pointer to CommandLineArguments object
+ * @return true if any m_window arguments exist, false otherwise
  */
-bool WindowManager::HasAnyWindowArguments(CommandLineArguments* cmdArgs) {
-	// If no cmdArgs provided, no arguments exist
-	if (!cmdArgs) { return false; }
+bool WindowManager::HasAnyWindowArguments(CommandLineArguments* m_cmdArgs) {
+	// If no m_cmdArgs provided, no arguments exist
+	if (!m_cmdArgs) { return false; }
 
-	// Check for any window-related arguments
-	return cmdArgs->HasArgument(L"-width") || cmdArgs->HasArgument(L"-w") ||
-		   cmdArgs->HasArgument(L"-height") || cmdArgs->HasArgument(L"-h") ||
-		   cmdArgs->HasArgument(L"-x") || cmdArgs->HasArgument(L"-y") ||
-		   cmdArgs->HasArgument(L"-maximized") || cmdArgs->HasArgument(L"-maximize") ||
-		   cmdArgs->HasArgument(L"-fullscreen") || cmdArgs->HasArgument(L"-fs") ||
-		   cmdArgs->HasArgument(L"-windowed") || cmdArgs->HasArgument(L"-window");
+	// Check for any m_window-related arguments
+	return m_cmdArgs->HasArgument(L"-width") || m_cmdArgs->HasArgument(L"-w") ||
+		   m_cmdArgs->HasArgument(L"-height") || m_cmdArgs->HasArgument(L"-h") ||
+		   m_cmdArgs->HasArgument(L"-x") || m_cmdArgs->HasArgument(L"-y") ||
+		   m_cmdArgs->HasArgument(L"-maximized") || m_cmdArgs->HasArgument(L"-maximize") ||
+		   m_cmdArgs->HasArgument(L"-fullscreen") || m_cmdArgs->HasArgument(L"-fs") ||
+		   m_cmdArgs->HasArgument(L"-windowed") || m_cmdArgs->HasArgument(L"-m_window");
 }
 
 /**
@@ -431,11 +431,11 @@ int WindowManager::GetMonitorHeight() {
 }
 
 bool WindowManager::ApplyDarkModeToTitleBar(HWND hwnd, bool enabled) {
-	// Check if the window handle is valid
-	// nullptr indicates an invalid or uninitialized window
+	// Check if the m_window handle is valid
+	// nullptr indicates an invalid or uninitialized m_window
 	if (hwnd == nullptr) {
 		// Invalid handle, return failure immediately
-		// Cannot apply theme to a non-existent window
+		// Cannot apply theme to a non-existent m_window
 		return false;
 	}
 
@@ -448,7 +448,7 @@ bool WindowManager::ApplyDarkModeToTitleBar(HWND hwnd, bool enabled) {
 
 	// Call the DwmSetWindowAttribute API to set the attribute
 	// This function modifies Desktop Window Manager (DWM) properties
-	// for the specified window
+	// for the specified m_window
 	//
 	// Parameters breakdown:
 	//   1. hwnd: Window handle to modify

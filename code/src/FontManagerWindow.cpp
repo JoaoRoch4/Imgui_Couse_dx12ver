@@ -9,7 +9,7 @@ FontManagerWindow::FontManagerWindow()
   m_selectedFilePath(""),	// Initialize empty file path
   m_selectedFolderPath(""), // Initialize empty folder path
   m_statusMessage("Ready"), // Initial status message
-  m_hwnd(nullptr),			// Store window handle
+  m_hwnd(nullptr),			// Store m_window handle
   m_fontsLoaded(false),		// No fonts loaded yet
   m_totalFontsLoaded(0),	// Zero fonts loaded+
   bShowFontPreview(false),
@@ -55,9 +55,9 @@ FontManagerWindow::~FontManagerWindow() {
 
 
 void FontManagerWindow::Render() {
-	// Begin a new ImGui window
-	// "Font Manager Demo" is the window title
-	// The window is resizable and can be moved
+	// Begin a new ImGui m_window
+	// "Font Manager Demo" is the m_window title
+	// The m_window is resizable and can be moved
 	ImGui::Begin("Font Manager Demo", &m_memory->m_bShow_FontManager_window);
 
 	ImGui::Checkbox("Show font preview", &bShowFontPreview);
@@ -211,11 +211,11 @@ void FontManagerWindow::Render() {
 	// Display total count of loaded fonts
 	ImGui::Text("Total fonts in m_memory: %zu", m_fontManager->GetFontMap().size());
 
-	// Create a child window with scrollbar for font list
+	// Create a child m_window with scrollbar for font list
 	// This creates a scrollable area to display all loaded fonts
-	ImGui::BeginChild("FontList",							 // ID for this child window
+	ImGui::BeginChild("FontList",							 // ID for this child m_window
 					  ImVec2(0, 200),						 // Size: full width, 200 pixels height
-					  true,									 // Show border around child window
+					  true,									 // Show border around child m_window
 					  ImGuiWindowFlags_HorizontalScrollbar); // Enable horizontal scroll
 
 	// Get reference to the font map
@@ -247,7 +247,7 @@ void FontManagerWindow::Render() {
 		fontIndex++;
 	}
 
-	// End the scrollable child window
+	// End the scrollable child m_window
 	ImGui::EndChild();
 
 	// Add spacing
@@ -275,12 +275,12 @@ void FontManagerWindow::Render() {
 		ImGui::Text("%s", m_statusMessage.c_str());
 	}
 
-	// End the ImGui window
+	// End the ImGui m_window
 	ImGui::End();
 }
 
 void FontManagerWindow::RenderFontPreview() {
-	// Create a separate window to preview loaded fonts
+	// Create a separate m_window to preview loaded fonts
 	ImGui::Begin("Font Preview");
 
 	// Sample text to display in each font
@@ -332,7 +332,7 @@ void FontManagerWindow::RenderFontPreview() {
 //        // Render our dialog UI
 //        dialogUI.Render();
 //
-//        // Optional: Render font preview window
+//        // Optional: Render font preview m_window
 //        dialogUI.RenderFontPreview();
 //
 //        // Render ImGui

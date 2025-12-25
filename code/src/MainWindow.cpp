@@ -5,22 +5,22 @@
 //// Main code
 //int MainWindow::launch(HINSTANCE& hInstance) {
 //
-//    g_pd3dSrvDescHeapAlloc = std::make_unique<ExampleDescriptorHeapAllocator>();
-//    std::unique_ptr<WindowManager> window = std::make_unique<WindowManager>();
+//    m_HeapAlloc = std::make_unique<ExampleDescriptorHeapAllocator>();
+//    std::unique_ptr<WindowManager> m_window = std::make_unique<WindowManager>();
 //
-//    window->WMCreateWindow(hInstance);
+//    m_window->WMCreateWindow(hInstance);
 //
 //    // Initialize Direct3D
-//    if(!CreateDeviceD3D(window->GetHWND())) {
+//    if(!CreateDeviceD3D(m_window->GetHWND())) {
 //        CleanupDeviceD3D();
-//        ::UnregisterClass(window->GetWc()->lpszClassName,
-//            window->GetWc()->hInstance);
+//        ::UnregisterClass(m_window->GetWc()->lpszClassName,
+//            m_window->GetWc()->hInstance);
 //        return 1;
 //    }
 //
-//    // Show the window
-//    ::ShowWindow(window->GetHWND(), SW_SHOWDEFAULT);
-//    ::UpdateWindow(window->GetHWND());
+//    // Show the m_window
+//    ::ShowWindow(m_window->GetHWND(), SW_SHOWDEFAULT);
+//    ::UpdateWindow(m_window->GetHWND());
 //
 //    // Setup Dear ImGui context
 //    IMGUI_CHECKVERSION();
@@ -39,12 +39,12 @@
 //    // Setup scaling
 //    ImGuiStyle& style = ImGui::GetStyle();
 //    style.ScaleAllSizes(
-//        window
+//        m_window
 //        ->get_main_scale()); // Bake a fixed style scale. (until we have a solution for
 //    // dynamic style scaling, changing this requires resetting
 //    // Style + calling this again)
 //    style.FontScaleDpi =
-//        window->get_main_scale() + 0.2f; // Set initial font scale. (using
+//        m_window->get_main_scale() + 0.2f; // Set initial font scale. (using
 //    // m_io.ConfigDpiScaleFonts=true makes this unnecessary.
 //    // We leave both here for documentation purpose)
 //
@@ -57,7 +57,7 @@
 //    ImPlot::CreateContext();
 //
 //    // Setup Platform/Renderer backends
-//    ImGui_ImplWin32_Init(window->GetHWND());
+//    ImGui_ImplWin32_Init(m_window->GetHWND());
 //
 //    ImGui_ImplDX12_InitInfo init_info = {};
 //    init_info.Device = m_Device.Get();
@@ -75,7 +75,7 @@
 //            ([&](ImGui_ImplDX12_InitInfo*,
 //                D3D12_CPU_DESCRIPTOR_HANDLE* out_cpu_handle,
 //                D3D12_GPU_DESCRIPTOR_HANDLE* out_gpu_handle) {
-//                    return g_pd3dSrvDescHeapAlloc->Alloc(out_cpu_handle,
+//                    return m_HeapAlloc->Alloc(out_cpu_handle,
 //                        out_gpu_handle);
 //                }));
 //
@@ -85,7 +85,7 @@
 //            [&](ImGui_ImplDX12_InitInfo*,
 //                D3D12_CPU_DESCRIPTOR_HANDLE cpu_handle,
 //                D3D12_GPU_DESCRIPTOR_HANDLE gpu_handle) {
-//                    return g_pd3dSrvDescHeapAlloc->Free(cpu_handle, gpu_handle);
+//                    return m_HeapAlloc->Free(cpu_handle, gpu_handle);
 //            });
 //    ImGui_ImplDX12_Init(&init_info);
 //
@@ -107,12 +107,12 @@
 //    bool show_another_window = false;
 //    ImVec4 clear_color_ptr = ImVec4(0.15f, 0.15f, 0.15f, 1.f);
 //
-//    WindowClass window_obj;
+//    WindowClass m_window_obj;
 //
 //    // Main loop
 //    bool done = false;
 //    while(!done) {
-//        // Poll and handle messages (inputs, window resize, etc.)
+//        // Poll and handle messages (inputs, m_window resize, etc.)
 //        // See the WndProc() function below for our to dispatch events to the Win32
 //        // backend.
 //        MSG msg;
@@ -125,11 +125,11 @@
 //        if(done)
 //            break;
 //
-//        // Handle window screen locked
+//        // Handle m_window screen locked
 //        if((m_SwapChainOccluded &&
 //            m_pSwapChain->Present(0, DXGI_PRESENT_TEST) ==
 //            DXGI_STATUS_OCCLUDED) ||
-//            ::IsIconic(window->GetHWND())) {
+//            ::IsIconic(m_window->GetHWND())) {
 //            ::Sleep(10);
 //            continue;
 //        }
@@ -141,23 +141,23 @@
 //        ImGui::NewFrame();
 //
 //        {
-//            render(window_obj);
+//            render(m_window_obj);
 //        }
 //
-//        // 1. Show the big demo window (Most of the sample code is in
+//        // 1. Show the big demo m_window (Most of the sample code is in
 //        // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
 //        // ImGui!).
 //        if(show_demo_window)
 //            ImGui::ShowDemoWindow(&show_demo_window);
 //
-//        // 2. Show a simple window that we create ourselves. We use a Begin/End pair
-//        // to create a named window.
+//        // 2. Show a simple m_window that we create ourselves. We use a Begin/End pair
+//        // to create a named m_window.
 //        {
 //            static float f = 0.0f;
 //            static int counter = 0;
 //
 //            ImGui::Begin(
-//                "Hello, world!"); // Create a window called "Hello, world!"
+//                "Hello, world!"); // Create a m_window called "Hello, world!"
 //            // and append into it.
 //
 //            ImGui::Text(
@@ -165,7 +165,7 @@
 //            // use a format strings too)
 //            ImGui::Checkbox(
 //                "Demo Window",
-//                &show_demo_window); // Edit bools storing our window open/close state
+//                &show_demo_window); // Edit bools storing our m_window open/close state
 //            ImGui::Checkbox("Another Window", &show_another_window);
 //
 //            ImGui::SliderFloat(
@@ -191,14 +191,14 @@
 //            ImGui::End();
 //        }
 //
-//        // 3. Show another simple window.
+//        // 3. Show another simple m_window.
 //        if(show_another_window) {
 //            ImGui::Begin(
 //                "Another Window",
 //                &show_another_window); // Pass a pointer to our bool variable (the
-//            // window will have a closing button that will
+//            // m_window will have a closing button that will
 //            // clear the bool when clicked)
-//            ImGui::Text("Hello from another window!");
+//            ImGui::Text("Hello from another m_window!");
 //            if(ImGui::Button("Close Me"))
 //                show_another_window = false;
 //            ImGui::End();
@@ -269,9 +269,9 @@
 //    ImGui::DestroyContext();
 //
 //    CleanupDeviceD3D();
-//    ::DestroyWindow(window->GetHWND());
-//    ::UnregisterClass(window->GetWc()->lpszClassName,
-//        window->GetWc()->hInstance);
+//    ::DestroyWindow(m_window->GetHWND());
+//    ::UnregisterClass(m_window->GetWc()->lpszClassName,
+//        m_window->GetWc()->hInstance);
 //
 //    m_font_manager.CleanupFonts();
 //    ImPlot::DestroyContext();
@@ -373,7 +373,7 @@
 //            IID_PPV_ARGS(&m_SrvDescHeap)) !=
 //            S_OK)
 //            return false;
-//        g_pd3dSrvDescHeapAlloc->Create(m_Device.Get(), m_SrvDescHeap.Get());
+//        m_HeapAlloc->Create(m_Device.Get(), m_SrvDescHeap.Get());
 //    }
 //
 //    {
@@ -389,12 +389,12 @@
 //    for(UINT i = 0; i < APP_NUM_FRAMES_IN_FLIGHT; i++)
 //        if(m_Device->CreateCommandAllocator(
 //            D3D12_COMMAND_LIST_TYPE_DIRECT,
-//            IID_PPV_ARGS(&g_frameContext[i].CommandAllocator)) != S_OK)
+//            IID_PPV_ARGS(&m_frameContext[i].CommandAllocator)) != S_OK)
 //            return false;
 //
 //    if(m_Device->CreateCommandList(0,
 //        D3D12_COMMAND_LIST_TYPE_DIRECT,
-//        g_frameContext[0].CommandAllocator.Get(),
+//        m_frameContext[0].CommandAllocator.Get(),
 //        nullptr,
 //        IID_PPV_ARGS(&m_CommandList)) != S_OK ||
 //        m_CommandList->Close() != S_OK)
@@ -454,9 +454,9 @@
 //        m_hSwapChainWaitableObject = nullptr;
 //    }
 //    for(UINT i = 0; i < APP_NUM_FRAMES_IN_FLIGHT; i++)
-//        if(g_frameContext[i].CommandAllocator) {
-//            g_frameContext[i].CommandAllocator->Release();
-//            g_frameContext[i].CommandAllocator = nullptr;
+//        if(m_frameContext[i].CommandAllocator) {
+//            m_frameContext[i].CommandAllocator->Release();
+//            m_frameContext[i].CommandAllocator = nullptr;
 //        }
 //
 //    if(m_FenceEvent) {
@@ -495,7 +495,7 @@
 //
 //FrameContext* MainWindow::WaitForNextFrameContext() {
 //    FrameContext* m_frame_context =
-//        &g_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
+//        &m_frameContext[g_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
 //    if(m_fence->GetCompletedValue() < m_frame_context->FenceValue) {
 //        m_fence->SetEventOnCompletion(m_frame_context->FenceValue, m_FenceEvent);
 //        HANDLE waitableObjects[] = { m_hSwapChainWaitableObject, m_FenceEvent };

@@ -27,8 +27,8 @@ protected:
 	void OpenFileWithDefaultEditor();
 	void RenameFilePopUp();
 	void DeleteFilePopUp();
-	bool renameFile(const fs::path& old_Path, const fs::path& new_Path);
-	bool deleteFile(const fs::path& Path);
+	HRESULT renameFile(const fs::path& old_Path, const fs::path& new_Path);
+    HRESULT deleteFile(const fs::path& Path);
 
 private:
 

@@ -59,8 +59,8 @@ void ConfigManager::Open() {
 	// Try to load configuration from disk
 	// If loading fails, we'll use the default values set in constructor
 	if (!LoadConfiguration()) {
-		// Loading failed - print message to console
-		// Convert wide string to narrow string for console output
+		// Loading failed - print message to m_console
+		// Convert wide string to narrow string for m_console output
 		std::wcout << L"Using default configuration values" << std::endl;
 	} else {
 		// Loading succeeded - print confirmation with file path
@@ -191,7 +191,7 @@ bool ConfigManager::LoadConfiguration() {
 		} else {
 			// Parsing failed - print error message
 			// error() returns an error object with details
-			// Convert error message to wide string for console output
+			// Convert error message to wide string for m_console output
 			std::string	 errorMsg = result.error().what();
 			std::wstring wErrorMsg(errorMsg.begin(), errorMsg.end());
 			std::wcerr << L"Failed to parse configuration JSON: " << wErrorMsg << std::endl;
@@ -202,7 +202,7 @@ bool ConfigManager::LoadConfiguration() {
 		// Catch any exceptions that might occur during file operations
 		// std::exception is the base class for standard exceptions
 		// what() returns a description of the error
-		// Convert error message to wide string for console output
+		// Convert error message to wide string for m_console output
 		std::string	 errorMsg = e.what();
 		std::wstring wErrorMsg(errorMsg.begin(), errorMsg.end());
 		std::wcerr << L"Exception while loading configuration: " << wErrorMsg << std::endl;
@@ -290,7 +290,7 @@ bool ConfigManager::SaveConfiguration() {
 
 	} catch (const std::exception& e) {
 		// Catch any exceptions during serialization or file writing
-		// Convert error message to wide string for console output
+		// Convert error message to wide string for m_console output
 		std::string	 errorMsg = e.what();
 		std::wstring wErrorMsg(errorMsg.begin(), errorMsg.end());
 		std::wcerr << L"Exception while saving configuration: " << wErrorMsg << std::endl;

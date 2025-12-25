@@ -6,8 +6,8 @@
 // [SECTION] Example App: Debug Console / ShowExampleAppConsole()
 //-----------------------------------------------------------------------------
 
-// Demonstrate creating a simple console window, with scrolling, filtering, completion and history.
-// For the console example, we are using a more C++ like approach of declaring a class to hold both data and functions.
+// Demonstrate creating a simple m_console m_window, with scrolling, filtering, completion and history.
+// For the m_console example, we are using a more C++ like approach of declaring a class to hold both data and functions.
 namespace app {
 class ConsoleWindow {
 private:

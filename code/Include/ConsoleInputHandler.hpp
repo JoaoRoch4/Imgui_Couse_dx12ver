@@ -1,6 +1,6 @@
 // ConsoleInputHandler.hpp
-// Header file for console input handler with threaded command processing
-// Allows console to receive and process user commands asynchronously
+// Header file for m_console input handler with threaded command processing
+// Allows m_console to receive and process user commands asynchronously
 
 #pragma once
 

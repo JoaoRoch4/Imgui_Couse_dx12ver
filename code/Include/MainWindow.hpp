@@ -7,14 +7,14 @@
 //public:
 //    // Config for example app
 //
-//    std::unique_ptr<ExampleDescriptorHeapAllocator> g_pd3dSrvDescHeapAlloc;
+//    std::unique_ptr<ExampleDescriptorHeapAllocator> m_HeapAlloc;
 //
 //    MainWindow();
 //    uint32_t WINDOW_WIDTH = std::uint32_t{ 2000 };
 //    uint32_t WINDOW_HEIGHT = std::uint32_t{ 1000 };
 //
 //    UINT g_frameIndex = 0;
-//    FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
+//    FrameContext m_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 //
 //    // Data
 //

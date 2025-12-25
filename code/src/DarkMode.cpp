@@ -2,11 +2,11 @@
 #include "DarkMode.hpp"
 
 bool ApplyDarkModeToTitleBar(HWND hwnd, bool enable) {
-    // Check if the window handle is valid
-    // nullptr indicates an invalid or uninitialized window
+    // Check if the m_window handle is valid
+    // nullptr indicates an invalid or uninitialized m_window
     if (hwnd == nullptr) {
         // Invalid handle, return failure immediately
-        // Cannot apply theme to a non-existent window
+        // Cannot apply theme to a non-existent m_window
         return false;
     }
 
@@ -19,7 +19,7 @@ bool ApplyDarkModeToTitleBar(HWND hwnd, bool enable) {
 
     // Call the DwmSetWindowAttribute API to set the attribute
     // This function modifies Desktop Window Manager (DWM) properties
-    // for the specified window
+    // for the specified m_window
     //
     // Parameters breakdown:
     //   1. hwnd: Window handle to modify

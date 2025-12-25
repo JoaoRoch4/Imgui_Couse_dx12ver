@@ -361,7 +361,7 @@ std::string FontManager::ExtractFontName(const std::filesystem::path& path) cons
 
 // OpenFontFileDialog - Opens Windows file dialog to select a font file
 // This uses the Windows Common Dialog API to show a native file picker
-// @param hwnd: Handle to parent window (can be NULL if no parent window)
+// @param hwnd: Handle to parent m_window (can be NULL if no parent m_window)
 // @return: String containing the selected file path, or empty string if cancelled
 std::string FontManager::OpenFontFileDialog(HWND hwnd) const {
 	// OPENFILENAMEW structure - contains information for the file dialog
@@ -379,8 +379,8 @@ std::string FontManager::OpenFontFileDialog(HWND hwnd) const {
 	// Set the size of the structure (required by Windows API)
 	ofn.lStructSize = sizeof(ofn);
 
-	// Set the parent window handle
-	// If NULL, the dialog will be a top-level window
+	// Set the parent m_window handle
+	// If NULL, the dialog will be a top-level m_window
 	ofn.hwndOwner = hwnd;
 
 	// Set the buffer where the selected file path will be stored
@@ -462,7 +462,7 @@ int CALLBACK BrowseFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lp
 	if (uMsg == BFFM_INITIALIZED) {
 		// Set the initial selection to C:\Windows\Fonts as an example
 		// You can change this to any default folder you want
-		// SendMessage sends a message to the dialog window
+		// SendMessage sends a message to the dialog m_window
 		// BFFM_SETSELECTION tells it to select a specific folder
 		// TRUE means lpData is a path string (not a PIDL)
 		// The last parameter is the path to select
@@ -475,7 +475,7 @@ int CALLBACK BrowseFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lp
 
 // OpenFolderBrowserDialog - Opens Windows folder browser to select a folder
 // This uses the SHBrowseForFolder API to show a native folder picker
-// @param hwnd: Handle to parent window (can be NULL if no parent window)
+// @param hwnd: Handle to parent m_window (can be NULL if no parent m_window)
 // @return: String containing the selected folder path, or empty string if cancelled
 std::string FontManager::OpenFolderBrowserDialog(HWND hwnd) const {
 	// BROWSEINFOW structure - contains information for the folder browser
@@ -488,7 +488,7 @@ std::string FontManager::OpenFolderBrowserDialog(HWND hwnd) const {
 	// Buffer to store the selected folder path
 	wchar_t szFolder[MAX_PATH] = {0};
 
-	// Set the parent window handle
+	// Set the parent m_window handle
 	bi.hwndOwner = hwnd;
 
 	// Set the root folder (NULL = Desktop is the root)

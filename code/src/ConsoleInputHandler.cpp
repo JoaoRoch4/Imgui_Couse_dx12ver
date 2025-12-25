@@ -1,6 +1,6 @@
 // ConsoleInputHandler.cpp
-// Implementation of console input handler with threaded command processing
-// Provides asynchronous command input and processing for console applications
+// Implementation of m_console input handler with threaded command processing
+// Provides asynchronous command input and processing for m_console applications
 
 #include "PCH.hpp"
 #include "ConsoleInputHandler.hpp"
@@ -27,7 +27,7 @@ ConsoleInputHandler::ConsoleInputHandler()
 	// Used for the help system to display available commands
 	m_commandDescriptions["help"]	= "Display this help message";
 	m_commandDescriptions["list"]	= "List all available commands";
-	m_commandDescriptions["clear"]	= "Clear the console screen";
+	m_commandDescriptions["clear"]	= "Clear the m_console screen";
 	m_commandDescriptions["exit"]	= "Exit the application";
 	m_commandDescriptions["quit"]	= "Exit the application (alias for exit)";
 	m_commandDescriptions["status"] = "Show current application status";
@@ -64,16 +64,16 @@ ConsoleInputHandler::~ConsoleInputHandler() {
 }
 
 /**
- * @brief Opens the console input handler and starts the input thread
+ * @brief Opens the m_console input handler and starts the input thread
  * 
  * This method:
  * 1. Sets the running flag to true
  * 2. Resets the stop flag
  * 3. Creates and starts a new thread for input handling
- * 4. Prints a welcome message to the console
+ * 4. Prints a welcome message to the m_console
  * 
  * The input thread runs InputThreadFunction() which continuously
- * reads user input from the console.
+ * reads user input from the m_console.
  * 
  * Thread safety: Uses atomic flags for thread synchronization
  */
@@ -94,7 +94,7 @@ void ConsoleInputHandler::Open() {
 	// The thread will start executing InputThreadFunction immediately
 	m_inputThread = std::thread(&ConsoleInputHandler::InputThreadFunction, this);
 
-	// Print welcome message to console
+	// Print welcome message to m_console
 	// std::cout is thread-safe for individual operations
 	// std::endl flushes the output buffer and adds a newline
 	std::cout << "\n=== Console Input Handler Started ===" << std::endl;
@@ -147,7 +147,7 @@ void ConsoleInputHandler::Tick() {
 }
 
 /**
- * @brief Closes the console input handler and stops the input thread
+ * @brief Closes the m_console input handler and stops the input thread
  * 
  * This method:
  * 1. Signals the input thread to stop
@@ -202,7 +202,7 @@ void ConsoleInputHandler::StopInputThread() {
 /**
  * @brief Input thread function - Runs in a separate thread
  * 
- * This function continuously reads input from the console.
+ * This function continuously reads input from the m_console.
  * It runs in its own thread, separate from the main application thread.
  * 
  * Process flow:
@@ -234,7 +234,7 @@ void ConsoleInputHandler::InputThreadFunction() {
 		// String to store the user's input
 		std::string input;
 
-		// Read a line of input from the console
+		// Read a line of input from the m_console
 		// std::getline reads from std::cin until a newline character
 		// It stores the result in 'input' (excluding the newline)
 		// This call blocks (waits) until the user presses Enter
@@ -343,7 +343,7 @@ void ConsoleInputHandler::InputThreadFunction() {
  * Supported commands:
  * - help: Display help message
  * - list: List all commands
- * - clear: Clear the console
+ * - clear: Clear the m_console
  * - status: Show application status
  * - echo <text>: Echo back the text
  * - Any other: Report unknown command
@@ -371,7 +371,7 @@ void ConsoleInputHandler::ProcessCommand(const std::string& command) {
 	}
 	// Check for "clear" command
 	else if (lowerCommand == "clear" || lowerCommand == "cls") {
-		// Clear the console screen
+		// Clear the m_console screen
 		ClearConsole();
 	}
 	// Check for "status" command
@@ -389,7 +389,7 @@ void ConsoleInputHandler::ProcessCommand(const std::string& command) {
 		// substr(5) gets everything from index 5 to the end
 		std::string echoText = command.substr(5);
 
-		// Echo the text back to the console
+		// Echo the text back to the m_console
 		std::cout << "Echo: " << echoText << std::endl;
 	}
 	// Check for empty command
@@ -473,9 +473,9 @@ void ConsoleInputHandler::ListCommands() {
 }
 
 /**
- * @brief Clears the console screen
+ * @brief Clears the m_console screen
  * 
- * This method clears the console output by calling the system clear command.
+ * This method clears the m_console output by calling the system clear command.
  * 
  * Platform-specific behavior:
  * - Windows: Uses "cls" command
@@ -490,11 +490,11 @@ void ConsoleInputHandler::ClearConsole() {
 #ifdef _WIN32
 	// Windows: Use "cls" command
 	// system() executes a shell command
-	// "cls" is the Windows command to clear the console
+	// "cls" is the Windows command to clear the m_console
 	system("cls");
 #else
 	// Unix/Linux/Mac: Use "clear" command
-	// "clear" is the Unix command to clear the console
+	// "clear" is the Unix command to clear the m_console
 	system("clear");
 #endif
 

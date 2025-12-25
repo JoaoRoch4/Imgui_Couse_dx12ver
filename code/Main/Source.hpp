@@ -17,17 +17,17 @@ static HANDLE m_hSwapChainWaitableObject = nullptr;
  * @param hInstance Application instance handle from WinMain
  * @return EXIT_SUCCESS on successful execution, error code otherwise
  *
- * Initializes all subsystems, creates the DirectX device and window,
+ * Initializes all subsystems, creates the DirectX device and m_window,
  * sets up ImGui, runs the main loop, and performs cleanup.
  */
 int Start(_In_ HINSTANCE hInstance);
 
 /**
- * @brief Creates and displays the application window
+ * @brief Creates and displays the application m_window
  * @param hInstance Application instance handle
  *
- * Creates the Win32 window, initializes DirectX 12 device and resources,
- * and displays the window in maximized state.
+ * Creates the Win32 m_window, initializes DirectX 12 device and resources,
+ * and displays the m_window in maximized state.
  */
 void OpenWindow(_In_ HINSTANCE hInstance);
 
@@ -36,7 +36,7 @@ void OpenWindow(_In_ HINSTANCE hInstance);
  * @param m_io Pointer to ImGui IO context
  *
  * Loads fonts, initializes configuration, and runs the main message loop.
- * Handles window messages, renders ImGui windows, and manages frame presentation.
+ * Handles m_window messages, renders ImGui windows, and manages frame presentation.
  * Saves configuration on exit.
  */
 void MainLoop(ImGuiIO* m_io);
@@ -44,7 +44,7 @@ void MainLoop(ImGuiIO* m_io);
 /**
  * @brief Cleanup function called before application exit
  *
- * Shuts down ImGui, destroys DirectX resources, and unregisters window class.
+ * Shuts down ImGui, destroys DirectX resources, and unregisters m_window class.
  */
 void Cleanup();
 
@@ -55,7 +55,7 @@ void Cleanup();
  *
  * Creates D3D12 device, command queue, command allocators, descriptor heaps,
  * swap chain, and fence objects. Configures swap chain scaling mode to prevent
- * window stretching issues.
+ * m_window stretching issues.
  */
 bool CreateDeviceD3D(HWND hWnd);
 
@@ -97,7 +97,7 @@ void WaitForPendingOperations();
  * @param lParam Additional message parameter
  * @return Result of message processing
  *
- * Forwards messages to ImGui, handles window resize, and processes
+ * Forwards messages to ImGui, handles m_window resize, and processes
  * system commands and destruction messages.
  */
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

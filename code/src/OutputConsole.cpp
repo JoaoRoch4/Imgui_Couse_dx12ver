@@ -38,7 +38,7 @@ void OutputConsole::CreateConsole() {
 
 
 	if (!AllocConsole()) throw std::runtime_error("Cannot AllocConsole!");
-	// 1. Redireciona stdout para o console
+	// 1. Redireciona stdout para o m_console
 	FILE* fp;
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 
@@ -46,7 +46,7 @@ void OutputConsole::CreateConsole() {
 	std::wcout.imbue(std::locale(""));
 
 	// 2. CONFIGURAÇÃO CRUCIAL PARA WCOUT:
-	// Define o modo de saída do console para Unicode (UTF-16)
+	// Define o modo de saída do m_console para Unicode (UTF-16)
 	//_setmode(_fileno(stdout), _O_U8TEXT);
 
 	std::ios::sync_with_stdio(true);
@@ -80,7 +80,7 @@ void OutputConsole::setConsoleFontSize(int size) {
 	if (SetCurrentConsoleFontEx(hOut, FALSE, &cfi)) {
 		std::cout << "Font size set to " << std::to_string(size) << "! \n";
 	} else {
-		throw std::runtime_error("can't set console font size!");
+		throw std::runtime_error("can't set m_console font size!");
 	}
 }
 

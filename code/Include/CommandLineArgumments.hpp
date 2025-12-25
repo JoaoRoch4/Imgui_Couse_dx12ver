@@ -1,6 +1,6 @@
 // CommandLineArguments.hpp
 // Header file for command line argument parsing
-// This class now supports window configuration via command line arguments
+// This class now supports m_window configuration via command line arguments
 
 #pragma once
 
@@ -14,7 +14,7 @@ namespace app {
  * @brief Class that handles command line argument parsing
  * 
  * This class parses command line arguments and provides methods to query them.
- * Now includes support for window configuration arguments like:
+ * Now includes support for m_window configuration arguments like:
  * - Window size (-width, -height)
  * - Window position (-x, -y)
  * - Window state (-maximized, -fullscreen, -windowed)
@@ -70,7 +70,7 @@ public:
 	int GetArgumentValueInt(const std::wstring& arg, int defaultValue = 0);
 
 	/**
-     * @brief Prints all available command line options to console
+     * @brief Prints all available command line options to m_console
      * This is useful for showing help to users
      */
 	void PrintHelp();
@@ -100,16 +100,16 @@ private:
 	// Number of arguments parsed
 	int argCount;
 
-	// Flag indicating if console was launched/allocated
+	// Flag indicating if m_console was launched/allocated
 	bool bConsoleLaunched;
 
 	void ShowConsole();
 
 public:
-	// Getter for console launched flag
+	// Getter for m_console launched flag
 	inline bool GetbConsoleLaunched() const { return bConsoleLaunched; }
 
-	// Setter for console launched flag
+	// Setter for m_console launched flag
 	inline void SetbConsoleLaunched(bool bisConsoleLaunched) {
 		bConsoleLaunched = bisConsoleLaunched;
 	}

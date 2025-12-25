@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "PCH.hpp"
 
@@ -6,15 +6,15 @@
 // This is the enum value that controls dark mode on Windows 11
 // On Windows 10 (build 19041+), the value was 19
 // On Windows 11, the official value is 20
-// This value tells DWM which window attribute we want to modify
+// This value tells DWM which m_window attribute we want to modify
 #ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 #endif
 
 // ApplyDarkModeToTitleBar function
-// This function applies the dark theme to the window title bar
+// This function applies the dark theme to the m_window title bar
 // Parameters:
-//   hwnd: Handle to the window that will receive dark theme
+//   hwnd: Handle to the m_window that will receive dark theme
 //   enable: true to enable dark mode, false to disable (use light mode)
 // Returns:
 //   true: Dark mode was successfully applied

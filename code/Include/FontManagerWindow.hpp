@@ -29,7 +29,7 @@ class FontManagerWindow : public MemoryManagement{
 	// String to store status messages
 	std::string m_statusMessage;
 
-	// Handle to the main window (needed for dialogs to be modal)
+	// Handle to the main m_window (needed for dialogs to be modal)
 	HWND m_hwnd;
 
 	// Flag to track if fonts are currently loaded
@@ -58,7 +58,7 @@ public:
 	// Destructor
 	~FontManagerWindow();
 
-	// Method to display a font preview window (bonus feature)
+	// Method to display a font preview m_window (bonus feature)
 	void RenderFontPreview();
 
 	bool bShowFontPreview;

@@ -25,7 +25,7 @@ void CommandLineArguments::Close() { this->~CommandLineArguments(); }
  * Checks if a specific argument exists in the command line
  * 
  * Example usage:
- *   if (cmdArgs->HasArgument(L"-maximized")) { ... }
+ *   if (m_cmdArgs->HasArgument(L"-maximized")) { ... }
  * 
  * @param arg The argument to check (automatically converted to lowercase)
  * @return true if the argument was found, false otherwise
@@ -43,7 +43,7 @@ bool CommandLineArguments::HasArgument(const std::wstring& arg) {
  * Gets the value following a command line argument
  * 
  * Example usage:
- *   std::wstring title = cmdArgs->GetArgumentValue(L"-title", L"Default Title");
+ *   std::wstring title = m_cmdArgs->GetArgumentValue(L"-title", L"Default Title");
  *   // If command line is: program.exe -title "My Window"
  *   // Returns: "My Window"
  * 
@@ -99,7 +99,7 @@ int CommandLineArguments::GetInitArgs() {
  * Gets an integer value from a command line argument
  * 
  * Example usage:
- *   int width = cmdArgs->GetArgumentValueInt(L"-width", 1280);
+ *   int width = m_cmdArgs->GetArgumentValueInt(L"-width", 1280);
  *   // If command line is: program.exe -width 1920
  *   // Returns: 1920
  * 
@@ -127,7 +127,7 @@ int CommandLineArguments::GetArgumentValueInt(const std::wstring& arg, int defau
 }
 
 /**
- * Prints all available command line options to console
+ * Prints all available command line options to m_console
  * This is useful for showing help to users
  * 
  * Command line usage: program.exe -help or program.exe -?
@@ -140,22 +140,22 @@ void CommandLineArguments::PrintHelp() {
 	cmd->Out << L"\n=== Command Line Arguments ===" << std::endl;
 	cmd->Out << L"\nWindow Configuration:" << std::endl;
 
-	// Print window size options
-	cmd->Out << L"  -width <pixels>  or -w <pixels>  : Set window width" << std::endl;
-	cmd->Out << L"  -height <pixels> or -h <pixels>  : Set window height" << std::endl;
+	// Print m_window size options
+	cmd->Out << L"  -width <pixels>  or -w <pixels>  : Set m_window width" << std::endl;
+	cmd->Out << L"  -height <pixels> or -h <pixels>  : Set m_window height" << std::endl;
 
-	// Print window position options
-	cmd->Out << L"  -x <pixels>                       : Set window X position" << std::endl;
-	cmd->Out << L"  -y <pixels>                       : Set window Y position" << std::endl;
+	// Print m_window position options
+	cmd->Out << L"  -x <pixels>                       : Set m_window X position" << std::endl;
+	cmd->Out << L"  -y <pixels>                       : Set m_window Y position" << std::endl;
 
-	// Print window state options
+	// Print m_window state options
 	cmd->Out << L"  -maximized or -maximize           : Start maximized" << std::endl;
 	cmd->Out << L"  -fullscreen or -fs                : Start fullscreen (no borders)" << std::endl;
-	cmd->Out << L"  -windowed or -window              : Start in windowed mode" << std::endl;
+	cmd->Out << L"  -windowed or -m_window              : Start in windowed mode" << std::endl;
 
 	// Print other options
 	cmd->Out << L"\nOther Options:" << std::endl;
-	cmd->Out << L"  -cmd                              : Show console window" << std::endl;
+	cmd->Out << L"  -cmd                              : Show m_console m_window" << std::endl;
 	cmd->Out << L"  -help                       : Show this help message" << std::endl;
 
 	// Print examples
@@ -174,7 +174,7 @@ void CommandLineArguments::ShowCmd() {
 
 	ShowConsole();
 
-	std::cout << "\nThis message appears in the new console window.\n" << std::endl;
+	std::cout << "\nThis message appears in the new m_console m_window.\n" << std::endl;
 
 
 	if (m_bShowHelp) PrintHelp();
