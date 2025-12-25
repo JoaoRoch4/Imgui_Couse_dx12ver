@@ -38,7 +38,7 @@ class FontManagerWindow : public MemoryManagement{
 	// Counter for total fonts loaded
 	int m_totalFontsLoaded;
 
-    MemoryManagement* memory;
+    MemoryManagement* m_memory;
 
 
     // Main render function - called every frame to draw the UI

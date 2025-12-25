@@ -9,13 +9,12 @@
 #include "Classes.hpp"
 #include "WindowManager.hpp"
 
+// Forward declaration of window procedure
+// This function handles Windows messages for the application window
 extern LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
 namespace app {
-
-// Forward declaration of window procedure
-// This function handles Windows messages for the application window
 
 /**
  * Constructor - Initializes all member variables
@@ -27,22 +26,24 @@ WindowManager::WindowManager()
 : m_wc(nullptr),		 // Window class pointer (not yet allocated)
   m_windowRect(nullptr), // Window rectangle pointer (not yet allocated)
   m_hwnd(nullptr),		 // Window handle (not yet created)
-  m_main_scale(0.f),
-  m_windowWidth(), // DPI scale factor (will be calculated)
-  m_windowHeigh(),
-  m_windowX_pos(), // Constructor body (empty - all initialization in member list)
-  m_windowY_pos(),
-  m_windowStyle(),
-  m_scaledHeight(),
-  m_showCommand(),
-  m_bHasAnyWindowArgs(false) {}
+  m_main_scale(0.f),     // DPI scale factor (will be calculated)
+  m_windowWidth(),       // Window width in pixels
+  m_windowHeigh(),       // Window height in pixels
+  m_windowX_pos(),       // Window X position
+  m_windowY_pos(),       // Window Y position
+  m_windowStyle(),       // Window style flags
+  m_scaledWidth(),       // DPI-scaled window width
+  m_scaledHeight(),      // DPI-scaled window height
+  m_showCommand(),       // Show window command (SW_SHOW, SW_SHOWMAXIMIZED, etc.)
+  m_bHasAnyWindowArgs(false) {} // Flag indicating if command line args were provided
 
-/** m_scaledWidth
- * Dm_scaledHeighestructor - Cleans up resources
- *  m_showCommand
- * Note: HWND and WNDCLASSEX cleanup is typically handled by
- * the main application cleanup code, not here
- */
+/**
+* Destructor - Cleans up resources
+* 
+* Resets all member variables to safe default values.
+* Note: HWND and WNDCLASSEX cleanup is typically handled by
+* the main application cleanup code, not here
+*/
 WindowManager::~WindowManager() {
 
 	m_wc		 = nullptr;
@@ -454,7 +455,7 @@ bool WindowManager::ApplyDarkModeToTitleBar(HWND hwnd, bool enabled) {
 	//   2. DWMWA_USE_IMMERSIVE_DARK_MODE: The attribute identifier (value: 20)
 	//      This tells DWM which property we want to change
 	//   3. &useDarkMode: Pointer to the value we want to set (TRUE or FALSE)
-	//      Must be a pointer because the API needs to read from memory
+	//      Must be a pointer because the API needs to read from m_memory
 	//   4. sizeof(useDarkMode): Size of the value in bytes (4 bytes for BOOL)
 	//      Tells the API how many bytes to read from the pointer
 	//

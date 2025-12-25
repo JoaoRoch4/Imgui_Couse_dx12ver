@@ -1,5 +1,5 @@
 // MemoryManagement.hpp
-// Header file for memory management and object allocation
+// Header file for m_memory management and object allocation
 // Centralized management of all major application objects
 
 #pragma once
@@ -41,19 +41,19 @@ public:
 	//DX12Renderer*					Get_DX12Renderer() const;
 
 
-	static MemoryManagement* Get_MemoryManagement();
-
-	CommandLineArguments*			Get_CommandLineArguments() const;
-	ConsoleInputHandler*			Get_ConsoleInputHandler() const;
-	ConsoleWindow*					Get_ConsoleWindow() const;
-	DebugWindow*					Get_DebugWindow() const;
-	FontManager*					Get_FontManager() const;
-	FontManagerWindow*				Get_FontManagerWindow() const;
+	static MemoryManagement*		Get_MemoryManagement();
 	ExampleDescriptorHeapAllocator* Get_ExampleDescriptorHeapAllocator() const;
-	WindowClass*					Get_WindowClass() const;
-	WindowManager*					Get_WindowManager() const;
-	ConfigManager*					Get_ConfigManager() const;
-	OutputConsole*					Get_OutputConsole() const;
+
+	CommandLineArguments* Get_CommandLineArguments() const;
+	ConsoleInputHandler*  Get_ConsoleInputHandler() const;
+	ConsoleWindow*		  Get_ConsoleWindow() const;
+	DebugWindow*		  Get_DebugWindow() const;
+	FontManager*		  Get_FontManager() const;
+	FontManagerWindow*	  Get_FontManagerWindow() const;
+	WindowClass*		  Get_WindowClass() const;
+	WindowManager*		  Get_WindowManager() const;
+	ConfigManager*		  Get_ConfigManager() const;
+	OutputConsole*		  Get_OutputConsole() const;
 
 
 protected:

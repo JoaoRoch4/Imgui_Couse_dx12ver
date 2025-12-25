@@ -9,215 +9,217 @@
 #include "MemoryManagement.hpp"
 
 namespace app {
-    void WindowClass::Open() {
-        memory = MemoryManagement::Get_MemoryManagement();
-    }
-    void WindowClass::Tick() {
-        Draw("Label");
-    }
-    void WindowClass::Close() {}
-    /**
-     * @brief Construct a new Window Class object.
-     * Initializes currentPath to the application's current working directory.
-     */
-    WindowClass::WindowClass() : currentPath(fs::current_path()), selectedEntry(fs::path{}), memory(nullptr){
-    }
 
-    /**
-     * @brief Destroy the Window Class object.
-     * Clears the current path string/buffer.
-     */
-    WindowClass::~WindowClass() { currentPath.clear(); }
+void WindowClass::Open() {}
+void WindowClass::Tick() { Draw("Label"); }
+void WindowClass::Close() {}
 
-    /**
-     * @brief Main rendering loop for the window.
-     *
-     * Orchestrates the drawing of the menu, actions, filters, and directory content.
-     * @param label The window title displayed in the ImGui title bar.
-     */
-    void WindowClass::Draw(std::string_view label) {
-        constexpr static auto window_flags{ ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar };
+/**
+ * @brief Construct a new Window Class object.
+ * Initializes m_currentPath to the application's current working directory.
+ */
+WindowClass::WindowClass()
+: m_currentPath(fs::current_path()), m_selectedEntry(fs::path{}), m_memory(nullptr) {
+	m_memory = MemoryManagement::Get_MemoryManagement();
+}
 
-        ImGui::Begin(label.data(), &memory->m_bShow_FileSys_window, window_flags);
-        {
-            ig::Spacing();
-            ig::Separator();
-            DrawMenu();
-            ig::Spacing();
-            ig::Separator();
+/**
+ * @brief Destroy the Window Class object.
+ * Clears the current path string/buffer.
+ */
+WindowClass::~WindowClass() {
+	m_currentPath.clear();
+	m_selectedEntry.clear();
+	m_memory = nullptr;
+}
 
-            DrawActions();
-            ig::Spacing();
-            ig::Separator();
-            DrawFilters();
-            ig::Spacing();
-            ig::Separator();
-            DrawContent();
+/**
+ * @brief Main rendering loop for the window.
+ *
+ * Orchestrates the drawing of the menu, actions, filters, and directory content.
+ * @param label The window title displayed in the ImGui title bar.
+ */
+void WindowClass::Draw(std::string_view label) {
+	constexpr static auto window_flags{ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar};
 
-            ig::Spacing();
-            ig::Separator();
-        }
-        ImGui::End();
-    }
+	ImGui::Begin(label.data(), &m_memory->m_bShow_FileSys_window, window_flags);
+	{
+		ig::Spacing();
+		ig::Separator();
+		DrawMenu();
+		ig::Spacing();
+		ig::Separator();
 
-    /**
-     * @brief Renders the navigation menu.
-     * Displays the current path and provides a "Go up" button to navigate to the parent directory.
-     */
-    void WindowClass::DrawMenu() {
-        ImGui::Text("Menu");
+		DrawActions();
+		ig::Spacing();
+		ig::Separator();
+		DrawFilters();
+		ig::Spacing();
+		ig::Separator();
+		DrawContent();
 
-        if(ImGui::Button("Go up")) {
-            if(currentPath.has_parent_path()) { currentPath = currentPath.parent_path(); }
-        }
+		ig::Spacing();
+		ig::Separator();
+	}
+	ImGui::End();
+}
 
-        ImGui::SameLine();
-        ImGui::Text("Current directory: %s", currentPath.string().c_str());
-    }
+/**
+ * @brief Renders the navigation menu.
+ * Displays the current path and provides a "Go up" button to navigate to the parent directory.
+ */
+void WindowClass::DrawMenu() {
+	ImGui::Text("Menu");
 
-    /**
-     * @brief Renders the directory listing.
-     *
-     * Iterates through the current directory, differentiates between files [F] and
-     * directories [D], and handles selection and folder entry logic.
-     */
-    void WindowClass::DrawContent() {
-        ImGui::Text("Content: ");
-        ig::Spacing();
+	if (ImGui::Button("Go up")) {
+		if (m_currentPath.has_parent_path()) { m_currentPath = m_currentPath.parent_path(); }
+	}
 
-        for(const auto& entry : fs::directory_iterator(currentPath)) {
-            const bool is_selected = entry.path() == selectedEntry;
-            const bool is_directory = entry.is_directory();
-            const bool is_file = entry.is_regular_file();
-            str		   entry_name = entry.path().filename().string();
+	ImGui::SameLine();
+	ImGui::Text("Current directory: %s", m_currentPath.string().c_str());
+}
 
-            if(is_directory) entry_name = "[D] " + entry_name;
-            else if(is_file) entry_name = "[F] " + entry_name;
+/**
+ * @brief Renders the directory listing.
+ *
+ * Iterates through the current directory, differentiates between files [F] and
+ * directories [D], and handles selection and folder entry logic.
+ */
+void WindowClass::DrawContent() {
+	ImGui::Text("Content: ");
+	ig::Spacing();
 
-            if(ig::Selectable(entry_name.c_str(), is_selected)) {
-                if(is_directory) currentPath /= entry.path().filename();
-                selectedEntry = entry.path();
-            }
-            ig::Separator();
-        }
-    }
+	for (const auto& entry : fs::directory_iterator(m_currentPath)) {
+		const bool is_selected	= entry.path() == m_selectedEntry;
+		const bool is_directory = entry.is_directory();
+		const bool is_file		= entry.is_regular_file();
+		str		   entry_name	= entry.path().filename().string();
 
-    /**
-     * @brief Displays available operations for the selected filesystem entry.
-     * Shows buttons for Rename, Delete, and Open (if the entry is a file).
-     */
-    void WindowClass::DrawActions() {
-        ImGui::Text("Actions");
+		if (is_directory) entry_name = "[D] " + entry_name;
+		else if (is_file) entry_name = "[F] " + entry_name;
 
-        if(fs::is_directory(selectedEntry))
-            ig::Text("Selected dir: %s", selectedEntry.string().c_str());
-        else if(fs::is_regular_file(selectedEntry))
-            ig::Text("Selected file: %s", selectedEntry.string().c_str());
-        else { ig::Text("nothing selectected"); }
+		if (ig::Selectable(entry_name.c_str(), is_selected)) {
+			if (is_directory) m_currentPath /= entry.path().filename();
+			m_selectedEntry = entry.path();
+		}
+		ig::Separator();
+	}
+}
 
-        if(fs::is_regular_file(selectedEntry) && ig::Button("Open")) OpenFileWithDefaultEditor();
+/**
+ * @brief Displays available operations for the selected filesystem entry.
+ * Shows buttons for Rename, Delete, and Open (if the entry is a file).
+ */
+void WindowClass::DrawActions() {
+	ImGui::Text("Actions");
 
-        if(ig::Button("rename")) ig::OpenPopup("rename");
-        ig::SameLine();
-        if(ig::Button("delete")) ig::OpenPopup("delete");
+	if (fs::is_directory(m_selectedEntry))
+		ig::Text("Selected dir: %s", m_selectedEntry.string().c_str());
+	else if (fs::is_regular_file(m_selectedEntry))
+		ig::Text("Selected file: %s", m_selectedEntry.string().c_str());
+	else { ig::Text("nothing selectected"); }
 
-        RenameFilePopUp();
-        DeleteFilePopUp();
-    }
+	if (fs::is_regular_file(m_selectedEntry) && ig::Button("Open")) OpenFileWithDefaultEditor();
 
-    /**
-     * @brief Renders the file extension filter UI.
-     *
-     * Provides an input text field to filter files by extension and displays
-     * the count of matching files in the current directory.
-     */
-    void WindowClass::DrawFilters() {
-        ImGui::Text("DrawFilters");
-        static char extention_filter[16]{ "\0" };
+	if (ig::Button("rename")) ig::OpenPopup("rename");
+	ig::SameLine();
+	if (ig::Button("delete")) ig::OpenPopup("delete");
 
-        ImGui::Text("Filter By Extention: ");
-        ig::SameLine();
-        ig::InputText("###inFilter", extention_filter, sizeof(extention_filter));
+	RenameFilePopUp();
+	DeleteFilePopUp();
+}
 
-        if(std::strlen(extention_filter) == 0) return;
+/**
+ * @brief Renders the file extension filter UI.
+ *
+ * Provides an input text field to filter files by extension and displays
+ * the count of matching files in the current directory.
+ */
+void WindowClass::DrawFilters() {
+	ImGui::Text("DrawFilters");
+	static char extention_filter[16]{"\0"};
 
-        size_t filtered_file_count{};
-        for(const auto& entry : fs::directory_iterator(currentPath)) {
-            if(!fs::is_regular_file(entry)) continue;
-            if(entry.path().extension().string() == extention_filter) ++filtered_file_count;
-        }
+	ImGui::Text("Filter By Extention: ");
+	ig::SameLine();
+	ig::InputText("###inFilter", extention_filter, sizeof(extention_filter));
 
-        ig::Text("Number of files: %u", filtered_file_count);
-    }
+	if (std::strlen(extention_filter) == 0) return;
 
-    /**
-     * @brief Placeholder for opening a file with the system's default handler.
-     */
-    void WindowClass::OpenFileWithDefaultEditor() {}
+	size_t filtered_file_count{};
+	for (const auto& entry : fs::directory_iterator(m_currentPath)) {
+		if (!fs::is_regular_file(entry)) continue;
+		if (entry.path().extension().string() == extention_filter) ++filtered_file_count;
+	}
 
-    /**
-     * @brief Renders the 'Rename' modal popup.
-     * Provides an input buffer for the new name and calls renameFile upon confirmation.
-     */
-    void WindowClass::RenameFilePopUp() {
+	ig::Text("Number of files: %u", filtered_file_count);
+}
 
-        static bool Dialog_open = false;
+/**
+ * @brief Placeholder for opening a file with the system's default handler.
+ */
+void WindowClass::OpenFileWithDefaultEditor() {}
 
-        if(ig::BeginPopupModal("rename")) {
-            static char buffer_name[512]{ '\0' };
-            ig::Text("New Name: ");
-            ig::InputText("###newName", buffer_name, sizeof(buffer_name));
+/**
+ * @brief Renders the 'Rename' modal popup.
+ * Provides an input buffer for the new name and calls renameFile upon confirmation.
+ */
+void WindowClass::RenameFilePopUp() {
 
-            if(ig::Button("rename")) {
-                auto new_path = selectedEntry.parent_path() / buffer_name;
-                if(renameFile(selectedEntry, new_path)) {
-                    ig::EndPopup();
-                    return;
-                }
-            }
-            ig::EndPopup();
+	static bool Dialog_open = false;
 
-        }
-    }
+	if (ig::BeginPopupModal("rename")) {
+		static char buffer_name[512]{'\0'};
+		ig::Text("New Name: ");
+		ig::InputText("###newName", buffer_name, sizeof(buffer_name));
 
-    /**
-     * @brief Renders the 'Delete' modal popup.
-     */
-    void WindowClass::DeleteFilePopUp() {
-        if(ig::BeginPopupModal("delete")) { ig::EndPopup(); }
-    }
+		if (ig::Button("rename")) {
+			auto new_path = m_selectedEntry.parent_path() / buffer_name;
+			if (renameFile(m_selectedEntry, new_path)) {
+				ig::EndPopup();
+				return;
+			}
+		}
+		ig::EndPopup();
+	}
+}
 
-    /**
-     * @brief Wraps std::filesystem::rename with error handling.
-     * @param old_Path Original path.
-     * @param new_Path Target path.
-     * @return true if successful, false otherwise.
-     */
-    bool WindowClass::renameFile(const fs::path& old_Path, const fs::path& new_Path) {
-        try {
-            fs::rename(old_Path, new_Path);
-            return true;
-        } catch(std::exception& e) {
-            std::cerr << e.what() << std::endl;
-            return false;
-        }
-    }
+/**
+ * @brief Renders the 'Delete' modal popup.
+ */
+void WindowClass::DeleteFilePopUp() {
+	if (ig::BeginPopupModal("delete")) { ig::EndPopup(); }
+}
 
-    /**
-     * @brief Wraps std::filesystem::remove with error handling.
-     * @param Path Path to the entry to be deleted.
-     * @return true if successful, false otherwise.
-     */
-    bool WindowClass::deleteFile(const fs::path& Path) {
-        try {
-            fs::remove(Path);
-            return true;
-        } catch(std::runtime_error& e) {
-            std::cerr << e.what() << std::endl;
-            return false;
-        }
-    }
+/**
+ * @brief Wraps std::filesystem::rename with error handling.
+ * @param old_Path Original path.
+ * @param new_Path Target path.
+ * @return true if successful, false otherwise.
+ */
+bool WindowClass::renameFile(const fs::path& old_Path, const fs::path& new_Path) {
+	try {
+		fs::rename(old_Path, new_Path);
+		return true;
+	} catch (std::exception& e) {
+		std::cerr << e.what() << std::endl;
+		return false;
+	}
+}
 
-  
+/**
+ * @brief Wraps std::filesystem::remove with error handling.
+ * @param Path Path to the entry to be deleted.
+ * @return true if successful, false otherwise.
+ */
+bool WindowClass::deleteFile(const fs::path& Path) {
+	try {
+		fs::remove(Path);
+		return true;
+	} catch (std::runtime_error& e) {
+		std::cerr << e.what() << std::endl;
+		return false;
+	}
+}
+
 
 } // namespace app

@@ -553,16 +553,16 @@ std::string FontManager::OpenFolderBrowserDialog(HWND hwnd) const {
 			// Remove null terminator
 			result.resize(static_cast<size_t>(sizeNeeded - 1));
 
-			// Free the PIDL memory allocated by SHBrowseForFolderW
-			// This is important to prevent memory leaks
-			// CoTaskMemFree is the correct way to free PIDL memory
+			// Free the PIDL m_memory allocated by SHBrowseForFolderW
+			// This is important to prevent m_memory leaks
+			// CoTaskMemFree is the correct way to free PIDL m_memory
 			CoTaskMemFree(pidl);
 
 			// Return the selected folder path
 			return result;
 		}
 
-		// Failed to get path from PIDL - free memory and return empty string
+		// Failed to get path from PIDL - free m_memory and return empty string
 		CoTaskMemFree(pidl);
 	}
 
@@ -596,9 +596,9 @@ ImFont* FontManager::LoadSingleFont(const std::string& fontPath) {
 void FontManager::CleanupFonts() {
 	// Iterate through all loaded fonts in the vector
 	for (const auto* font : m_loadedFonts) {
-		// Note: Setting font to nullptr here doesn't actually free memory
+		// Note: Setting font to nullptr here doesn't actually free m_memory
 		// because 'font' is a local copy of the pointer
-		// ImGui manages the actual font memory internally
+		// ImGui manages the actual font m_memory internally
 		font = nullptr; // This line doesn't actually do much
 	}
 

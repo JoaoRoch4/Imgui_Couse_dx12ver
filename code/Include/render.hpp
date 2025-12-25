@@ -3,11 +3,12 @@
 #include "PCH.hpp"
 #include "MemoryManagement.hpp"
 
-
 namespace app {
+
 class WindowClass : public MemoryManagement {
 
 public:
+
 	virtual void Open() override;
 	virtual void Tick() override;
 	virtual void Close() override;
@@ -18,6 +19,7 @@ public:
 	void Draw(std::string_view label);
 
 protected:
+
 	void DrawMenu();
 	void DrawContent();
 	void DrawActions();
@@ -29,10 +31,11 @@ protected:
 	bool deleteFile(const fs::path& Path);
 
 private:
-	fs::path		  currentPath;
-	fs::path		  selectedEntry;
-	MemoryManagement* memory;
-};
 
+	fs::path		  m_currentPath;
+	fs::path		  m_selectedEntry;
+	MemoryManagement* m_memory;
+
+};
 
 } // namespace app

@@ -1,4 +1,4 @@
-﻿#include "PCH.hpp"
+#include "PCH.hpp"
 #include "DarkMode.hpp"
 
 bool ApplyDarkModeToTitleBar(HWND hwnd, bool enable) {
@@ -26,7 +26,7 @@ bool ApplyDarkModeToTitleBar(HWND hwnd, bool enable) {
     //   2. DWMWA_USE_IMMERSIVE_DARK_MODE: The attribute identifier (value: 20)
     //      This tells DWM which property we want to change
     //   3. &useDarkMode: Pointer to the value we want to set (TRUE or FALSE)
-    //      Must be a pointer because the API needs to read from memory
+    //      Must be a pointer because the API needs to read from m_memory
     //   4. sizeof(useDarkMode): Size of the value in bytes (4 bytes for BOOL)
     //      Tells the API how many bytes to read from the pointer
     //

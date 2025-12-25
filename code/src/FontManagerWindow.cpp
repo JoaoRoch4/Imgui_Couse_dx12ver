@@ -14,9 +14,9 @@ FontManagerWindow::FontManagerWindow()
   m_totalFontsLoaded(0),	// Zero fonts loaded+
   bShowFontPreview(false),
   bFonstsWereLoaded(false),
-  memory(nullptr)
+  m_memory(nullptr)
   {
-    memory = MemoryManagement::Get_MemoryManagement();
+    m_memory = MemoryManagement::Get_MemoryManagement();
   }
 
 
@@ -50,7 +50,7 @@ FontManagerWindow::~FontManagerWindow() {
 	m_selectedFilePath.clear();
 	m_selectedFolderPath.clear();
 	m_statusMessage.clear();
-    memory = nullptr;
+    m_memory = nullptr;
 }
 
 
@@ -58,7 +58,7 @@ void FontManagerWindow::Render() {
 	// Begin a new ImGui window
 	// "Font Manager Demo" is the window title
 	// The window is resizable and can be moved
-	ImGui::Begin("Font Manager Demo", &memory->m_bShow_FontManager_window);
+	ImGui::Begin("Font Manager Demo", &m_memory->m_bShow_FontManager_window);
 
 	ImGui::Checkbox("Show font preview", &bShowFontPreview);
 
@@ -187,7 +187,7 @@ void FontManagerWindow::Render() {
 
 			// Button to search fonts without loading
 			if (ImGui::Button("Search Fonts (Don't Load)") && bFonstsWereLoaded) {
-				// Search for fonts but don't load them into memory
+				// Search for fonts but don't load them into m_memory
 				std::map<std::string, std::string> foundFonts =
 					m_fontManager->SearchFontsInFolderAsMap(m_selectedFolderPath, false);
 
@@ -209,7 +209,7 @@ void FontManagerWindow::Render() {
 	ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Loaded Fonts:");
 
 	// Display total count of loaded fonts
-	ImGui::Text("Total fonts in memory: %zu", m_fontManager->GetFontMap().size());
+	ImGui::Text("Total fonts in m_memory: %zu", m_fontManager->GetFontMap().size());
 
 	// Create a child window with scrollbar for font list
 	// This creates a scrollable area to display all loaded fonts

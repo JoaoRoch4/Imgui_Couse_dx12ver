@@ -21,7 +21,7 @@ static D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUF
  */
 static FrameContext g_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
 
-MemoryManagement*	  memory;
+MemoryManagement*	  m_memory;
 OutputConsole*		  console;
 CommandLineArguments* cmdArgs;
 WindowManager*		  window;
@@ -44,27 +44,27 @@ FrameContext* WaitForNextFrameContext();
 
 int Start(_In_ HINSTANCE hInstance) {
 
-	memory = MemoryManagement::Get_MemoryManagement();
-	memory->AllocAll();
+	m_memory = MemoryManagement::Get_MemoryManagement();
+	m_memory->AllocAll();
 
-	console = memory->Get_OutputConsole();
+	console = m_memory->Get_OutputConsole();
 
 	console->Open();
 
 
 	console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
 
-	cmdArgs = memory->Get_CommandLineArguments();
+	cmdArgs = m_memory->Get_CommandLineArguments();
 
 	console->Out << tc::green << "Memory management initialized" << std::endl;
 	console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 
-	configManager = memory->Get_ConfigManager();
+	configManager = m_memory->Get_ConfigManager();
 
 
 	// Main code
-	g_pd3dSrvDescHeapAlloc = memory->Get_ExampleDescriptorHeapAllocator();
-	window				   = memory->Get_WindowManager();
+	g_pd3dSrvDescHeapAlloc = m_memory->Get_ExampleDescriptorHeapAllocator();
+	window				   = m_memory->Get_WindowManager();
 
 	OpenWindow(hInstance);
 
@@ -73,7 +73,7 @@ int Start(_In_ HINSTANCE hInstance) {
 	ImGui::CreateContext();
 	ImGuiIO& m_io = ImGui::GetIO();
 	static_cast<void>(m_io);
-	memory->Set_ImGuiIO(&m_io);
+	m_memory->Set_ImGuiIO(&m_io);
 	m_io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 	m_io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;	// Enable Gamepad Controls
 
@@ -167,13 +167,13 @@ void OpenWindow(_In_ HINSTANCE hInstance) {
 
 void MainLoop(ImGuiIO* m_io) {
 	// Get font manager and initialize
-	m_font_manager = memory->Get_FontManager();
+	m_font_manager = m_memory->Get_FontManager();
 	m_font_manager->GetIo(m_io);
 
-	m_font_manager_window = memory->Get_FontManagerWindow();
+	m_font_manager_window = m_memory->Get_FontManagerWindow();
 	m_font_manager_window->GetAux(window->GetHWND(), m_font_manager);
 
-	m_debug_window = memory->Get_DebugWindow();
+	m_debug_window = m_memory->Get_DebugWindow();
 	m_debug_window->GetIo(m_io);
 
 
@@ -186,7 +186,7 @@ void MainLoop(ImGuiIO* m_io) {
 	// ========================================================================
 
 	// Get ConfigManager instance from MemoryManagement
-	configManager = memory->Get_ConfigManager();
+	configManager = m_memory->Get_ConfigManager();
 
 	// Call Open() to load configuration from disk
 	// This will load config.json if it exists
@@ -206,7 +206,7 @@ void MainLoop(ImGuiIO* m_io) {
 				 << " B=" << clear_color.z << " A=" << clear_color.w << "\n";
 
 	// Create window object for file system browser
-	window_obj = memory->Get_WindowClass();
+	window_obj = m_memory->Get_WindowClass();
 	window_obj->Open();
 
 
@@ -242,12 +242,12 @@ void MainLoop(ImGuiIO* m_io) {
 		ImGui::NewFrame();
 
 		// Render optional windows
-		if (memory->m_bShow_FileSys_window) window_obj->Tick();
-		if (memory->m_bShow_Debug_window) m_debug_window->Tick();
+		if (m_memory->m_bShow_FileSys_window) window_obj->Tick();
+		if (m_memory->m_bShow_Debug_window) m_debug_window->Tick();
 
-		if (memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
-		if (memory->m_bShow_styleEditor_window) ImGui::ShowStyleEditor();
-		if (memory->m_bShow_demo_window) ImGui::ShowDemoWindow(&memory->m_bShow_demo_window);
+		if (m_memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
+		if (m_memory->m_bShow_styleEditor_window) ImGui::ShowStyleEditor();
+		if (m_memory->m_bShow_demo_window) ImGui::ShowDemoWindow(&m_memory->m_bShow_demo_window);
 
 		// ====================================================================
 		// MAIN WINDOW WITH COLOR PICKER AND SAVE FUNCTIONALITY
@@ -339,15 +339,15 @@ void MainLoop(ImGuiIO* m_io) {
 			// Rest of your UI code...
 			ImGui::Text("Other Settings");
 
-			ImGui::Checkbox("Demo Window", &memory->m_bShow_demo_window);
-			ImGui::Checkbox("Another Window", &memory->m_bShow_another_window);
-			ImGui::Checkbox("Style Editor", &memory->m_bShow_styleEditor_window);
+			ImGui::Checkbox("Demo Window", &m_memory->m_bShow_demo_window);
+			ImGui::Checkbox("Another Window", &m_memory->m_bShow_another_window);
+			ImGui::Checkbox("Style Editor", &m_memory->m_bShow_styleEditor_window);
 
 			ig::Separator();
 
-			ImGui::Checkbox("Debug Window", &memory->m_bShow_Debug_window);
-			ImGui::Checkbox("Font Manager Window", &memory->m_bShow_FontManager_window);
-			ImGui::Checkbox("File System Window", &memory->m_bShow_FileSys_window);
+			ImGui::Checkbox("Debug Window", &m_memory->m_bShow_Debug_window);
+			ImGui::Checkbox("Font Manager Window", &m_memory->m_bShow_FontManager_window);
+			ImGui::Checkbox("File System Window", &m_memory->m_bShow_FileSys_window);
 
 			ig::Separator();
 
@@ -365,10 +365,10 @@ void MainLoop(ImGuiIO* m_io) {
 		}
 
 		// Another window example
-		if (memory->m_bShow_another_window) {
-			ImGui::Begin("Another Window", &memory->m_bShow_another_window);
+		if (m_memory->m_bShow_another_window) {
+			ImGui::Begin("Another Window", &m_memory->m_bShow_another_window);
 			ImGui::Text("Hello from another window!");
-			if (ImGui::Button("Close Me")) memory->m_bShow_another_window = false;
+			if (ImGui::Button("Close Me")) m_memory->m_bShow_another_window = false;
 			ImGui::End();
 		}
 
@@ -446,6 +446,7 @@ void MainLoop(ImGuiIO* m_io) {
 
 	console->Out << tc::green << "Configuration saved on exit\n" << tc::reset;
 }
+
 void Cleanup() {
 
 	ImGui_ImplDX12_Shutdown();
@@ -457,6 +458,16 @@ void Cleanup() {
 	::UnregisterClassW(window->GetWc()->lpszClassName, window->GetWc()->hInstance);
 
 	ImPlot::DestroyContext();
+
+	m_memory				  = nullptr;
+	console				  = nullptr;
+	cmdArgs				  = nullptr;
+	window				  = nullptr;
+	m_font_manager		  = nullptr;
+	m_font_manager_window = nullptr;
+	m_debug_window		  = nullptr;
+	configManager		  = nullptr;
+	window_obj			  = nullptr;
 }
 
 // Helper functions

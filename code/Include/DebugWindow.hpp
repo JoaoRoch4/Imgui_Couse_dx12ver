@@ -37,6 +37,6 @@ private:
 	HANDLE			  hPsProcessHandle; // Armazena o handle do PowerShell
 	HANDLE			  hPyProcessHandle;
 
-    MemoryManagement* memory;
+    MemoryManagement* m_memory;
 };
 } // namespace app
