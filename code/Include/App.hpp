@@ -14,9 +14,10 @@ namespace app {
     class ConfigManager;
     class WindowClass;
     class ExampleDescriptorHeapAllocator;
+    class DX12Renderer;
 }
 
-class DX12Renderer;
+namespace app {
 
 /**
  * @brief Main application class that manages the entire application lifecycle
@@ -121,20 +122,22 @@ private:
     static App* s_instance;
 
     // Application objects
-    app::MemoryManagement* m_memory;
-    app::OutputConsole* m_console;
-    app::CommandLineArguments* m_cmdArgs;
-    app::WindowManager* m_window;
-    app::FontManager* m_font_manager;
-    app::FontManagerWindow* m_font_manager_window;
-    app::DebugWindow* m_debug_window;
-    app::ConfigManager* m_configManager;
-    app::WindowClass* m_window_obj;
+    MemoryManagement* m_memory;
+    OutputConsole* m_console;
+    CommandLineArguments* m_cmdArgs;
+    WindowManager* m_window;
+    FontManager* m_font_manager;
+    FontManagerWindow* m_font_manager_window;
+    DebugWindow* m_debug_window;
+    ConfigManager* m_configManager;
+    WindowClass* m_window_obj;
 
     // DirectX 12 Renderer and related objects
     DX12Renderer* m_renderer;
-    app::ExampleDescriptorHeapAllocator* m_HeapAlloc;
+    ExampleDescriptorHeapAllocator* m_HeapAlloc;
 
     // ImGui context
     ImGuiIO* m_io;
 };
+
+} // namespace app

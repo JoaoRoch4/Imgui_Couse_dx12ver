@@ -2,13 +2,13 @@
 #include "App.hpp"
 #include "Classes.hpp"
 
-using namespace app;
+// Forward declare ImGui message handler (global namespace)
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+namespace app {
 
 // Static instance
 App* App::s_instance = nullptr;
-
-// Forward declare ImGui message handler
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 App::App() :
     m_memory(nullptr),
@@ -219,7 +219,7 @@ bool App::RenderFrame(ImVec4& clear_color, bool& colorModified) {
     ImGui::Render();
 
     // Get frame context and back buffer
-    app::FrameContext* frameCtx = m_renderer->WaitForNextFrameContext();
+    FrameContext* frameCtx = m_renderer->WaitForNextFrameContext();
     UINT backBufferIdx = m_renderer->GetSwapChain()->GetCurrentBackBufferIndex();
     frameCtx->CommandAllocator->Reset();
 
@@ -461,3 +461,5 @@ LRESULT WINAPI App::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     
     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }
+
+} // namespace app

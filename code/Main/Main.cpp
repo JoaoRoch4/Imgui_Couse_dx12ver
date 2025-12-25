@@ -35,7 +35,7 @@ _Use_decl_annotations_ int WINAPI wWinMain(_In_ HINSTANCE	  hInstance,
 
 	try {
 		// Create and run the application
-		App app;
+		app::App app;
 		return app.Run(hInstance);
 
 	// Handle known exceptions (std::exception and derived classes)

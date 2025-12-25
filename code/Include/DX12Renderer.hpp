@@ -5,6 +5,8 @@
 #include "FrameContext.hpp"
 #include "ExampleDescriptorHeapAllocator.hpp"
 
+namespace app {
+
 /**
  * @brief DirectX 12 Renderer class that manages all D3D12 resources
  * 
@@ -21,13 +23,13 @@ public:
     ~DX12Renderer();
 
     // Initialization and cleanup
-    bool CreateDeviceD3D(HWND hWnd, app::ExampleDescriptorHeapAllocator* heapAlloc);
+    bool CreateDeviceD3D(HWND hWnd, ExampleDescriptorHeapAllocator* heapAlloc);
     void CleanupDeviceD3D();
     void CreateRenderTarget();
     void CleanupRenderTarget();
 
     // Frame management
-    app::FrameContext* WaitForNextFrameContext();
+    FrameContext* WaitForNextFrameContext();
     void WaitForPendingOperations();
 
     // Getters for D3D12 resources
@@ -64,7 +66,7 @@ private:
     D3D12_CPU_DESCRIPTOR_HANDLE m_mainRenderTargetDescriptor[APP_NUM_BACK_BUFFERS];
     
     // Frame contexts
-    app::FrameContext m_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
+    FrameContext m_frameContext[APP_NUM_FRAMES_IN_FLIGHT];
     
     // Synchronization
     HANDLE m_fenceEvent;
@@ -76,3 +78,5 @@ private:
     bool m_SwapChainOccluded;
     HANDLE m_hSwapChainWaitableObject;
 };
+
+} // namespace app

@@ -133,7 +133,7 @@ void MemoryManagement::AllocAll() {
 	Alloc_config_manager();
 
 	// Allocate DX12 renderer
-	//Alloc_dx12_renderer();
+	Alloc_dx12_renderer();
 
 	// Allocate DirectX demos
 	Alloc_dx_demos();
@@ -438,23 +438,38 @@ FontManagerWindow* MemoryManagement::Get_FontManagerWindow() const {
  * 
  * @throws std::runtime_error if already allocated or allocation fails
  */
-//void MemoryManagement::Alloc_dx12_renderer() {
-//	// Check if already allocated
-//	if (!bDx12_renderer_allocated) {
-//		// Create new instance
-//		dx12_renderer = std::make_unique<DX12Renderer>();
-//
-//		// Mark as allocated
-//		bDx12_renderer_allocated = true;
-//	} else {
-//		throw std::runtime_error("DX12Renderer is already allocated");
-//	}
-//
-//	// Verify allocation
-//	if (!dx12_renderer) {
-//		throw std::runtime_error("DX12Renderer failed to allocate");
-//	}
-//}
+HRESULT MemoryManagement::Alloc_dx12_renderer() {
+
+    // Check if the ConfigManager is already allocated to prevent double allocation
+    if(m_bDx12_renderer_allocated) {
+        MessageBoxA(NULL, "m_dx12_renderer is already allocated.", "Initialization Error",
+            MB_OK | MB_ICONERROR);
+        return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
+    }
+
+    try {
+        // Create new instance using make_unique
+        // This handles m_memory allocation safely
+        m_dx12_renderer = std::make_unique<DX12Renderer>();
+    } catch(const std::bad_alloc&) {
+        // Handle physical m_memory exhaustion
+        MessageBoxA(NULL, "Failed to allocate m_memory for m_dx12_renderer.", "Memory Error",
+            MB_OK | MB_ICONSTOP);
+        return E_OUTOFMEMORY;
+    }
+
+    // Verify if the unique_ptr holds a valid object
+    if(!m_dx12_renderer) {
+        MessageBoxA(NULL, "m_dx12_renderer pointer is null after allocation.", "Critical Error",
+            MB_OK | MB_ICONERROR);
+        return E_POINTER;
+    }
+
+    // Mark as successfully allocated
+    m_bConfig_manager_allocated = true;
+
+    return S_OK;
+}
 
 /**
  * @brief Gets the DX12Renderer instance
@@ -462,20 +477,20 @@ FontManagerWindow* MemoryManagement::Get_FontManagerWindow() const {
  * @return Raw pointer to DX12Renderer
  * @throws std::runtime_error if not allocated or pointer is null
  */
-//DX12Renderer* MemoryManagement::Get_DX12Renderer() const {
-//	// Check if allocated
-//	if (!bDx12_renderer_allocated) {
-//		throw std::runtime_error("DX12Renderer is not allocated");
-//	}
-//
-//	// Check if pointer is valid
-//	if (!dx12_renderer) {
-//		throw std::runtime_error("dx12_renderer is nullptr!");
-//	}
-//
-//	// Return raw pointer
-//	return dx12_renderer.get();
-//}
+DX12Renderer* MemoryManagement::Get_DX12Renderer() const {
+	// Check if allocated
+	if (!m_bDx12_renderer_allocated) {
+		throw std::runtime_error("m_dx12_renderer is not allocated");
+	}
+
+	// Check if pointer is valid
+	if (!m_dx12_renderer) {
+		throw std::runtime_error("m_dx12_renderer is nullptr!");
+	}
+
+	// Return raw pointer
+	return m_dx12_renderer.get();
+}
 
 /**
 * @brief Allocates the ExampleDescriptorHeapAllocator object

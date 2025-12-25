@@ -3,6 +3,8 @@
 #include "FrameContext.hpp"
 #include "ExampleDescriptorHeapAllocator.hpp"
 
+namespace app {
+
 DX12Renderer::DX12Renderer() :
     m_fenceEvent(nullptr),
     m_fenceLastSignaledValue(0),
@@ -18,7 +20,7 @@ DX12Renderer::~DX12Renderer() {
     CleanupDeviceD3D();
 }
 
-bool DX12Renderer::CreateDeviceD3D(HWND hWnd, app::ExampleDescriptorHeapAllocator* heapAlloc) {
+bool DX12Renderer::CreateDeviceD3D(HWND hWnd, ExampleDescriptorHeapAllocator* heapAlloc) {
     // Setup swap chain
     DXGI_SWAP_CHAIN_DESC1 sd;
     {
@@ -202,8 +204,8 @@ void DX12Renderer::WaitForPendingOperations() {
     ::WaitForSingleObject(m_fenceEvent, INFINITE);
 }
 
-app::FrameContext* DX12Renderer::WaitForNextFrameContext() {
-app::FrameContext* frameContext = &m_frameContext[m_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
+FrameContext* DX12Renderer::WaitForNextFrameContext() {
+FrameContext* frameContext = &m_frameContext[m_frameIndex % APP_NUM_FRAMES_IN_FLIGHT];
     if (m_fence->GetCompletedValue() < frameContext->FenceValue) {
         m_fence->SetEventOnCompletion(frameContext->FenceValue, m_fenceEvent);
         HANDLE waitableObjects[] = { m_hSwapChainWaitableObject, m_fenceEvent };
@@ -395,3 +397,5 @@ app::FrameContext* frameContext = &m_frameContext[m_frameIndex % APP_NUM_FRAMES_
 //
 //    m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
 //}
+
+} // namespace app

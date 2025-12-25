@@ -1,14 +1,15 @@
 # Application Refactoring Summary
 
 ## Overview
-Successfully refactored the application from using global functions in Source.cpp to a proper Object-Oriented design using an App class.
+Successfully refactored the application from using global functions in Source.cpp to a proper Object-Oriented design using an App class. Both `App` and `DX12Renderer` classes are now properly placed in the `app` namespace for consistency with the rest of the codebase.
 
 ## Changes Made
 
-### 1. Created New App Class
+### 1. Created New App Class (in `app` namespace)
 
 #### App.hpp (`code/Include/App.hpp`)
 - Created a comprehensive App class that encapsulates all application state
+- **Placed in `app` namespace** for consistency with other classes
 - Used proper encapsulation with private members
 - Implemented singleton pattern for accessing the App instance from static contexts
 - Key public methods:
@@ -27,13 +28,22 @@ Successfully refactored the application from using global functions in Source.cp
   - `Cleanup()` - Resource cleanup
 
 #### App.cpp (`code/src/App.cpp`)
-- Implemented all App class methods
+- Implemented all App class methods within the `app` namespace
 - Converted global functions to member functions
 - Maintained all original functionality
 - Properly manages lifetime of all subsystems
 - Uses WinRT ComPtr throughout
+- ImGui forward declaration placed outside namespace to avoid linkage issues
 
-### 2. Updated Main.cpp
+### 2. Moved DX12Renderer to `app` namespace
+
+**DX12Renderer.hpp and DX12Renderer.cpp**
+- Moved `DX12Renderer` class into the `app` namespace
+- This provides consistency as all other classes (MemoryManagement, WindowManager, etc.) are in `app`
+- Updated all method signatures to remove `app::` prefix for types within the same namespace
+- Simplified type references within the namespace
+
+### 3. Updated Main.cpp
 
 **Before:**
 ```cpp
@@ -42,7 +52,7 @@ Start(hInstance);
 
 **After:**
 ```cpp
-App app;
+app::App app;
 return app.Run(hInstance);
 ```
 

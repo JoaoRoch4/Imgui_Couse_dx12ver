@@ -14,7 +14,7 @@ class CommandLineArguments;
 class ConsoleWindow;
 class ConsoleInputHandler;
 class ConfigManager;
-// class DX12Renderer;
+class DX12Renderer;
 class DxDemos;
 class DebugWindow;
 class ExampleDescriptorHeapAllocator;
@@ -48,6 +48,7 @@ public:
 	ConsoleInputHandler*  Get_ConsoleInputHandler() const;
 	ConsoleWindow*		  Get_ConsoleWindow() const;
 	DebugWindow*		  Get_DebugWindow() const;
+	DX12Renderer*		  Get_DX12Renderer() const;
 	FontManager*		  Get_FontManager() const;
 	FontManagerWindow*	  Get_FontManagerWindow() const;
 	WindowClass*		  Get_WindowClass() const;
