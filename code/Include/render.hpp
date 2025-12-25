@@ -35,6 +35,8 @@ private:
 	fs::path		  m_currentPath;
 	fs::path		  m_selectedEntry;
 	MemoryManagement* m_memory;
+    bool m_renameDialogOpen;
+    bool m_deleteDialogOpen;
 
 };
 

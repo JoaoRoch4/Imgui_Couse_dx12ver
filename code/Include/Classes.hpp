@@ -19,6 +19,7 @@
 #include "FontManager.hpp"
 #include "FontManagerWindow.hpp"
 #include "FrameContext.hpp"
+#include "Helpers.hpp"
 #include "Globals.hpp"
 #include "render.hpp"
 #include "MemoryManagement.hpp"

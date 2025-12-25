@@ -241,6 +241,7 @@
     <ClCompile Include="code\src\FontManagerWindow.cpp" />
     <ClCompile Include="code\src\FrameContext.cpp" />
     <ClCompile Include="code\src\Globals.cpp" />
+    <ClCompile Include="code\src\Helpers.cpp" />
     <ClCompile Include="code\src\MainWindow.cpp" />
     <ClCompile Include="code\src\MemoryManagement.cpp" />
     <ClCompile Include="code\src\OutputConsole.cpp" />
@@ -574,6 +575,7 @@
     <ClInclude Include="code\Include\FontManagerWindow.hpp" />
     <ClInclude Include="code\Include\FrameContext.hpp" />
     <ClInclude Include="code\Include\Globals.hpp" />
+    <ClInclude Include="code\Include\Helpers.hpp" />
     <ClInclude Include="code\Include\MainWindow.hpp" />
     <ClInclude Include="code\Include\Master.hpp" />
     <ClInclude Include="code\Include\MemoryManagement.hpp" />

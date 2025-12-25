@@ -197,6 +197,9 @@
     <ClCompile Include="code\src\WindowManager.cpp">
       <Filter>local\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\src\Helpers.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\imgui\imconfig.h">
@@ -401,6 +404,9 @@
       <Filter>local\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\Include\WindowManager.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\Helpers.hpp">
       <Filter>local\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

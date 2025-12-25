@@ -18,8 +18,12 @@ void WindowClass::Close() {}
  * @brief Construct a new Window Class object.
  * Initializes m_currentPath to the application's current working directory.
  */
-WindowClass::WindowClass()
-: m_currentPath(fs::current_path()), m_selectedEntry(fs::path{}), m_memory(nullptr) {
+WindowClass::WindowClass() :
+m_currentPath(fs::current_path()),
+m_selectedEntry(fs::path{}),
+m_memory(nullptr),
+m_renameDialogOpen(false),
+m_deleteDialogOpen(false) {
 	m_memory = MemoryManagement::Get_MemoryManagement();
 }
 
@@ -40,26 +44,25 @@ WindowClass::~WindowClass() {
  * @param label The window title displayed in the ImGui title bar.
  */
 void WindowClass::Draw(std::string_view label) {
-	constexpr static auto window_flags{ImGuiWindowFlags_::ImGuiWindowFlags_MenuBar};
+	constexpr static auto window_flags{ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysHorizontalScrollbar
+   | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize};
+
+   ig::SetNextWindowSize(ImVec2(1000.f, 800.f));
+
+
 
 	ImGui::Begin(label.data(), &m_memory->m_bShow_FileSys_window, window_flags);
 	{
-		ig::Spacing();
+        DrawMenu();
 		ig::Separator();
-		DrawMenu();
-		ig::Spacing();
-		ig::Separator();
-
+        DrawContent();	
+        ig::Separator();
 		DrawActions();
 		ig::Spacing();
 		ig::Separator();
 		DrawFilters();
-		ig::Spacing();
-		ig::Separator();
-		DrawContent();
+	
 
-		ig::Spacing();
-		ig::Separator();
 	}
 	ImGui::End();
 }
@@ -121,9 +124,16 @@ void WindowClass::DrawActions() {
 
 	if (fs::is_regular_file(m_selectedEntry) && ig::Button("Open")) OpenFileWithDefaultEditor();
 
-	if (ig::Button("rename")) ig::OpenPopup("rename");
+	if (ig::Button("rename")) {
+		m_renameDialogOpen = true;
+
+		ig::OpenPopup("Rename File");
+	}
 	ig::SameLine();
-	if (ig::Button("delete")) ig::OpenPopup("delete");
+	if (ig::Button("delete")) {
+		m_deleteDialogOpen = true;
+		ig::OpenPopup("Delete File");
+	}
 
 	RenameFilePopUp();
 	DeleteFilePopUp();
@@ -157,7 +167,21 @@ void WindowClass::DrawFilters() {
 /**
  * @brief Placeholder for opening a file with the system's default handler.
  */
-void WindowClass::OpenFileWithDefaultEditor() {}
+void WindowClass::OpenFileWithDefaultEditor() {
+
+#ifdef WIN32
+
+    const auto command = "start \"\" \"" + m_selectedEntry.string() + "\"";
+
+    std::system(command.c_str());
+
+#elifndef WIN32
+
+throw std::runtime_error("not implemented!");
+
+#endif
+
+}
 
 /**
  * @brief Renders the 'Rename' modal popup.
@@ -167,18 +191,24 @@ void WindowClass::RenameFilePopUp() {
 
 	static bool Dialog_open = false;
 
-	if (ig::BeginPopupModal("rename")) {
+	if (ig::BeginPopupModal("Rename File", &m_renameDialogOpen)) {
 		static char buffer_name[512]{'\0'};
 		ig::Text("New Name: ");
 		ig::InputText("###newName", buffer_name, sizeof(buffer_name));
 
-		if (ig::Button("rename")) {
+		if (ig::Button("Rename File")) {
 			auto new_path = m_selectedEntry.parent_path() / buffer_name;
 			if (renameFile(m_selectedEntry, new_path)) {
-				ig::EndPopup();
-				return;
+				m_renameDialogOpen = false;
+				m_selectedEntry	   = new_path;
+				std::memset(buffer_name, 0, sizeof(buffer_name));
 			}
 		}
+		ig::SameLine();
+		{
+			if (ig::Button("Cancel")) m_renameDialogOpen = false;
+		}
+
 		ig::EndPopup();
 	}
 }
@@ -187,7 +217,18 @@ void WindowClass::RenameFilePopUp() {
  * @brief Renders the 'Delete' modal popup.
  */
 void WindowClass::DeleteFilePopUp() {
-	if (ig::BeginPopupModal("delete")) { ig::EndPopup(); }
+	if (ig::BeginPopupModal("Delete File", &m_deleteDialogOpen)) {
+		ig::Text("Are you sure that you want to delete %s?", m_selectedEntry.string().c_str());
+		{
+			if (ig::Button("Yes")) {
+				if (deleteFile(m_selectedEntry)) m_selectedEntry.clear();
+				m_deleteDialogOpen = false;
+			}
+			ig::SameLine();
+			if (ig::Button("No")) m_deleteDialogOpen = false;
+		}
+		ig::EndPopup();
+	}
 }
 
 /**
