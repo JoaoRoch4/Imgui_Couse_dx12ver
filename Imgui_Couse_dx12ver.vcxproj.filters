@@ -200,6 +200,9 @@
     <ClCompile Include="code\src\App.cpp">
       <Filter>local\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\src\StyleManager.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\imgui\imconfig.h">
@@ -409,6 +412,9 @@
     <ClInclude Include="code\Include\App.hpp">
       <Filter>local\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="code\Include\StyleManager.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json" />
@@ -421,5 +427,7 @@
     <None Include="ClassDiagram3.cd" />
     <None Include="REFACTORING_SUMMARY.md" />
     <None Include="FINAL_REFACTORING_SUMMARY.md" />
+    <None Include="IMGUI_CONTEXT_SHUTDOWN_FIX.md" />
+    <None Include="STYLE_EDITOR_SAVE_LOAD_BUTTONS.md" />
   </ItemGroup>
 </Project>

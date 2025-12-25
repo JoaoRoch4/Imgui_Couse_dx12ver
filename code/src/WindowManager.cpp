@@ -23,7 +23,7 @@ namespace app {
  * Ensures safe state before m_window creation
  */
 WindowManager::WindowManager()
-: m_wc(nullptr),		 // Window class pointer (not yet allocated)
+: m_wc{},		 // Window class structure (initialized to zero)
   m_windowRect(nullptr), // Window rectangle pointer (not yet allocated)
   m_hwnd(nullptr),		 // Window handle (not yet created)
   m_main_scale(0.f),     // DPI scale factor (will be calculated)
@@ -46,8 +46,8 @@ WindowManager::WindowManager()
 */
 WindowManager::~WindowManager() {
 
-	m_wc		 = nullptr;
-	m_windowRect = nullptr;
+// m_wc is automatically destroyed as a member object
+m_windowRect = nullptr;
 	m_hwnd		 = nullptr;
 	m_main_scale = 0;
 
@@ -91,34 +91,33 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 	m_main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(
 		::MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY));
 
-	// Create and initialize the m_window class structure
+	// Initialize the m_window class structure
 	// WNDCLASSEX contains m_window class attributes like style and icon
-	WNDCLASSEX wc = {};
-	m_wc		  = &wc;
+	m_wc = {};
 
 	// Size of the structure (required for Windows versioning)
-	m_wc->cbSize = sizeof(WNDCLASSEX);
+	m_wc.cbSize = sizeof(WNDCLASSEX);
 
 	// Window class style flags
 	// CS_HREDRAW: Redraw entire m_window if width changes
 	// CS_VREDRAW: Redraw entire m_window if height changes
-	m_wc->style = CS_HREDRAW | CS_VREDRAW;
+	m_wc.style = CS_HREDRAW | CS_VREDRAW;
 
 	// Pointer to the m_window procedure function that handles messages
-	m_wc->lpfnWndProc = app::App::WndProc;
+	m_wc.lpfnWndProc = app::App::WndProc;
 
 	// Application instance handle
-	m_wc->hInstance = hInstance;
+	m_wc.hInstance = hInstance;
 
 	// Cursor to display when mouse is over m_window (standard arrow)
-	m_wc->hCursor = LoadCursor(NULL, IDC_ARROW);
+	m_wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 
 	// Class name for this m_window type (used to create windows of this class)
-	m_wc->lpszClassName = L"ImGui Example";
+	m_wc.lpszClassName = L"ImGui Example";
 
 	// Register the m_window class with Windows
 	// Must be done before creating windows of this class
-	::RegisterClassEx(m_wc);
+	::RegisterClassEx(&m_wc);
 
 
 	// Check if ANY m_window configuration arguments were passed
@@ -177,7 +176,7 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 	// Lambda function for creating windowed mode
 	// This encapsulates the CreateWindowW call for windowed style
 	auto windowed = [&]() {
-		m_hwnd = ::CreateWindowW(m_wc->lpszClassName,			  // Window class name
+		m_hwnd = ::CreateWindowW(m_wc.lpszClassName,			  // Window class name
 								 L"Dear ImGui DirectX12 Example", // Window title
 								 WS_OVERLAPPEDWINDOW,			  // Window style (with borders)
 								 m_windowX_pos,					  // X position
@@ -186,14 +185,14 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 								 m_scaledHeight,				  // Height (scaled for DPI)
 								 nullptr,						  // Parent m_window (none)
 								 nullptr,						  // Menu (none)
-								 m_wc->hInstance,				  // Application instance
+								 m_wc.hInstance,				  // Application instance
 								 nullptr);						  // Additional data (none)
 	};
 
 	// Lambda function for creating fullscreen mode
 	// This encapsulates the CreateWindowW call for fullscreen style
 	auto fullscreen = [&]() {
-		m_hwnd = ::CreateWindowW(m_wc->lpszClassName,			  // Window class name
+		m_hwnd = ::CreateWindowW(m_wc.lpszClassName,			  // Window class name
 								 L"Dear ImGui DirectX12 Example", // Window title
 								 WS_POPUP,						  // Window style (no borders)
 								 0,								  // X position (top-left)
@@ -202,7 +201,7 @@ bool WindowManager::WMCreateWindow(_In_ HINSTANCE hInstance, CommandLineArgument
 								 GetMonitorHeight(),			  // Height (full monitor)
 								 nullptr,						  // Parent m_window (none)
 								 nullptr,						  // Menu (none)
-								 m_wc->hInstance,				  // Application instance
+								 m_wc.hInstance,				  // Application instance
 								 nullptr);						  // Additional data (none)
 	};
 

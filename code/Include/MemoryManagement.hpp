@@ -14,6 +14,7 @@ class CommandLineArguments;
 class ConsoleWindow;
 class ConsoleInputHandler;
 class ConfigManager;
+class StyleManager;
 class DX12Renderer;
 class DxDemos;
 class DebugWindow;
@@ -54,6 +55,7 @@ public:
 	WindowClass*		  Get_WindowClass() const;
 	WindowManager*		  Get_WindowManager() const;
 	ConfigManager*		  Get_ConfigManager() const;
+	StyleManager*		  Get_StyleManager() const;
 	OutputConsole*		  Get_OutputConsole() const;
 
 
@@ -62,6 +64,7 @@ protected:
 	HRESULT Alloc_console_window();
 	HRESULT Alloc_console_input_handler();
 	HRESULT Alloc_config_manager();
+	HRESULT Alloc_style_manager();
 	HRESULT Alloc_dx12_renderer();
 	HRESULT Alloc_dx_demos();
 	HRESULT Alloc_debug_window();
@@ -86,6 +89,7 @@ private:
 	UPtr<ConsoleWindow>		   m_console_window;
 	UPtr<ConsoleInputHandler>  m_console_input_handler;
 	UPtr<ConfigManager>		   m_config_manager;
+	UPtr<StyleManager>		   m_style_manager;
 	UPtr<DxDemos>			   m_dx_demos;
 	UPtr<DX12Renderer>		   m_dx12_renderer;
 	UPtr<DebugWindow>		   m_debug_window;
@@ -100,6 +104,7 @@ private:
 	bool m_bConsole_window_allocated;
 	bool m_bConsole_input_handler_allocated;
 	bool m_bConfig_manager_allocated;
+	bool m_bStyle_manager_allocated;
 	bool m_bDx12_renderer_allocated;
 	bool m_bDx_demos_allocated;
 	bool m_bDebug_window_allocated;

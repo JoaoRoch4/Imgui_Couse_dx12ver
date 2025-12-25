@@ -40,10 +40,11 @@ void MemoryManagement::Close() {}
 */
 MemoryManagement::MemoryManagement()
 : m_command_line_args(nullptr),
-  m_console_window(nullptr),
-  m_console_input_handler(nullptr),
-  m_config_manager(nullptr),
-  m_dx12_renderer(nullptr),
+m_console_window(nullptr),
+m_console_input_handler(nullptr),
+m_config_manager(nullptr),
+m_style_manager(nullptr),
+m_dx12_renderer(nullptr),
   m_dx_demos(nullptr),
   m_debug_window(nullptr),
   m_Example_Descriptor_Heap_Allocator(nullptr),
@@ -57,6 +58,7 @@ MemoryManagement::MemoryManagement()
   m_bConsole_window_allocated(false),
   m_bConsole_input_handler_allocated(false),
   m_bConfig_manager_allocated(false),
+  m_bStyle_manager_allocated(false),
   m_bDx12_renderer_allocated(false),
   m_bDx_demos_allocated(false),
   m_bDebug_window_allocated(false),
@@ -131,6 +133,8 @@ void MemoryManagement::AllocAll() {
 	Alloc_console_input_handler();
 
 	Alloc_config_manager();
+	
+	Alloc_style_manager();
 
 	// Allocate DX12 renderer
 	Alloc_dx12_renderer();
@@ -318,6 +322,49 @@ HRESULT MemoryManagement::Alloc_config_manager() {
 
 	// Mark as successfully allocated
 	m_bConfig_manager_allocated = true;
+
+	return S_OK;
+}
+
+/**
+* @brief Allocates the StyleManager object
+* 
+* Creates a new StyleManager instance for managing ImGui style configuration
+* with persistent storage using reflectcpp serialization.
+*
+* @return S_OK on successful allocation
+* @return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED) if already allocated
+* @return E_OUTOFMEMORY if memory allocation fails
+* @return E_POINTER if pointer is null after allocation
+*/
+HRESULT MemoryManagement::Alloc_style_manager() {
+	// Check if the StyleManager is already allocated to prevent double allocation
+	if (m_bStyle_manager_allocated) {
+		MessageBoxA(NULL, "StyleManager is already allocated.", "Initialization Error",
+					MB_OK | MB_ICONERROR);
+		return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
+	}
+
+	try {
+		// Create new instance using make_unique
+		// This handles memory allocation safely
+		m_style_manager = std::make_unique<StyleManager>();
+	} catch (const std::bad_alloc&) {
+		// Handle physical memory exhaustion
+		MessageBoxA(NULL, "Failed to allocate memory for StyleManager.", "Memory Error",
+					MB_OK | MB_ICONSTOP);
+		return E_OUTOFMEMORY;
+	}
+
+	// Verify if the unique_ptr holds a valid object
+	if (!m_style_manager) {
+		MessageBoxA(NULL, "StyleManager pointer is null after allocation.", "Critical Error",
+					MB_OK | MB_ICONERROR);
+		return E_POINTER;
+	}
+
+	// Mark as successfully allocated
+	m_bStyle_manager_allocated = true;
 
 	return S_OK;
 }
@@ -751,6 +798,29 @@ ConfigManager* MemoryManagement::Get_ConfigManager() const {
 
 	// Return raw pointer
 	return m_config_manager.get();
+}
+
+/**
+ * @brief Gets the StyleManager instance
+ * 
+ * Returns a raw pointer to the managed StyleManager object.
+ * The object must be allocated via Alloc_style_manager() before calling this.
+ * 
+ * @return Raw pointer to StyleManager
+ * @throws std::runtime_error if not allocated or pointer is null
+ */
+StyleManager* MemoryManagement::Get_StyleManager() const {
+
+	// Check if allocated
+	if (!m_bStyle_manager_allocated) {
+		throw std::runtime_error("m_style_manager is not allocated");
+	}
+
+	// Check if pointer is valid
+	if (!m_style_manager) { throw std::runtime_error("m_style_manager is nullptr!"); }
+
+	// Return raw pointer
+	return m_style_manager.get();
 }
 
 /**

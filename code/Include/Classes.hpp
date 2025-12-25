@@ -11,6 +11,7 @@
 #include "ConsoleWindow.hpp"
 #include "ConsoleInputHandler.hpp"
 #include "ConfigManager.hpp"
+#include "StyleManager.hpp"
 #include "Conv.hpp"
 #include "DX12Renderer.hpp"
 #include "DX12Demos.hpp"

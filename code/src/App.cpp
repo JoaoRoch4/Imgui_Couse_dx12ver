@@ -96,19 +96,9 @@ void App::SetupImGui() {
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
 
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-
-    // Setup scaling
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.ScaleAllSizes(m_window->get_main_scale());
-    style.FontScaleDpi = m_window->get_main_scale() + 0.2f;
-
-    style.Alpha = 0.90f;
-    style.FrameRounding = 4.0f;
-    style.FramePadding = ImVec2(4.0f, 3.0f);
-    style.FrameBorderSize = 1.0f;
-    style.WindowRounding = 5.0f;
+    // Note: Style configuration is handled by StyleManager in MainLoop()
+    // This includes theme selection, scaling, and all visual properties
+    // Do NOT set style properties here to avoid conflicts with StyleManager
 
     ImPlot::CreateContext();
 }
@@ -159,6 +149,16 @@ void App::MainLoop() {
     m_configManager = m_memory->Get_ConfigManager();
     m_configManager->Open();
 
+    // Initialize StyleManager and load saved style settings
+    // Must be called after ImGui::CreateContext() in SetupImGui()
+    StyleManager* styleManager = m_memory->Get_StyleManager();
+    styleManager->Open();
+
+    // Apply DPI scaling after style is loaded
+    // This ensures scaling is applied to the loaded or default style
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.ScaleAllSizes(m_window->get_main_scale());
+    
     // Load the saved clear color (or use default)
     ImVec4 clear_color = m_configManager->GetClearColorAsImVec4();
 
@@ -286,8 +286,108 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
     if (m_memory->m_bShow_FileSys_window) m_window_obj->Tick();
     if (m_memory->m_bShow_Debug_window) m_debug_window->Tick();
     if (m_memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
-    if (m_memory->m_bShow_styleEditor_window) ImGui::ShowStyleEditor();
-    if (m_memory->m_bShow_demo_window) ImGui::ShowDemoWindow(&m_memory->m_bShow_demo_window);
+    
+    // Show style editor window (can be opened from demo window or main menu)
+    if (m_memory->m_bShow_styleEditor_window) {
+        // Create a manual window for the style editor with proper close button
+        ImGui::Begin("Style Editor", &m_memory->m_bShow_styleEditor_window);
+        
+        // Add custom save/load buttons at the top - Load button first
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.5f, 0.8f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.3f, 0.6f, 1.0f));
+        if (ImGui::Button("Load Style Configuration", ImVec2(200, 30))) {
+            StyleManager* styleManager = m_memory->Get_StyleManager();
+            if (styleManager->LoadConfiguration()) {
+                styleManager->ApplyStyleToImGui();
+                m_console->Out << tc::green << "Style configuration loaded successfully!\n" << tc::reset;
+            } else {
+                m_console->Out << tc::red << "Failed to load style configuration!\n" << tc::reset;
+            }
+        }
+        ImGui::PopStyleColor(3);
+        
+        ImGui::SameLine();
+        
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.5f, 0.1f, 1.0f));
+        if (ImGui::Button("Save Style Configuration", ImVec2(200, 30))) {
+            StyleManager* styleManager = m_memory->Get_StyleManager();
+            if (styleManager->SaveConfiguration()) {
+                m_console->Out << tc::green << "Style configuration saved successfully!\n" << tc::reset;
+            } else {
+                m_console->Out << tc::red << "Failed to save style configuration!\n" << tc::reset;
+            }
+        }
+        ImGui::PopStyleColor(3);
+        
+        ImGui::SameLine();
+        ImGui::TextDisabled("(?)");
+        if (ImGui::IsItemHovered()) {
+            ImGui::BeginTooltip();
+            StyleManager* styleManager = m_memory->Get_StyleManager();
+            ImGui::Text("Style config file location:");
+            ImGui::Text("%ls", styleManager->GetConfigFilePath().c_str());
+            ImGui::EndTooltip();
+        }
+        
+        ImGui::Separator();
+        
+        // Add preset theme buttons
+        ImGui::Text("Quick Presets:");
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Dark")) {
+            StyleManager* styleManager = m_memory->Get_StyleManager();
+            styleManager->ApplyPresetDark();
+            m_console->Out << "Applied Dark theme preset\n";
+        }
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Light")) {
+            StyleManager* styleManager = m_memory->Get_StyleManager();
+            styleManager->ApplyPresetLight();
+            m_console->Out << "Applied Light theme preset\n";
+        }
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Classic")) {
+            StyleManager* styleManager = m_memory->Get_StyleManager();
+            styleManager->ApplyPresetClassic();
+            m_console->Out << "Applied Classic theme preset\n";
+        }
+        ImGui::SameLine();
+        ImGui::TextDisabled("(Presets don't auto-save)");
+        
+        ImGui::Separator();
+        ImGui::Spacing();
+        
+        // Show the built-in ImGui style editor
+        ImGui::ShowStyleEditor(nullptr);
+        
+        ImGui::End();
+    }
+    
+    // Show demo window
+    // Note: The demo window has "Tools > Style Editor" menu that will open the style editor
+    // To make it work with our flag, we need to detect when it's opened
+    if (m_memory->m_bShow_demo_window) {
+        ImGui::ShowDemoWindow(&m_memory->m_bShow_demo_window);
+        
+        // Detect if demo window opened the style editor via its menu
+        // When user clicks "Tools > Style Editor" in demo, it creates a window named "Dear ImGui Style Editor"
+        if (!m_memory->m_bShow_styleEditor_window && ImGui::FindWindowByName("Dear ImGui Style Editor")) {
+            m_memory->m_bShow_styleEditor_window = true;
+        }
+    }
+    
+    // If demo window opened the native style editor, we need to manage it separately
+    // Close the native one and use our wrapped version instead
+    if (ImGui::FindWindowByName("Dear ImGui Style Editor") && !m_memory->m_bShow_styleEditor_window) {
+        // Demo window opened it, so set our flag to true
+        m_memory->m_bShow_styleEditor_window = true;
+    }
 
     // Main window with color picker and save functionality
     {

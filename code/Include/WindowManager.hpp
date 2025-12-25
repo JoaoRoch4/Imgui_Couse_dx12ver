@@ -33,7 +33,7 @@ public:
 	bool WMCreateWindowWithArgs(_In_ HINSTANCE hInstance, CommandLineArguments* m_cmdArgs);
 
 
-	inline WNDCLASSEX* GetWc() const { return m_wc; }
+	inline WNDCLASSEX* GetWc() { return &m_wc; }
 
 
 	inline RECT* GetWindowRect() const { return m_windowRect; }
@@ -74,10 +74,10 @@ public:
 	int GetMonitorHeight();
 
 private:
-	bool ApplyDarkModeToTitleBar(HWND hwnd, bool enabled);
+bool ApplyDarkModeToTitleBar(HWND hwnd, bool enabled);
 
-	// Member variables
-	WNDCLASSEX* m_wc; // Pointer to m_window class structure
+// Member variables
+WNDCLASSEX m_wc; // Window class structure
 
 	RECT* m_windowRect; // Pointer to m_window rectangle
 	HWND  m_hwnd;		// Handle to the created m_window

@@ -247,6 +247,7 @@
     <ClCompile Include="code\src\MemoryManagement.cpp" />
     <ClCompile Include="code\src\OutputConsole.cpp" />
     <ClCompile Include="code\src\render.cpp" />
+    <ClCompile Include="code\src\StyleManager.cpp" />
     <ClCompile Include="code\src\WindowManager.cpp" />
     <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -565,6 +566,7 @@
     <ClInclude Include="code\Include\MemoryManagement.hpp" />
     <ClInclude Include="code\Include\OutputConsole.hpp" />
     <ClInclude Include="code\Include\render.hpp" />
+    <ClInclude Include="code\Include\StyleManager.hpp" />
     <ClInclude Include="code\Include\WindowManager.hpp" />
     <ClInclude Include="code\pch\PCH.hpp" />
     <ClInclude Include="external\imgui\backends\imgui_impl_dx12.h" />
@@ -618,7 +620,9 @@
     <None Include="ClassDiagram3.cd" />
     <None Include="cpp.hint" />
     <None Include="FINAL_REFACTORING_SUMMARY.md" />
+    <None Include="IMGUI_CONTEXT_SHUTDOWN_FIX.md" />
     <None Include="REFACTORING_SUMMARY.md" />
+    <None Include="STYLE_EDITOR_SAVE_LOAD_BUTTONS.md" />
     <None Include="vcpkg-configuration.json" />
     <None Include="vcpkg.json" />
   </ItemGroup>
