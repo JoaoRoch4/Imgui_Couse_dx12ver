@@ -59,8 +59,8 @@ void App::Initialize(_In_ HINSTANCE hInstance) {
     m_HeapAlloc = m_memory->Get_ExampleDescriptorHeapAllocator();
     m_window = m_memory->Get_WindowManager();
     
-    // Create DX12 Renderer
-    m_renderer = new DX12Renderer();
+    // Get DX12 Renderer from memory management (uses smart pointer)
+    m_renderer = m_memory->Get_DX12Renderer();
 
     // Open window and initialize DirectX
     OpenWindow(hInstance);
@@ -385,22 +385,32 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
 }
 
 void App::Cleanup() {
-    // Wait for GPU to finish
-    if (m_renderer) {
-        m_renderer->WaitForPendingOperations();
+// Wait for GPU to finish
+if (m_renderer) {
+    m_renderer->WaitForPendingOperations();
+}
+
+// Shutdown ImGui (only if initialized)
+if (ImGui::GetCurrentContext() != nullptr) {
+    // Only shutdown backends if they were initialized
+    if (ImGui::GetIO().BackendRendererUserData != nullptr) {
+        ImGui_ImplDX12_Shutdown();
     }
-
-    // Shutdown ImGui
-    ImGui_ImplDX12_Shutdown();
-    ImGui_ImplWin32_Shutdown();
+    if (ImGui::GetIO().BackendPlatformUserData != nullptr) {
+        ImGui_ImplWin32_Shutdown();
+    }
     ImGui::DestroyContext();
+}
+    
+// Shutdown ImPlot (only if initialized)
+if (ImPlot::GetCurrentContext() != nullptr) {
     ImPlot::DestroyContext();
+}
 
-    // Cleanup renderer
+    // Cleanup renderer (managed by MemoryManagement's smart pointer - don't delete)
     if (m_renderer) {
         m_renderer->CleanupDeviceD3D();
-        delete m_renderer;
-        m_renderer = nullptr;
+        m_renderer = nullptr; // Just clear the pointer, MemoryManagement owns it
     }
 
     // Destroy window
@@ -409,7 +419,7 @@ void App::Cleanup() {
         ::UnregisterClassW(m_window->GetWc()->lpszClassName, m_window->GetWc()->hInstance);
     }
 
-    // Clear all pointers
+    // Clear all pointers (all managed by MemoryManagement)
     m_memory = nullptr;
     m_console = nullptr;
     m_cmdArgs = nullptr;

@@ -420,5 +420,6 @@
     <None Include="ClassDiagram2.cd" />
     <None Include="ClassDiagram3.cd" />
     <None Include="REFACTORING_SUMMARY.md" />
+    <None Include="FINAL_REFACTORING_SUMMARY.md" />
   </ItemGroup>
 </Project>

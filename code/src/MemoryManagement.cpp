@@ -466,7 +466,7 @@ HRESULT MemoryManagement::Alloc_dx12_renderer() {
     }
 
     // Mark as successfully allocated
-    m_bConfig_manager_allocated = true;
+    m_bDx12_renderer_allocated = true;
 
     return S_OK;
 }

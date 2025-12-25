@@ -45,7 +45,7 @@ void DebugWindow::Render() {
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / m_io->Framerate,
 				m_io->Framerate);
 
-	if (ImGui::Button("Debug Break")) __debugbreak();
+	if (ImGui::Button("Debug Break")) __debugbreak(); // this is proposital!
 
 
 	if (bPsOpen) {
