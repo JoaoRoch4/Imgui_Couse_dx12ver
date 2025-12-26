@@ -1,7 +1,6 @@
 #pragma once
 #include "pch.hpp"
 #include "Classes.hpp"
-#include "ImGuiTermcolor.hpp"
 
 namespace app {
 
@@ -12,14 +11,12 @@ class CustomOutput{
 private:
 	ConsoleWindow* m_consoleWindow;
 	std::string m_buffer; // Buffer to accumulate text until newline
-	std::string m_currentColorTag; // Current ImGui color tag
 
 public:
 	CustomOutput();
 	void SetConsoleWindow(ConsoleWindow* consoleWindow);
 
-	
-
+	// Stream manipulator overload (for std::endl, std::flush, etc.)
 	template <class elem = char, class _Traits = std::char_traits<char>>
 	CustomOutput& operator<<(
 		std::basic_ostream<char, std::char_traits<char>>&(__cdecl* _Pfn)(
@@ -43,7 +40,7 @@ public:
 		return *this;
 	}
 
-
+	// Specific overloads for data types (take precedence over template)
 	CustomOutput& operator<<(const long long& valor);
 	CustomOutput& operator<<(const int& valor);
 	CustomOutput& operator<<(const long double& valor);
@@ -52,11 +49,6 @@ public:
 	CustomOutput& operator<<(const wchar_t* dado);
 	CustomOutput& operator<<(const std::string& dado);
 	CustomOutput& operator<<(const std::wstring& dado);
-
-	// ImGui color control methods
-	CustomOutput& SetImGuiColor(const char* colorTag);
-	CustomOutput& ResetImGuiColor();
-	const std::string& GetCurrentColorTag() const { return m_currentColorTag; }
 
 	// Guaranteed output methods - always appear in both consoles
 	void WriteLine(const std::string& message);
@@ -70,12 +62,6 @@ public:
 private:
 	void FlushToConsoleWindow();
 	void ForceFlush(); // Force immediate flush regardless of newline
-
-	/* template<typename Func>
-    auto operator<<(Func&& manipulator) -> decltype(manipulator(std::declval<std::ostream&>()), *this) {
-        manipulator(std::cout);
-        return *this;
-    }*/
 };
 
 class OutputConsole : public Master {

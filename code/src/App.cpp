@@ -26,6 +26,23 @@ App::App() :
     m_style(nullptr) {
     
     s_instance = this;
+
+  
+}
+
+HRESULT App::Alloc() {
+    m_memory = MemoryManagement::Get_MemoryManagement();
+    m_memory->AllocAll();
+
+    m_cmdArgs = m_memory->Get_CommandLineArguments();
+    m_console = m_memory->Get_OutputConsole();
+    m_consoleWindow = m_memory->Get_ConsoleWindow();
+    m_configManager = m_memory->Get_ConfigManager();
+    m_font_manager = m_memory->Get_FontManager();
+    m_font_manager_window = m_memory->Get_FontManagerWindow();
+    m_debug_window = m_memory->Get_DebugWindow();
+
+    return S_OK;
 }
 
 App::~App() {
@@ -34,6 +51,7 @@ App::~App() {
 }
 
 int App::Run(_In_ HINSTANCE hInstance) {
+    Alloc();
     Initialize(hInstance);
     MainLoop();
     return 0;
@@ -41,24 +59,24 @@ int App::Run(_In_ HINSTANCE hInstance) {
 
 void App::Initialize(_In_ HINSTANCE hInstance) {
 // Initialize memory management
-m_memory = MemoryManagement::Get_MemoryManagement();
-m_memory->AllocAll();
 
-m_console = m_memory->Get_OutputConsole();
+
+
+m_cmdArgs->Open();
+
+// Connect OutputConsole with ConsoleWindow BEFORE opening console
+// This ensures all messages appear in both consoles
+m_console->SetConsoleWindow(m_consoleWindow);
+
 m_console->Open();
 
-// Connect OutputConsole with ConsoleWindow so m_console->Out prints to both
-ConsoleWindow* consoleWindow = m_memory->Get_ConsoleWindow();
-m_console->SetConsoleWindow(consoleWindow);
 
 m_console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
 
-m_cmdArgs = m_memory->Get_CommandLineArguments();
 
 m_console->Out << tc::green << "Memory management initialized" << std::endl;
 m_console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 
-    m_configManager = m_memory->Get_ConfigManager();
 
     // Initialize DirectX components
     m_HeapAlloc = m_memory->Get_ExampleDescriptorHeapAllocator();
@@ -76,8 +94,8 @@ m_console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 }
 
 void App::OpenWindow(_In_ HINSTANCE hInstance) {
-    m_cmdArgs->Open();
     m_window->WMCreateWindow(hInstance, m_cmdArgs);
+    m_consoleWindow->Open();
 
     // Initialize Direct3D
     if (!m_renderer->CreateDeviceD3D(m_window->GetHWND(), m_HeapAlloc)) {
@@ -85,10 +103,19 @@ void App::OpenWindow(_In_ HINSTANCE hInstance) {
         ::UnregisterClassW(m_window->GetWc()->lpszClassName, m_window->GetWc()->hInstance);
         throw std::runtime_error("Failed to create D3D12 device");
     }
-
+    m_console->Out << itc::bright_cyan() << std::endl;
+    m_console->Out
+        << "╔════════════════════════════════════════╗\n"
+    << "║    MyApplication v1.0.0                ║\n"
+    << "║    Ready to rock! 🚀                   ║\n"
+        << "╚════════════════════════════════════════╝"
+        << std::endl
+       << itc::reset();
     // Show the window
     ::ShowWindow(m_window->GetHWND(), SW_SHOWMAXIMIZED);
     ::UpdateWindow(m_window->GetHWND());
+
+
 }
 
 void App::SetupImGui() {
@@ -100,6 +127,52 @@ void App::SetupImGui() {
     
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+
+    // Load Arial as the default font with emoji support
+    ImFontConfig config;
+    config.OversampleH = 2;
+    config.OversampleV = 1;
+    
+    // Try to load Arial font from Windows Fonts directory
+    const char* arialPath = "C:\\Windows\\Fonts\\arial.ttf";
+    ImFont* font = m_io->Fonts->AddFontFromFileTTF(arialPath, 16.0f, &config);
+    
+    // Add emoji support by merging Segoe UI Emoji font
+    ImFontConfig emojiConfig;
+    emojiConfig.MergeMode = true;
+    emojiConfig.OversampleH = 2;
+    emojiConfig.OversampleV = 1;
+    emojiConfig.PixelSnapH = true;
+    
+    // Unicode ranges for emoji
+    static const ImWchar emoji_ranges[] = {
+        0x1F300, 0x1F6FF, // Emoticons
+        0x1F900, 0x1F9FF, // Supplemental Symbols and Pictographs
+        0x2600, 0x26FF,   // Miscellaneous Symbols
+        0x2700, 0x27BF,   // Dingbats
+        0xFE00, 0xFE0F,   // Variation Selectors
+        0x1F680, 0x1F6FF, // Transport and Map Symbols
+        0,
+    };
+    
+    const char* emojiPath = "C:\\Windows\\Fonts\\seguiemj.ttf"; // Segoe UI Emoji
+    ImFont* emojiFont = m_io->Fonts->AddFontFromFileTTF(emojiPath, 16.0f, &emojiConfig, emoji_ranges);
+    
+    // Fallback to default font if Arial cannot be loaded
+    if (!font) {
+        m_console->Out << tc::yellow << "Warning: Could not load Arial font, using default font\n" << tc::reset;
+        m_io->Fonts->AddFontDefault(&config);
+    } else {
+        if (emojiFont) {
+            m_console->Out << tc::green << "Successfully loaded Arial with emoji support\n" << tc::reset;
+        } else {
+            m_console->Out << tc::yellow << "Arial loaded but emoji font not available\n" << tc::reset;
+        }
+    }
+    
+    // Note: With DX12 backend, font atlas is built automatically
+    // Do NOT call m_io->Fonts->Build() manually - it will be handled by the backend
+    // m_io->Fonts->Build();  // Removed: causes assertion with ImGuiBackendFlags_RendererHasTextures
 
     // Note: Style configuration is handled by StyleManager in MainLoop()
     // This includes theme selection, scaling, and all visual properties
@@ -136,22 +209,24 @@ void App::SetupImGuiBackend() {
 }
 
 void App::MainLoop() {
-    // Get font manager and initialize
-    m_font_manager = m_memory->Get_FontManager();
-    m_font_manager->GetIo(m_io);
+    
+m_consoleWindow->Tick();
+// Get font manager and initialize
+m_font_manager->GetIo(m_io);
 
-    m_font_manager_window = m_memory->Get_FontManagerWindow();
-    m_font_manager_window->GetAux(m_window->GetHWND(), m_font_manager);
 
-    m_debug_window = m_memory->Get_DebugWindow();
-    m_debug_window->GetIo(m_io);
+m_font_manager_window->GetAux(m_window->GetHWND(), m_font_manager);
 
-    // Load fonts
-    m_font_manager->LoadFonts();
-    m_font_manager->SetDefaultFont();
 
+m_debug_window->GetIo(m_io);
+
+// Auto-load all Windows fonts at startup
+m_console->Out << tc::cyan << "Loading Windows fonts..." << tc::reset << std::endl;
+int fontsLoaded = m_font_manager->LoadFontsFromFolderToMap("C:\\Windows\\Fonts");
+m_console->Out << tc::green << "Successfully loaded " << fontsLoaded << " fonts from Windows\\Fonts" 
+               << tc::reset << std::endl;
+    
     // Initialize ConfigManager and load saved settings
-    m_configManager = m_memory->Get_ConfigManager();
     m_configManager->Open();
 
     // Initialize StyleManager and load saved m_style settings
@@ -175,6 +250,7 @@ void App::MainLoop() {
     m_window_obj = m_memory->Get_WindowClass();
     m_window_obj->Open();
 
+    
     // Track if color was modified this frame
     bool colorModified = false;
 
@@ -201,42 +277,51 @@ void App::MainLoop() {
     // Save configuration on exit
     m_configManager->Close();
     m_console->Out << tc::green << "Configuration saved on exit\n" << tc::reset;
+
+    
 }
 
 bool App::RenderFrame(ImVec4& clear_color, bool& colorModified) {
-    // Handle window occlusion and minimization
-    if ((m_renderer->GetSwapChainOccluded() &&
-         m_renderer->GetSwapChain()->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
-        ::IsIconic(m_window->GetHWND())) {
-        ::Sleep(10);
-        return true;
-    }
-    m_renderer->SetSwapChainOccluded(false);
+// Handle window occlusion and minimization
+if ((m_renderer->GetSwapChainOccluded() &&
+     m_renderer->GetSwapChain()->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED) ||
+    ::IsIconic(m_window->GetHWND())) {
+    ::Sleep(10);
+    return true;
+}
+m_renderer->SetSwapChainOccluded(false);
 
-    // Start ImGui frame
-    ImGui_ImplDX12_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
+// Start ImGui frame
+ImGui_ImplDX12_NewFrame();
+ImGui_ImplWin32_NewFrame();
+ImGui::NewFrame();
 
-    // Render UI
-    RenderUI(clear_color, colorModified);
+// Render UI
+RenderUI(clear_color, colorModified);
 
-    // Rendering
-    ImGui::Render();
+// Rendering
+ImGui::Render();
 
-    // Get frame context and back buffer
-    FrameContext* frameCtx = m_renderer->WaitForNextFrameContext();
-    UINT backBufferIdx = m_renderer->GetSwapChain()->GetCurrentBackBufferIndex();
-    frameCtx->CommandAllocator->Reset();
+// Get frame context and back buffer
+FrameContext* frameCtx = m_renderer->WaitForNextFrameContext();
+UINT backBufferIdx = m_renderer->GetSwapChain()->GetCurrentBackBufferIndex();
+frameCtx->CommandAllocator->Reset();
 
-    // Transition to render target state
-    D3D12_RESOURCE_BARRIER barrier = {};
-    barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-    barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-    barrier.Transition.pResource = m_renderer->GetRenderTarget(backBufferIdx);
-    barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-    barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-    barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+// Validate render target before use
+ID3D12Resource* renderTarget = m_renderer->GetRenderTarget(backBufferIdx);
+if (!renderTarget) {
+    // Render target is invalid, skip this frame
+    return true;
+}
+
+// Transition to render target state
+D3D12_RESOURCE_BARRIER barrier = {};
+barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+barrier.Transition.pResource = renderTarget;
+barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
     m_renderer->GetCommandList()->Reset(frameCtx->CommandAllocator.get(), nullptr);
     m_renderer->GetCommandList()->ResourceBarrier(1, &barrier);
@@ -295,8 +380,8 @@ if (m_memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
     
 // Show console window
 if (m_memory->m_bShow_Console_window) {
-    ConsoleWindow* consoleWindow = m_memory->Get_ConsoleWindow();
-    consoleWindow->ShowExampleAppConsole(&m_memory->m_bShow_Console_window);
+    m_consoleWindow = m_memory->Get_ConsoleWindow();
+    m_consoleWindow->ShowExampleAppConsole(&m_memory->m_bShow_Console_window);
 }
     
 // Show m_style editor window (can be opened from demo window or main menu)
@@ -568,6 +653,8 @@ if (ImPlot::GetCurrentContext() != nullptr) {
     m_window_obj = nullptr;
 }
 
+
+
 LRESULT WINAPI App::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) {
         return true;
@@ -581,6 +668,9 @@ LRESULT WINAPI App::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_SIZE:
         if (app->m_renderer && app->m_renderer->GetDevice() != nullptr && wParam != SIZE_MINIMIZED) {
+            // Wait for GPU to finish all pending operations before resizing
+            app->m_renderer->WaitForPendingOperations();
+            
             app->m_renderer->CleanupRenderTarget();
             DXGI_SWAP_CHAIN_DESC1 desc = {};
             app->m_renderer->GetSwapChain()->GetDesc1(&desc);
@@ -590,8 +680,19 @@ LRESULT WINAPI App::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 static_cast<UINT>(HIWORD(lParam)),
                 desc.Format,
                 desc.Flags);
-            IM_ASSERT(!FAILED(result) && "Failed to resize swapchain.");
-            app->m_renderer->CreateRenderTarget();
+            
+            // Only recreate render targets if resize succeeded
+            if (SUCCEEDED(result)) {
+                app->m_renderer->CreateRenderTarget();
+            } else {
+                // If resize failed, recreate with current swap chain buffers
+                // This handles cases like monitor changes where resize may fail temporarily
+                if (app->m_console) {
+                    app->m_console->Out << tc::yellow << "ResizeBuffers failed (HRESULT: 0x" 
+                                       << std::hex << result << std::dec << "), recreating targets with current buffers\n" << tc::reset;
+                }
+                app->m_renderer->CreateRenderTarget();
+            }
         }
         return 0;
         

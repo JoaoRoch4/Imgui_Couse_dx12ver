@@ -8,7 +8,7 @@
 #include "PCH.hpp"
 
 // Include base class definition
-#include "MemoryManagement.hpp"
+#include "Master.hpp"
 namespace app {
 /**
  * @brief Class that handles command line argument parsing
@@ -21,7 +21,7 @@ namespace app {
  * - Console mode (-cmd)
  */
 
-class CommandLineArguments : public MemoryManagement {
+class CommandLineArguments : public Master {
 public:
 	// Constructor - Initializes all member variables
 	CommandLineArguments();
@@ -84,12 +84,6 @@ private:
      */
 	int GetInitArgs();
 
-	/**
-     * @brief Converts a wide string to lowercase
-     * @param s The string to convert
-     * @return The lowercase version of the string
-     */
-	std::wstring toLower(std::wstring s);
 
 	// Map storing argument name (lowercase) -> index in szArgList
 	std::map<std::wstring, uint64_t> Args;
@@ -105,6 +99,8 @@ private:
 
 	void ShowConsole();
 
+    class MemoryManagement* m_memory;
+
 public:
 	// Getter for m_console launched flag
 	inline bool GetbConsoleLaunched() const { return bConsoleLaunched; }
@@ -114,7 +110,6 @@ public:
 		bConsoleLaunched = bisConsoleLaunched;
 	}
 
-private:
 	bool m_bShowCmd;
 	bool m_bShowHelp;
 	bool m_bShowArgs;

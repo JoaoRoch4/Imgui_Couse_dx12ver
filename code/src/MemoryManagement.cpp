@@ -78,7 +78,8 @@ m_dx12_renderer(nullptr),
   m_bOutput_console_allocated(false),
   m_io(nullptr),
   bIoPassed(false),
-  m_clear_color_ptr(nullptr)
+  m_clear_color_ptr(nullptr),
+  m_currentConsoleColor(ImGuiConsoleColor::Reset)
 
 {}
 

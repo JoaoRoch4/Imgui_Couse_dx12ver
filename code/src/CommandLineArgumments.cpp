@@ -4,7 +4,10 @@
 namespace app {
 
 CommandLineArguments::CommandLineArguments()
-: Args{}, szArgList(nullptr), argCount(0), bConsoleLaunched(false) {}
+: Args{}, szArgList(nullptr), argCount(0), bConsoleLaunched(false), m_memory(nullptr){
+
+    m_memory = MemoryManagement::Get_MemoryManagement(); //m_cmd = m_memory->Get_OutputConsole();
+}
 
 CommandLineArguments::~CommandLineArguments() { LocalFree(szArgList); }
 
@@ -14,12 +17,16 @@ void CommandLineArguments::Open() {
 	if (m_bShowCmd && (HasArgument(L"-help"))) m_bShowHelp = true;
 	if (m_bShowCmd && (HasArgument(L"-Args"))) m_bShowArgs = true;
 
-	if (m_bShowCmd) ShowCmd();
+    m_memory->m_bShowCmd = this->m_bShowCmd;
+    m_memory->m_bShowHelp = this->m_bShowHelp;
+    m_memory->m_bShowArgs = this->m_bShowArgs;
+
+	//if (m_bShowCmd) ShowCmd();
 }
 
 void CommandLineArguments::Tick() {}
 
-void CommandLineArguments::Close() { this->~CommandLineArguments(); }
+void CommandLineArguments::Close() { }
 
 /**
  * Checks if a specific argument exists in the command line
@@ -33,7 +40,7 @@ void CommandLineArguments::Close() { this->~CommandLineArguments(); }
 bool CommandLineArguments::HasArgument(const std::wstring& arg) {
 
 	// Convert argument to lowercase for case-insensitive comparison
-	std::wstring lowerArg = toLower(arg);
+	std::wstring lowerArg = Helpers::strtoLowerW(arg);
 
 	// Check if the argument exists in the Args map
 	// find() returns an iterator; if it equals end(), the argument wasn't found
@@ -55,7 +62,7 @@ std::wstring CommandLineArguments::GetArgumentValue(const std::wstring& arg,
 													const std::wstring& defaultValue) {
 
 	// Convert argument to lowercase
-	std::wstring lowerArg = toLower(arg);
+	std::wstring lowerArg = Helpers::strtoLowerW(arg);
 
 	// Try to find the argument in the map
 	auto it = Args.find(lowerArg);
@@ -89,7 +96,7 @@ int CommandLineArguments::GetInitArgs() {
 
 	std::cout << "arguments passed: " << argCount;
 
-	for (int i = 0; i < argCount; i++) { Args.insert(std::make_pair(toLower(szArgList[i]), i)); }
+	for (int i = 0; i < argCount; i++) { Args.insert(std::make_pair(Helpers::strtoLowerW(szArgList[i]), i)); }
 
 
 	return 0;
@@ -134,7 +141,10 @@ int CommandLineArguments::GetArgumentValueInt(const std::wstring& arg, int defau
  */
 void CommandLineArguments::PrintHelp() {
 
-	OutputConsole* cmd = MemoryManagement::Get_MemoryManagement()->Get_OutputConsole();
+    if(!m_bShowCmd) return;
+
+
+	OutputConsole* cmd = m_memory->Get_OutputConsole();
 	// Print header
 	cmd->Out << tc::bright_blue;
 	cmd->Out << L"\n=== Command Line Arguments ===" << std::endl;
@@ -172,6 +182,8 @@ void CommandLineArguments::PrintHelp() {
 
 void CommandLineArguments::ShowCmd() {
 
+    if(!m_bShowCmd) return;
+
 	ShowConsole();
 
 	std::cout << "\nThis message appears in the new m_console m_window.\n" << std::endl;
@@ -183,10 +195,7 @@ void CommandLineArguments::ShowCmd() {
 }
 
 
-std::wstring CommandLineArguments::toLower(std::wstring s) {
-	std::transform(s.begin(), s.end(), s.begin(), [](wchar_t c) { return std::tolower(c); });
-	return s;
-}
+
 
 void CommandLineArguments::ShowConsole() {}
 } // namespace app

@@ -9,6 +9,7 @@ public:
 
     std::string WStrToStr(const wstr& Txt);
     std::string WStrToStr(const wchar_t* Txt);
+
 };
 
 class ConvStatic {

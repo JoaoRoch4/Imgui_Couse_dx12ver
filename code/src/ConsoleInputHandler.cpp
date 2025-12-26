@@ -4,6 +4,11 @@
 
 #include "PCH.hpp"
 #include "ConsoleInputHandler.hpp"
+#include "App.hpp"
+#include "DX12Renderer.hpp"
+#include <psapi.h>
+#include <iomanip>
+#include <dxgi1_4.h>
 namespace app {
 /**
  * @brief Default constructor - Initializes all member variables
@@ -30,7 +35,7 @@ ConsoleInputHandler::ConsoleInputHandler()
 	m_commandDescriptions["clear"]	= "Clear the m_console screen";
 	m_commandDescriptions["exit"]	= "Exit the application";
 	m_commandDescriptions["quit"]	= "Exit the application (alias for exit)";
-	m_commandDescriptions["status"] = "Show current application status";
+	m_commandDescriptions["status"] = "Show comprehensive application status (ImGui, Memory, System)";
 	m_commandDescriptions["echo"]	= "Echo the text you type (usage: echo <text>)";
 }
 
@@ -376,12 +381,8 @@ void ConsoleInputHandler::ProcessCommand(const std::string& command) {
 	}
 	// Check for "status" command
 	else if (lowerCommand == "status") {
-		// Display current application status
-		std::cout << "\n=== Application Status ===" << std::endl;
-		std::cout << "Console Input Handler: " << (m_bIsRunning ? "Running" : "Stopped")
-				  << std::endl;
-		std::cout << "Commands in Queue: " << m_commandQueue.size() << std::endl;
-		std::cout << "=========================\n" << std::endl;
+		// Display comprehensive application status
+		ShowStatus();
 	}
 	// Check for "echo" command (echoes back the text)
 	else if (lowerCommand.substr(0, 5) == "echo ") {
@@ -470,6 +471,174 @@ void ConsoleInputHandler::ListCommands() {
 
 	// Print newline at the end
 	std::cout << "\n" << std::endl;
+}
+
+/**
+ * @brief Shows comprehensive application status information
+ * 
+ * Displays detailed information about:
+ * - Console Input Handler state
+ * - Application subsystems
+ * - DirectX 12 renderer status
+ * - ImGui context state
+ * - Memory management
+ * - Window information
+ * - Configuration status
+ */
+void ConsoleInputHandler::ShowStatus() {
+	auto app = app::App::GetInstance();
+	if (!app) {
+		std::cout << "\n[ERROR] Application instance not available!\n" << std::endl;
+		return;
+	}
+
+	std::cout << "\n" << std::string(60, '=') << std::endl;
+	std::cout << "           APPLICATION STATUS REPORT" << std::endl;
+	std::cout << std::string(60, '=') << std::endl;
+
+	// Console Input Handler Status
+	std::cout << "\n[CONSOLE INPUT HANDLER]" << std::endl;
+	std::cout << "  Status: " << (m_bIsRunning ? "\033[32mRunning\033[0m" : "\033[31mStopped\033[0m") << std::endl;
+	std::cout << "  Commands in Queue: " << m_commandQueue.size() << std::endl;
+	std::cout << "  Input Thread: " << (m_inputThread.joinable() ? "Active" : "Inactive") << std::endl;
+
+	// DirectX 12 Renderer Status
+	std::cout << "\n[DIRECTX 12 RENDERER]" << std::endl;
+	auto renderer = app->GetRenderer();
+	if (renderer && renderer->GetDevice()) {
+		std::cout << "  Device: \033[32mInitialized\033[0m" << std::endl;
+		
+		// Get adapter information
+		ComPtr<IDXGIFactory4> factory;
+		if (SUCCEEDED(CreateDXGIFactory1(IID_PPV_ARGS(factory.put())))) {
+			ComPtr<IDXGIAdapter1> adapter;
+			if (SUCCEEDED(factory->EnumAdapters1(0, adapter.put()))) {
+				DXGI_ADAPTER_DESC1 desc;
+				adapter->GetDesc1(&desc);
+				
+				// Convert wide string to string for console output
+				std::wstring wAdapterName(desc.Description);
+				std::wcout << "  GPU: " << wAdapterName << std::endl;
+				
+				// Video Memory
+				std::cout << "  Dedicated Video Memory: " << (desc.DedicatedVideoMemory / (1024 * 1024)) << " MB" << std::endl;
+				std::cout << "  Dedicated System Memory: " << (desc.DedicatedSystemMemory / (1024 * 1024)) << " MB" << std::endl;
+				std::cout << "  Shared System Memory: " << (desc.SharedSystemMemory / (1024 * 1024)) << " MB" << std::endl;
+				std::cout << "  Vendor ID: 0x" << std::hex << std::uppercase << desc.VendorId << std::dec << std::endl;
+				std::cout << "  Device ID: 0x" << std::hex << std::uppercase << desc.DeviceId << std::dec << std::endl;
+			}
+		}
+		
+		// Swap Chain Info
+		if (renderer->GetSwapChain()) {
+			DXGI_SWAP_CHAIN_DESC1 swapChainDesc;
+			renderer->GetSwapChain()->GetDesc1(&swapChainDesc);
+			
+			std::cout << "  Swap Chain Format: " << swapChainDesc.Format << std::endl;
+			std::cout << "  Swap Chain Buffers: " << swapChainDesc.BufferCount << std::endl;
+			std::cout << "  Swap Chain Size: " << swapChainDesc.Width << "x" << swapChainDesc.Height << std::endl;
+			std::cout << "  Tearing Support: " << (renderer->GetSwapChainTearingSupport() ? "Yes" : "No") << std::endl;
+			std::cout << "  Occluded: " << (renderer->GetSwapChainOccluded() ? "Yes" : "No") << std::endl;
+		}
+		
+		// Frame sync info
+		std::cout << "  Frame Index: " << renderer->GetFrameIndex() << std::endl;
+		std::cout << "  Fence Value: " << renderer->GetFenceLastSignaledValue() << std::endl;
+		
+		// Command Queue
+		if (renderer->GetCommandQueue()) {
+			std::cout << "  Command Queue: \033[32mActive\033[0m" << std::endl;
+		}
+		
+		// Command List
+		if (renderer->GetCommandList()) {
+			std::cout << "  Command List: \033[32mActive\033[0m" << std::endl;
+		}
+		
+		// Descriptor Heaps
+		if (renderer->GetSrvDescHeap()) {
+			D3D12_DESCRIPTOR_HEAP_DESC heapDesc = renderer->GetSrvDescHeap()->GetDesc();
+			std::cout << "  SRV Heap Descriptors: " << heapDesc.NumDescriptors << std::endl;
+			std::cout << "  SRV Heap Type: " << heapDesc.Type << std::endl;
+		}
+		
+		// Render Targets
+		int validRenderTargets = 0;
+		for (UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++) {
+			if (renderer->GetRenderTarget(i)) {
+				validRenderTargets++;
+			}
+		}
+		std::cout << "  Render Targets: " << validRenderTargets << "/" << APP_NUM_BACK_BUFFERS << std::endl;
+		
+	} else {
+		std::cout << "  Device: \033[31mNot Initialized\033[0m" << std::endl;
+	}
+
+	// ImGui Status
+	std::cout << "\n[IMGUI CONTEXT]" << std::endl;
+	if (ImGui::GetCurrentContext()) {
+		ImGuiIO& io = ImGui::GetIO();
+		std::cout << "  Context: \033[32mInitialized\033[0m" << std::endl;
+		std::cout << "  Frame Count: " << ImGui::GetFrameCount() << std::endl;
+		std::cout << "  FPS: " << std::fixed << std::setprecision(1) << io.Framerate << std::endl;
+		std::cout << "  Delta Time: " << std::fixed << std::setprecision(4) << io.DeltaTime << "s" << std::endl;
+		std::cout << "  Display Size: " << (int)io.DisplaySize.x << "x" << (int)io.DisplaySize.y << std::endl;
+		std::cout << "  Mouse Position: (" << (int)io.MousePos.x << ", " << (int)io.MousePos.y << ")" << std::endl;
+		std::cout << "  Config Flags: 0x" << std::hex << io.ConfigFlags << std::dec << std::endl;
+		std::cout << "  Backend Platform: " << (io.BackendPlatformName ? io.BackendPlatformName : "None") << std::endl;
+		std::cout << "  Backend Renderer: " << (io.BackendRendererName ? io.BackendRendererName : "None") << std::endl;
+		std::cout << "  Fonts Loaded: " << io.Fonts->Fonts.Size << std::endl;
+	} else {
+		std::cout << "  Context: \033[31mNot Initialized\033[0m" << std::endl;
+	}
+
+	// ImPlot Status
+	std::cout << "\n[IMPLOT CONTEXT]" << std::endl;
+	if (ImPlot::GetCurrentContext()) {
+		std::cout << "  Context: \033[32mInitialized\033[0m" << std::endl;
+	} else {
+		std::cout << "  Context: \033[31mNot Initialized\033[0m" << std::endl;
+	}
+
+	// Memory Info
+	std::cout << "\n[MEMORY STATUS]" << std::endl;
+	MEMORYSTATUSEX memInfo;
+	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+	if (GlobalMemoryStatusEx(&memInfo)) {
+		std::cout << "  Physical Memory Usage: " << memInfo.dwMemoryLoad << "%" << std::endl;
+		std::cout << "  Total Physical: " << (memInfo.ullTotalPhys / (1024 * 1024)) << " MB" << std::endl;
+		std::cout << "  Available Physical: " << (memInfo.ullAvailPhys / (1024 * 1024)) << " MB" << std::endl;
+		std::cout << "  Total Virtual: " << (memInfo.ullTotalVirtual / (1024 * 1024)) << " MB" << std::endl;
+		std::cout << "  Available Virtual: " << (memInfo.ullAvailVirtual / (1024 * 1024)) << " MB" << std::endl;
+	}
+
+	// Process Memory
+	PROCESS_MEMORY_COUNTERS_EX pmc;
+	if (GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))) {
+		std::cout << "  Process Working Set: " << (pmc.WorkingSetSize / (1024 * 1024)) << " MB" << std::endl;
+		std::cout << "  Process Private Bytes: " << (pmc.PrivateUsage / (1024 * 1024)) << " MB" << std::endl;
+		std::cout << "  Page Fault Count: " << pmc.PageFaultCount << std::endl;
+	}
+
+	// System Time
+	std::cout << "\n[SYSTEM INFORMATION]" << std::endl;
+	auto now = std::chrono::system_clock::now();
+	auto time = std::chrono::system_clock::to_time_t(now);
+	std::cout << "  Current Time: " << std::ctime(&time);
+	
+	// CPU Info
+	SYSTEM_INFO sysInfo;
+	GetSystemInfo(&sysInfo);
+	std::cout << "  Processor Count: " << sysInfo.dwNumberOfProcessors << std::endl;
+	std::cout << "  Page Size: " << (sysInfo.dwPageSize / 1024) << " KB" << std::endl;
+
+	// Thread Count
+	std::cout << "  Hardware Concurrency: " << std::thread::hardware_concurrency() << std::endl;
+
+	std::cout << "\n" << std::string(60, '=') << std::endl;
+	std::cout << "           END OF STATUS REPORT" << std::endl;
+	std::cout << std::string(60, '=') << "\n" << std::endl;
 }
 
 /**
