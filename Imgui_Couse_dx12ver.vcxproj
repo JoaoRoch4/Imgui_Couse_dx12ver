@@ -541,7 +541,6 @@
       <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
     </ClCompile>
     <ClCompile Include="code\src\StyleConfiguration.cpp" />
-    <ClCompile Include="ImGuiTermcolor_Examples.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\Include\App.hpp" />
@@ -619,6 +618,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
+    <None Include="CONSOLEWINDOW_FIX_MANUAL.md" />
+    <None Include="CONSOLE_PERSISTENT_COLOR_FIX.md" />
     <None Include="cpp.hint" />
     <None Include="vcpkg-configuration.json" />
     <None Include="vcpkg.json" />

@@ -151,6 +151,10 @@ void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 		}
 	History.push_back(Wcsdup(command_line));
 
+	// Convert command to lowercase for case-insensitive comparison
+	std::string command_lower = utf8_buf;
+	std::transform(command_lower.begin(), command_lower.end(), command_lower.begin(), ::tolower);
+
 	// Process command (use utf8_buf for comparisons)
 	// Command dispatch table - much more efficient than if-else ladder
 	static const std::unordered_map<std::string, std::function<void(ConsoleWindow*)>> commandHandlers = {
@@ -215,8 +219,9 @@ void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 		}}
 	};
 	
+	
 	// Look up and execute command - O(1) hash lookup instead of O(n) comparisons
-	auto it = commandHandlers.find(utf8_buf);
+	auto it = commandHandlers.find(command_lower);
 	if(it != commandHandlers.end()) {
 		it->second(this);
 	} else {

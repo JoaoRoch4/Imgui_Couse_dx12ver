@@ -1,0 +1,507 @@
+
+================================================================================
+Console Log Session Started: 2025-12-26 12:20:12
+================================================================================
+[2025-12-26 12:20:12.577] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 12:20:12.578] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 12:20:12.676] Console Window Created![2025-12-26 12:20:12.677] Font size set to 24![2025-12-26 12:20:13.335] === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 12:20:21.290] # commands
+[2025-12-26 12:20:21.290] [info] 📜 Available commands:
+[2025-12-26 12:20:21.290] [cmd]   ▸ clear
+[2025-12-26 12:20:21.290] [cmd]   ▸ commands
+[2025-12-26 12:20:21.290] [cmd]   ▸ demo
+[2025-12-26 12:20:21.290] [cmd]   ▸ exit
+[2025-12-26 12:20:21.290] [cmd]   ▸ help
+[2025-12-26 12:20:21.290] [cmd]   ▸ hide cmd
+[2025-12-26 12:20:21.290] [cmd]   ▸ history
+[2025-12-26 12:20:21.290] [cmd]   ▸ quit
+[2025-12-26 12:20:21.290] [cmd]   ▸ show cmd
+[2025-12-26 12:20:21.291] [cmd]   ▸ status
+
+================================================================================
+Console Log Session Started: 2025-12-26 12:21:05
+================================================================================
+[2025-12-26 12:21:05.549] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 12:21:05.549] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 12:21:05.630] Console Window Created![2025-12-26 12:21:05.631] Font size set to 24![2025-12-26 12:21:06.289] === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 12:21:12.577] # commands
+[2025-12-26 12:21:12.577] [info] 📜 Available commands:
+[2025-12-26 12:21:12.577] [cmd]   ▸ clear
+[2025-12-26 12:21:12.577] [cmd]   ▸ commands
+[2025-12-26 12:21:12.577] [cmd]   ▸ demo
+[2025-12-26 12:21:12.577] [cmd]   ▸ exit
+[2025-12-26 12:21:12.578] [cmd]   ▸ help
+[2025-12-26 12:21:12.578] [cmd]   ▸ hide cmd
+[2025-12-26 12:21:12.578] [cmd]   ▸ history
+[2025-12-26 12:21:12.578] [cmd]   ▸ quit
+[2025-12-26 12:21:12.578] [cmd]   ▸ show cmd
+[2025-12-26 12:21:12.578] [cmd]   ▸ status
+
+================================================================================
+Console Log Session Started: 2025-12-26 12:22:43
+================================================================================
+[2025-12-26 12:22:43.093] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 12:22:43.093] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 12:22:43.208] Console Window Created![2025-12-26 12:22:43.209] Font size set to 24![2025-12-26 12:22:43.869] === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 12:22:50.309] # commands
+[2025-12-26 12:22:50.309] [info] 📜 Available commands:
+[2025-12-26 12:22:50.309] [cmd]   ▸ clear
+[2025-12-26 12:22:50.309] [cmd]   ▸ commands
+[2025-12-26 12:22:50.309] [cmd]   ▸ demo
+[2025-12-26 12:22:50.309] [cmd]   ▸ exit
+[2025-12-26 12:22:50.309] [cmd]   ▸ help
+[2025-12-26 12:22:50.309] [cmd]   ▸ hide cmd
+[2025-12-26 12:22:50.309] [cmd]   ▸ history
+[2025-12-26 12:22:50.309] [cmd]   ▸ quit
+[2025-12-26 12:22:50.309] [cmd]   ▸ show cmd
+[2025-12-26 12:22:50.309] [cmd]   ▸ status
+
+================================================================================
+Console Log Session Started: 2025-12-26 12:25:01
+================================================================================
+[2025-12-26 12:25:01.284] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 12:25:01.284] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 12:25:01.364] Console Window Created![2025-12-26 12:25:01.365] Font size set to 24![2025-12-26 12:25:02.023] === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 12:25:13.433] # commands
+[2025-12-26 12:25:13.433] [info] 📜 Available commands:
+[2025-12-26 12:25:13.433] [cmd]   ▸ clear
+[2025-12-26 12:25:13.433] [cmd]   ▸ commands
+[2025-12-26 12:25:13.433] [cmd]   ▸ demo
+[2025-12-26 12:25:13.433] [cmd]   ▸ exit
+[2025-12-26 12:25:13.433] [cmd]   ▸ help
+[2025-12-26 12:25:13.433] [cmd]   ▸ hide cmd
+[2025-12-26 12:25:13.433] [cmd]   ▸ history
+[2025-12-26 12:25:13.433] [cmd]   ▸ quit
+[2025-12-26 12:25:13.433] [cmd]   ▸ show cmd
+[2025-12-26 12:25:13.433] [cmd]   ▸ status
+[2025-12-26 12:25:38.836] # show cmd
+[2025-12-26 12:25:38.850] [success] 👁️ Console window shown
+[2025-12-26 12:25:50.891] # hide cmd
+[2025-12-26 12:25:50.892] [success] 🙈 Console window hidden
+[2025-12-26 12:26:34.816] # [success] ✨ Welcome to Dear ImGui Console! 🎮  [info] 📋 Type 'help' or 'commands' to get started.  Console Window Created! Font size set to 24! === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000 # commands  
+[2025-12-26 12:26:34.816] [error] ❌ Unknown command: '[success] ✨ Welcome to Dear ImGui Console! 🎮  [info] 📋 Type 'help' or 'commands' to get started.  Console Window Created! Font size set to 24! === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000 # commands  '
+[2025-12-26 12:26:42.951] # ❤️
+[2025-12-26 12:26:42.951] [error] ❌ Unknown command: '❤️'
+[2025-12-26 12:26:48.311] # ❤
+[2025-12-26 12:26:48.311] [error] ❌ Unknown command: '❤'
+[2025-12-26 12:27:11.834] # help
+[2025-12-26 12:27:11.834] [info] ❓ Available Commands:
+[2025-12-26 12:27:11.834] [cmd]   ▸ clear
+[2025-12-26 12:27:11.834] [cmd]   ▸ commands
+[2025-12-26 12:27:11.834] [cmd]   ▸ demo
+[2025-12-26 12:27:11.834] [cmd]   ▸ exit
+[2025-12-26 12:27:11.834] [cmd]   ▸ help
+[2025-12-26 12:27:11.834] [cmd]   ▸ hide cmd
+[2025-12-26 12:27:11.834] [cmd]   ▸ history
+[2025-12-26 12:27:11.834] [cmd]   ▸ quit
+[2025-12-26 12:27:11.835] [cmd]   ▸ show cmd
+[2025-12-26 12:27:11.835] [cmd]   ▸ status
+[2025-12-26 12:27:23.436] # status
+[2025-12-26 12:27:23.436] [info] 📊 Generating status report...
+[2025-12-26 12:27:23.436] ============================================================[2025-12-26 12:27:23.436]            APPLICATION STATUS REPORT[2025-12-26 12:27:23.436] ============================================================[2025-12-26 12:27:23.436] 
+[DIRECTX 12 RENDERER][2025-12-26 12:27:23.436]   Device: Initialized[2025-12-26 12:27:23.437]   GPU: NVIDIA GeForce RTX 3060[2025-12-26 12:27:23.437]   Dedicated Video Memory: 12110 MB[2025-12-26 12:27:23.437]   Dedicated System Memory: 0 MB[2025-12-26 12:27:23.437]   Shared System Memory: 16313 MB[2025-12-26 12:27:23.437]   Vendor ID: 0x10DE[2025-12-26 12:27:23.438]   Device ID: 0x2487[2025-12-26 12:27:23.438]   Swap Chain Format: 28[2025-12-26 12:27:23.438]   Swap Chain Buffers: 2[2025-12-26 12:27:23.438]   Swap Chain Size: 2560x1009[2025-12-26 12:27:23.438]   Tearing Support: Yes[2025-12-26 12:27:23.439]   Occluded: No[2025-12-26 12:27:23.439]   Frame Index: 8378[2025-12-26 12:27:23.439]   Fence Value: 8382[2025-12-26 12:27:23.439]   Command Queue: Active[2025-12-26 12:27:23.439]   Command List: Active[2025-12-26 12:27:23.440]   SRV Heap Descriptors: 64[2025-12-26 12:27:23.440]   SRV Heap Type: 0[2025-12-26 12:27:23.440]   Render Targets: 2/2[2025-12-26 12:27:23.440] 
+[IMGUI CONTEXT][2025-12-26 12:27:23.440]   Context: Initialized[2025-12-26 12:27:23.440]   Frame Count: 8379[2025-12-26 12:27:23.441]   FPS: 75.0[2025-12-26 12:27:23.441]   Delta Time: 0.0136s[2025-12-26 12:27:23.441]   Display Size: 2560x1009[2025-12-26 12:27:23.441]   Mouse Position: (593, 746)[2025-12-26 12:27:23.441]   Backend Platform: imgui_impl_win32[2025-12-26 12:27:23.441]   Backend Renderer: imgui_impl_dx12[2025-12-26 12:27:23.442]   Fonts Loaded: 327[2025-12-26 12:27:23.442] 
+[IMPLOT CONTEXT][2025-12-26 12:27:23.442]   Context: Initialized[2025-12-26 12:27:23.442] 
+[MEMORY STATUS][2025-12-26 12:27:23.442]   Physical Memory Usage: 64%[2025-12-26 12:27:23.443]   Total Physical: 32626 MB[2025-12-26 12:27:23.443]   Available Physical: 11425 MB[2025-12-26 12:27:23.443]   Total Virtual: 134217727 MB[2025-12-26 12:27:23.443]   Available Virtual: 134211759 MB[2025-12-26 12:27:23.444]   Process Working Set: 475 MB[2025-12-26 12:27:23.444]   Process Private Bytes: 480 MB[2025-12-26 12:27:23.444]   Page Fault Count: 127180[2025-12-26 12:27:23.444] 
+[SYSTEM INFORMATION][2025-12-26 12:27:23.444]   Current Time: Fri Dec 26 12:27:23 2025[2025-12-26 12:27:23.444]   Processor Count: 8[2025-12-26 12:27:23.445]   Page Size: 4 KB[2025-12-26 12:27:23.445]   Hardware Concurrency: 8[2025-12-26 12:27:23.445] 
+============================================================[2025-12-26 12:27:23.445]            END OF STATUS REPORT[2025-12-26 12:27:23.446] ============================================================[2025-12-26 12:28:56.100] # clear
+[2025-12-26 12:28:56.100] [success] 🧹 Console cleared
+[2025-12-26 12:29:10.689] [info] 💡 Possible matches:
+[2025-12-26 12:29:10.689] [cmd]   ▸ HELP
+[2025-12-26 12:29:10.689] [cmd]   ▸ HISTORY
+[2025-12-26 12:29:10.689] [cmd]   ▸ CLEAR
+[2025-12-26 12:29:10.689] [cmd]   ▸ STATUS
+[2025-12-26 12:29:10.689] [cmd]   ▸ DEMO
+[2025-12-26 12:29:10.689] [cmd]   ▸ EXIT
+[2025-12-26 12:29:10.689] [cmd]   ▸ QUIT
+[2025-12-26 12:29:10.689] [cmd]   ▸ COMMANDS
+[2025-12-26 12:29:17.596] # demo
+[2025-12-26 12:29:17.596] [success] 🎪 Demo window ✅ enabled
+[2025-12-26 12:29:42.773] # history
+[2025-12-26 12:29:42.773] [info] 📚 Command History:
+[2025-12-26 12:29:42.773] [history] 📌   1: show cmd
+[2025-12-26 12:29:42.773] [history] 📌   2: hide cmd
+[2025-12-26 12:29:42.773] [history] 📌   3: [success] ✨ Welcome to Dear ImGui Console! 🎮  [info] 📋 Type 'help' or 'commands' to get started.  Console Window Created! Font size set to 24! === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000 # commands  
+[2025-12-26 12:29:42.773] [history] 📌   4: ❤️
+[2025-12-26 12:29:42.773] [history] 📌   5: ❤
+[2025-12-26 12:29:42.773] [history] 📌   6: help
+[2025-12-26 12:29:42.773] [history] 📌   7: status
+[2025-12-26 12:29:42.773] [history] 📌   8: clear
+[2025-12-26 12:29:42.773] [history] 📌   9: demo
+[2025-12-26 12:29:42.773] [history] 📌  10: history
+[2025-12-26 12:30:16.484] # commands
+[2025-12-26 12:30:16.484] [info] 📜 Available commands:
+[2025-12-26 12:30:16.484] [cmd]   ▸ clear
+[2025-12-26 12:30:16.484] [cmd]   ▸ commands
+[2025-12-26 12:30:16.484] [cmd]   ▸ demo
+[2025-12-26 12:30:16.484] [cmd]   ▸ exit
+[2025-12-26 12:30:16.484] [cmd]   ▸ help
+[2025-12-26 12:30:16.484] [cmd]   ▸ hide cmd
+[2025-12-26 12:30:16.484] [cmd]   ▸ history
+[2025-12-26 12:30:16.484] [cmd]   ▸ quit
+[2025-12-26 12:30:16.484] [cmd]   ▸ show cmd
+[2025-12-26 12:30:16.484] [cmd]   ▸ status
+
+================================================================================
+Console Log Session Started: 2025-12-26 12:45:18
+================================================================================
+[2025-12-26 12:45:18.130] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 12:45:18.130] [info] 📋 Type 'help' or 'commands' to get started.
+
+================================================================================
+Console Log Session Started: 2025-12-26 12:51:23
+================================================================================
+[2025-12-26 12:51:23.838] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 12:51:23.838] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 12:51:23.929] Console Window Created![2025-12-26 12:51:23.930] Font size set to 24![2025-12-26 12:51:24.595] === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 12:51:58.204] # show cmd
+[2025-12-26 12:51:58.214] [success] 👁️ Console window shown
+[2025-12-26 12:52:15.286] # hide cmd
+[2025-12-26 12:52:15.288] [success] 🙈 Console window hidden
+
+================================================================================
+Console Log Session Started: 2025-12-26 12:56:17
+================================================================================
+[2025-12-26 12:56:17.835] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 12:56:17.835] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 12:56:17.924] Console Window Created![2025-12-26 12:56:17.925] Font size set to 24![2025-12-26 12:56:18.574] === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000
+================================================================================
+Console Log Session Started: 2025-12-26 13:03:10
+================================================================================
+[2025-12-26 13:03:10.017] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:03:10.017] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:03:10.125] Console Window Created![2025-12-26 13:03:10.126] Font size set to 24![2025-12-26 13:03:10.875] === Application Starting ===Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000
+================================================================================
+Console Log Session Started: 2025-12-26 13:08:12
+================================================================================
+[2025-12-26 13:08:12.315] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:08:12.316] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:08:12.411] Console Window Created![2025-12-26 13:08:12.412] Font size set to 24![2025-12-26 13:08:12.412] 
+Hello From console class![2025-12-26 13:08:12.412] Memory management initialized[2025-12-26 13:08:12.415] === Application Starting ===[2025-12-26 13:08:12.783] Successfully loaded Arial with emoji support[2025-12-26 13:08:12.785] Loading Windows fonts...[2025-12-26 13:08:13.024] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:08:13.033] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:08:42.312] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:09:11
+================================================================================
+[2025-12-26 13:09:11.493] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:09:11.493] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:09:11.576] Console Window Created![2025-12-26 13:09:11.577] Font size set to 24![2025-12-26 13:09:11.578] 
+Hello From console class![2025-12-26 13:09:11.578] Memory management initialized[2025-12-26 13:09:11.582] === Application Starting ===[2025-12-26 13:09:11.952] Successfully loaded Arial with emoji support[2025-12-26 13:09:11.954] Loading Windows fonts...[2025-12-26 13:09:12.210] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:09:12.219] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:09:15.560] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:12:30
+================================================================================
+[2025-12-26 13:12:30.895] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:12:30.895] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:12:30.966] Console Window Created![2025-12-26 13:12:30.967] Font size set to 24![2025-12-26 13:12:30.967] 
+Hello From console class![2025-12-26 13:12:30.968] Memory management initialized[2025-12-26 13:12:30.971] === Application Starting ===[2025-12-26 13:12:31.331] Successfully loaded Arial with emoji support[2025-12-26 13:12:31.334] Loading Windows fonts...[2025-12-26 13:12:31.573] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:12:31.581] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:12:50.732] # show cmd
+[2025-12-26 13:12:50.744] [success] 👁️ Console window shown
+[2025-12-26 13:13:23.269] # hide cmd
+[2025-12-26 13:13:23.270] [success] 🙈 Console window hidden
+
+================================================================================
+Console Log Session Started: 2025-12-26 13:21:48
+================================================================================
+[2025-12-26 13:21:48.638] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:21:48.638] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:21:48.719] Console Window Created![2025-12-26 13:21:48.721] Font size set to 24![2025-12-26 13:21:48.721] 
+Hello From console class![2025-12-26 13:21:48.722] Memory management initialized[2025-12-26 13:21:48.725] === Application Starting ===[2025-12-26 13:21:49.110] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:21:49.110] ║    MyApplication v1.0.0               ║[2025-12-26 13:21:49.110] ║    Ready to rock! 🚀                   ║[2025-12-26 13:21:49.110] ╚════════════════════════════════════════╝[2025-12-26 13:21:49.117] Successfully loaded Arial with emoji support[2025-12-26 13:21:49.120] Loading Windows fonts...[2025-12-26 13:21:49.369] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:21:49.379] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:22:10.874] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:26:54
+================================================================================
+[2025-12-26 13:26:54.406] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:26:54.406] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:26:54.487] Console Window Created![2025-12-26 13:26:54.491] Font size set to 24![2025-12-26 13:26:54.492] 
+Hello From console class![2025-12-26 13:26:54.492] Memory management initialized[2025-12-26 13:26:54.496] === Application Starting ===[2025-12-26 13:26:54.876] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:26:54.877] ║    MyApplication v1.0.0               ║[2025-12-26 13:26:54.877] ║    Ready to rock! 🚀                   ║[2025-12-26 13:26:54.877] ╚════════════════════════════════════════╝[2025-12-26 13:26:54.884] Successfully loaded Arial with emoji support[2025-12-26 13:26:54.886] Loading Windows fonts...[2025-12-26 13:26:55.128] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:26:55.136] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:27:57.406] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:32:04
+================================================================================
+[2025-12-26 13:32:04.126] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:32:04.126] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:32:04.226] Console Window Created![2025-12-26 13:32:04.227] Font size set to 24![2025-12-26 13:32:04.227] 
+Hello From console class![2025-12-26 13:32:04.227] Memory management initialized[2025-12-26 13:32:04.232] === Application Starting ===[2025-12-26 13:32:04.677] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:32:04.678] ║    MyApplication v1.0.0               ║[2025-12-26 13:32:04.678] ║    Ready to rock! 🚀                   ║[2025-12-26 13:32:04.678] ╚════════════════════════════════════════╝[2025-12-26 13:32:04.688] Successfully loaded Arial with emoji support[2025-12-26 13:32:04.690] Loading Windows fonts...[2025-12-26 13:32:04.969] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:32:04.978] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:32:50.874] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:34:33
+================================================================================
+[2025-12-26 13:34:33.209] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:34:33.209] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:34:33.302] Console Window Created![2025-12-26 13:34:33.303] Font size set to 24![2025-12-26 13:34:33.304] 
+Hello From console class![2025-12-26 13:34:33.304] Memory management initialized[2025-12-26 13:34:33.308] === Application Starting ===[2025-12-26 13:34:33.690] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:34:33.690] ║    MyApplication v1.0.0               ║[2025-12-26 13:34:33.690] ║    Ready to rock! 🚀                   ║[2025-12-26 13:34:33.691] ╚════════════════════════════════════════╝[2025-12-26 13:34:33.699] Successfully loaded Arial with emoji support[2025-12-26 13:34:33.701] Loading Windows fonts...[2025-12-26 13:34:33.955] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:34:33.963] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:34:38.918] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:37:50
+================================================================================
+[2025-12-26 13:37:50.313] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:37:50.313] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:37:50.402] Console Window Created![2025-12-26 13:37:50.403] Font size set to 24![2025-12-26 13:37:50.403] 
+Hello From console class![2025-12-26 13:37:50.403] Memory management initialized[2025-12-26 13:37:50.406] === Application Starting ===[2025-12-26 13:37:50.794] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:37:50.794] ║    MyApplication v1.0.0               ║[2025-12-26 13:37:50.794] ║    Ready to rock! 🚀                   ║[2025-12-26 13:37:50.795] ╚════════════════════════════════════════╝[2025-12-26 13:37:50.803] Successfully loaded Arial with emoji support[2025-12-26 13:37:50.805] Loading Windows fonts...[2025-12-26 13:37:51.041] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:37:51.050] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:37:57.208] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:41:19
+================================================================================
+[2025-12-26 13:41:19.664] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:41:19.664] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:41:19.749] Console Window Created![2025-12-26 13:41:19.749] Font size set to 24![2025-12-26 13:41:19.750] 
+Hello From console class![2025-12-26 13:41:19.750] Memory management initialized[2025-12-26 13:41:19.753] === Application Starting ===[2025-12-26 13:41:20.143] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:41:20.143] ║    MyApplication v1.0.0               ║[2025-12-26 13:41:20.143] ║    Ready to rock! 🚀                   ║[2025-12-26 13:41:20.144] ╚════════════════════════════════════════╝[2025-12-26 13:41:20.151] Successfully loaded Arial with emoji support[2025-12-26 13:41:20.153] Loading Windows fonts...[2025-12-26 13:41:20.389] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:41:20.398] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:41:25.599] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:53:26
+================================================================================
+[2025-12-26 13:53:26.243] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:53:26.243] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:53:26.330] Console Window Created![2025-12-26 13:53:26.331] Font size set to 24![2025-12-26 13:53:26.331] 
+Hello From console class![2025-12-26 13:53:26.332] Memory management initialized[2025-12-26 13:53:26.335] === Application Starting ===[2025-12-26 13:53:26.745] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:53:26.746] ║    MyApplication v1.0.0               ║[2025-12-26 13:53:26.746] ║    Ready to rock! 🚀                   ║[2025-12-26 13:53:26.747] ╚════════════════════════════════════════╝[2025-12-26 13:53:26.755] Successfully loaded Arial with emoji support[2025-12-26 13:53:26.757] Loading Windows fonts...[2025-12-26 13:53:27.031] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:53:27.040] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:53:41.290] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:54:40
+================================================================================
+[2025-12-26 13:54:40.674] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:54:40.674] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:54:40.774] Console Window Created![2025-12-26 13:54:40.774] Font size set to 24![2025-12-26 13:54:40.775] 
+Hello From console class![2025-12-26 13:54:40.775] Memory management initialized[2025-12-26 13:54:40.778] === Application Starting ===[2025-12-26 13:54:41.164] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:54:41.165] ║    MyApplication v1.0.0                ║[2025-12-26 13:54:41.165] ║    Ready to rock! 🚀                   ║[2025-12-26 13:54:41.173] ╚════════════════════════════════════════╝Successfully loaded Arial with emoji support[2025-12-26 13:54:41.175] Loading Windows fonts...[2025-12-26 13:54:41.426] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:54:41.435] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:54:45.678] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:55:00
+================================================================================
+[2025-12-26 13:55:00.574] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:55:00.575] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:55:00.651] Console Window Created![2025-12-26 13:55:00.652] Font size set to 24![2025-12-26 13:55:00.653] 
+Hello From console class![2025-12-26 13:55:00.653] Memory management initialized[2025-12-26 13:55:00.657] === Application Starting ===[2025-12-26 13:55:01.148] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:55:01.148] ║    MyApplication v1.0.0                ║[2025-12-26 13:55:01.148] ║    Ready to rock! 🚀                   ║[2025-12-26 13:55:01.157] ╚════════════════════════════════════════╝Successfully loaded Arial with emoji support[2025-12-26 13:55:01.159] Loading Windows fonts...[2025-12-26 13:55:01.431] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:55:01.442] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:55:03.402] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:55:18
+================================================================================
+[2025-12-26 13:55:18.610] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:55:18.610] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:55:18.701] Console Window Created![2025-12-26 13:55:18.702] Font size set to 24![2025-12-26 13:55:18.703] 
+Hello From console class![2025-12-26 13:55:18.703] Memory management initialized[2025-12-26 13:55:18.706] === Application Starting ===[2025-12-26 13:55:19.114] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:55:19.114] ║    MyApplication v1.0.0                ║[2025-12-26 13:55:19.114] ║    Ready to rock! 🚀                   ║[2025-12-26 13:55:19.121] ╚════════════════════════════════════════╝[reset] Successfully loaded Arial with emoji support[2025-12-26 13:55:19.123] Loading Windows fonts...[2025-12-26 13:55:19.358] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:55:19.367] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:55:24.705] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:55:56
+================================================================================
+[2025-12-26 13:55:56.170] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:55:56.170] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:55:56.250] Console Window Created![2025-12-26 13:55:56.251] Font size set to 24![2025-12-26 13:55:56.251] 
+Hello From console class![2025-12-26 13:55:56.252] Memory management initialized[2025-12-26 13:55:56.254] === Application Starting ===[2025-12-26 13:55:56.633] [bright_cyan] ╔════════════════════════════════════════╗[2025-12-26 13:55:56.633] ║    MyApplication v1.0.0                ║[2025-12-26 13:55:56.634] ║    Ready to rock! 🚀                   ║[2025-12-26 13:55:56.634] ╚════════════════════════════════════════╝[2025-12-26 13:55:56.641] [reset] Successfully loaded Arial with emoji support[2025-12-26 13:55:56.643] Loading Windows fonts...[2025-12-26 13:55:56.890] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:55:56.899] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:56:27.263] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 13:56:43
+================================================================================
+[2025-12-26 13:56:43.214] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 13:56:43.214] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 13:56:43.296] Console Window Created![2025-12-26 13:56:43.297] Font size set to 24![2025-12-26 13:56:43.297] 
+Hello From console class![2025-12-26 13:56:43.298] Memory management initialized[2025-12-26 13:56:43.301] === Application Starting ===[2025-12-26 13:56:43.683] [bright_cyan] [2025-12-26 13:56:43.683] ╔════════════════════════════════════════╗[2025-12-26 13:56:43.683] ║    MyApplication v1.0.0                ║[2025-12-26 13:56:43.683] ║    Ready to rock! 🚀                   ║[2025-12-26 13:56:43.683] ╚════════════════════════════════════════╝[2025-12-26 13:56:43.691] [reset] Successfully loaded Arial with emoji support[2025-12-26 13:56:43.694] Loading Windows fonts...[2025-12-26 13:56:43.939] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 13:56:43.948] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 13:57:30.390] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 14:05:10
+================================================================================
+[2025-12-26 14:05:10.411] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 14:05:10.411] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 14:05:10.506] Console Window Created![2025-12-26 14:05:10.507] Font size set to 24![2025-12-26 14:05:10.508] 
+Hello From console class![2025-12-26 14:05:10.508] Memory management initialized[2025-12-26 14:05:10.512] === Application Starting ===[2025-12-26 14:05:10.881] [bright_cyan] [2025-12-26 14:05:10.881] ╔════════════════════════════════════════╗[2025-12-26 14:05:10.881] ║    MyApplication v1.0.0                ║[2025-12-26 14:05:10.881] ║    Ready to rock! 🚀                   ║[2025-12-26 14:05:10.881] ╚════════════════════════════════════════╝[2025-12-26 14:05:10.889] [reset] Successfully loaded Arial with emoji support[2025-12-26 14:05:10.891] Loading Windows fonts...[2025-12-26 14:05:11.128] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 14:05:11.137] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 14:05:15.407] # show cmd
+[2025-12-26 14:05:15.445] [success] 👁️ Console window shown
+[2025-12-26 14:05:24.102] # hide cmd
+[2025-12-26 14:05:24.104] [success] 🙈 Console window hidden
+[2025-12-26 14:05:28.813] # demo
+[2025-12-26 14:05:28.813] [success] 🎪 Demo window ✅ enabled
+
+================================================================================
+Console Log Session Started: 2025-12-26 15:58:57
+================================================================================
+[2025-12-26 15:58:57.090] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 15:58:57.090] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 15:58:57.158] Console Window Created![2025-12-26 15:58:57.159] Font size set to 24![2025-12-26 15:58:57.160] 
+Hello From console class![2025-12-26 15:58:57.160] Memory management initialized[2025-12-26 15:58:57.162] === Application Starting ===
+================================================================================
+Console Log Session Started: 2025-12-26 15:59:05
+================================================================================
+[2025-12-26 15:59:05.372] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 15:59:05.372] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 15:59:05.475] Console Window Created![2025-12-26 15:59:05.476] Font size set to 24![2025-12-26 15:59:05.480] 
+Hello From console class![2025-12-26 15:59:05.480] Memory management initialized[2025-12-26 15:59:05.483] === Application Starting ===
+================================================================================
+Console Log Session Started: 2025-12-26 16:16:28
+================================================================================
+[2025-12-26 16:16:28.271] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:16:28.272] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:16:28.348] Console Window Created![2025-12-26 16:16:28.349] Font size set to 24![2025-12-26 16:16:28.350] 
+Hello From console class![2025-12-26 16:16:28.350] Memory management initialized[2025-12-26 16:16:28.354] === Application Starting ===
+================================================================================
+Console Log Session Started: 2025-12-26 16:16:35
+================================================================================
+[2025-12-26 16:16:35.124] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:16:35.125] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:16:35.200] Console Window Created![2025-12-26 16:16:35.201] Font size set to 24![2025-12-26 16:16:35.201] 
+Hello From console class![2025-12-26 16:16:35.202] Memory management initialized[2025-12-26 16:16:35.206] === Application Starting ===
+================================================================================
+Console Log Session Started: 2025-12-26 16:17:19
+================================================================================
+[2025-12-26 16:17:19.606] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:17:19.606] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:17:19.704] Console Window Created![2025-12-26 16:17:19.705] Font size set to 24![2025-12-26 16:17:19.705] 
+Hello From console class![2025-12-26 16:17:19.708] Memory management initialized[2025-12-26 16:17:19.711] === Application Starting ===[2025-12-26 16:17:20.708] [bright_cyan] [2025-12-26 16:17:20.708] ╔════════════════════════════════════════╗[2025-12-26 16:17:20.708] ║    MyApplication v1.0.0                ║[2025-12-26 16:17:20.708] ║    Ready to rock! 🚀                   ║[2025-12-26 16:17:20.708] ╚════════════════════════════════════════╝[2025-12-26 16:17:20.731] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:17:20.845] Loading Windows fonts...[2025-12-26 16:17:21.192] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:17:21.202] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 16:17:34.536] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers[2025-12-26 16:18:02.600] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 16:25:28
+================================================================================
+[2025-12-26 16:25:28.547] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:25:28.547] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:25:28.635] Console Window Created![2025-12-26 16:25:28.636] Font size set to 24![2025-12-26 16:25:28.637] 
+Hello From console class![2025-12-26 16:25:28.637] Memory management initialized[2025-12-26 16:25:28.641] === Application Starting ===
+================================================================================
+Console Log Session Started: 2025-12-26 16:25:44
+================================================================================
+[2025-12-26 16:25:44.113] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:25:44.113] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:25:44.185] Console Window Created![2025-12-26 16:25:44.186] Font size set to 24![2025-12-26 16:25:44.186] 
+Hello From console class![2025-12-26 16:25:44.187] Memory management initialized[2025-12-26 16:25:44.190] === Application Starting ===
+================================================================================
+Console Log Session Started: 2025-12-26 16:25:51
+================================================================================
+[2025-12-26 16:25:51.663] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:25:51.663] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:25:51.732] Console Window Created![2025-12-26 16:25:51.732] Font size set to 24![2025-12-26 16:25:51.733] 
+Hello From console class![2025-12-26 16:25:51.733] Memory management initialized[2025-12-26 16:25:51.735] === Application Starting ===
+================================================================================
+Console Log Session Started: 2025-12-26 16:29:32
+================================================================================
+[2025-12-26 16:29:32.894] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:29:32.894] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:29:32.982] Console Window Created![2025-12-26 16:29:32.983] Font size set to 24![2025-12-26 16:29:32.984] 
+Hello From console class![2025-12-26 16:29:32.985] Memory management initialized[2025-12-26 16:29:32.988] === Application Starting ===[2025-12-26 16:29:33.034] [success] ✨ Console initialized!
+[2025-12-26 16:29:33.369] [bright_cyan] [2025-12-26 16:29:33.369] ╔════════════════════════════════════════╗[2025-12-26 16:29:33.369] ║    MyApplication v1.0.0                ║[2025-12-26 16:29:33.369] ║    Ready to rock! 🚀                   ║[2025-12-26 16:29:33.369] ╚════════════════════════════════════════╝[2025-12-26 16:29:33.376] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:29:33.379] Loading Windows fonts...[2025-12-26 16:29:33.632] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:29:33.641] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 16:29:49.564] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers[2025-12-26 16:30:01.113] Background color saved successfully![2025-12-26 16:30:14.898] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 16:46:01
+================================================================================
+[2025-12-26 16:46:01.685] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:46:01.685] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:46:01.841] Console Window Created![2025-12-26 16:46:01.842] Font size set to 24![2025-12-26 16:46:01.842] 
+Hello From console class![2025-12-26 16:46:01.843] Memory management initialized[2025-12-26 16:46:01.846] === Application Starting ===[2025-12-26 16:46:01.895] [error] ❌ Failed to initialize DirectX for console window!
+[2025-12-26 16:46:02.195] [bright_cyan] [2025-12-26 16:46:02.195] ╔════════════════════════════════════════╗[2025-12-26 16:46:02.195] ║    MyApplication v1.0.0                ║[2025-12-26 16:46:02.195] ║    Ready to rock! 🚀                   ║[2025-12-26 16:46:02.195] ╚════════════════════════════════════════╝[2025-12-26 16:46:02.203] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:46:02.205] Loading Windows fonts...[2025-12-26 16:46:02.506] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:46:02.525] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 16:46:13.669] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers[2025-12-26 16:46:58.760] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers[2025-12-26 16:47:12.167] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 16:48:13
+================================================================================
+[2025-12-26 16:48:13.562] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:48:13.562] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:48:13.637] Console Window Created![2025-12-26 16:48:13.637] Font size set to 24![2025-12-26 16:48:13.638] 
+Hello From console class![2025-12-26 16:48:13.638] Memory management initialized[2025-12-26 16:48:13.641] === Application Starting ===[2025-12-26 16:48:13.757] [error] ❌ Failed to initialize DirectX for console window!
+[2025-12-26 16:48:14.129] [bright_cyan] [2025-12-26 16:48:14.130] ╔════════════════════════════════════════╗[2025-12-26 16:48:14.130] ║    MyApplication v1.0.0                ║[2025-12-26 16:48:14.130] ║    Ready to rock! 🚀                   ║[2025-12-26 16:48:14.130] ╚════════════════════════════════════════╝[2025-12-26 16:48:14.137] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:48:14.139] Loading Windows fonts...[2025-12-26 16:48:14.418] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:48:14.426] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 16:48:22.695] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 16:49:04
+================================================================================
+[2025-12-26 16:49:04.280] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:49:04.280] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:49:04.356] Console Window Created![2025-12-26 16:49:04.357] Font size set to 24![2025-12-26 16:49:04.357] 
+Hello From console class![2025-12-26 16:49:04.358] Memory management initialized[2025-12-26 16:49:04.360] === Application Starting ===[2025-12-26 16:49:04.714] [bright_cyan] [2025-12-26 16:49:04.715] ╔════════════════════════════════════════╗[2025-12-26 16:49:04.715] ║    MyApplication v1.0.0                ║[2025-12-26 16:49:04.715] ║    Ready to rock! 🚀                   ║[2025-12-26 16:49:04.715] ╚════════════════════════════════════════╝[2025-12-26 16:49:04.723] [success] ✨ Console window ImGui initialized!\n[2025-12-26 16:49:04.736] [success] ✨ Console window initialized!
+[2025-12-26 16:49:04.743] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:49:11.737] Loading Windows fonts...[2025-12-26 16:49:11.989] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:49:11.998] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000
+================================================================================
+Console Log Session Started: 2025-12-26 16:49:40
+================================================================================
+[2025-12-26 16:49:40.377] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:49:40.377] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:49:40.463] Console Window Created![2025-12-26 16:49:40.464] Font size set to 24![2025-12-26 16:49:40.464] 
+Hello From console class![2025-12-26 16:49:40.465] Memory management initialized[2025-12-26 16:49:40.468] === Application Starting ===[2025-12-26 16:49:41.197] [bright_cyan] [2025-12-26 16:49:41.197] ╔════════════════════════════════════════╗[2025-12-26 16:49:41.197] ║    MyApplication v1.0.0                ║[2025-12-26 16:49:41.197] ║    Ready to rock! 🚀                   ║[2025-12-26 16:49:41.197] ╚════════════════════════════════════════╝[2025-12-26 16:49:41.209] [success] ✨ Console window ImGui initialized!\n[2025-12-26 16:49:41.235] [success] ✨ Console window initialized!
+[2025-12-26 16:49:41.246] [reset] Successfully loaded Arial with emoji support
+================================================================================
+Console Log Session Started: 2025-12-26 16:54:39
+================================================================================
+[2025-12-26 16:54:39.990] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:54:39.990] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:54:40.070] Console Window Created![2025-12-26 16:54:40.071] Font size set to 24![2025-12-26 16:54:40.072] 
+Hello From console class![2025-12-26 16:54:40.072] Memory management initialized[2025-12-26 16:54:40.075] === Application Starting ===[2025-12-26 16:54:40.424] [bright_cyan] [2025-12-26 16:54:40.425] ╔════════════════════════════════════════╗[2025-12-26 16:54:40.425] ║    MyApplication v1.0.0                ║[2025-12-26 16:54:40.425] ║    Ready to rock! 🚀                   ║[2025-12-26 16:54:40.425] ╚════════════════════════════════════════╝[2025-12-26 16:54:40.434] [success] ✨ Console window ImGui initialized!
+[2025-12-26 16:54:40.447] [success] ✨ Console window initialized!
+[2025-12-26 16:54:40.455] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:54:46.099] Loading Windows fonts...[2025-12-26 16:54:46.337] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:54:46.346] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000
+================================================================================
+Console Log Session Started: 2025-12-26 16:55:05
+================================================================================
+[2025-12-26 16:55:05.904] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:55:05.904] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:55:05.986] Console Window Created![2025-12-26 16:55:05.987] Font size set to 24![2025-12-26 16:55:05.987] 
+Hello From console class![2025-12-26 16:55:05.987] Memory management initialized[2025-12-26 16:55:05.990] === Application Starting ===[2025-12-26 16:55:06.762] [bright_cyan] [2025-12-26 16:55:06.762] ╔════════════════════════════════════════╗[2025-12-26 16:55:06.762] ║    MyApplication v1.0.0                ║[2025-12-26 16:55:06.762] ║    Ready to rock! 🚀                   ║[2025-12-26 16:55:06.762] ╚════════════════════════════════════════╝[2025-12-26 16:55:06.778] [success] ✨ Console window ImGui initialized!
+[2025-12-26 16:55:06.862] [success] ✨ Console window initialized!
+[2025-12-26 16:55:06.896] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:55:48.363] Loading Windows fonts...[2025-12-26 16:55:48.622] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:55:48.632] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 16:56:00.499] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers[2025-12-26 16:56:40.917] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers
+================================================================================
+Console Log Session Started: 2025-12-26 16:57:04
+================================================================================
+[2025-12-26 16:57:04.659] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:57:04.659] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:57:04.765] Console Window Created![2025-12-26 16:57:04.766] Font size set to 24![2025-12-26 16:57:04.766] 
+Hello From console class![2025-12-26 16:57:04.767] Memory management initialized[2025-12-26 16:57:04.770] === Application Starting ===[2025-12-26 16:57:05.582] [bright_cyan] [2025-12-26 16:57:05.582] ╔════════════════════════════════════════╗[2025-12-26 16:57:05.583] ║    MyApplication v1.0.0                ║[2025-12-26 16:57:05.583] ║    Ready to rock! 🚀                   ║[2025-12-26 16:57:05.583] ╚════════════════════════════════════════╝[2025-12-26 16:57:05.595] [success] ✨ Console window ImGui initialized!
+[2025-12-26 16:57:05.625] [success] ✨ Console window initialized!
+[2025-12-26 16:57:05.635] [reset] Successfully loaded Arial with emoji support[2025-12-26 16:57:05.671] Loading Windows fonts...[2025-12-26 16:57:06.052] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 16:57:06.117] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 16:57:13.037] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers[2025-12-26 16:57:14.600] ResizeBuffers failed (HRESULT: 0x), recreating targets with current buffers
+================================================================================
+Console Log Session Started: 2025-12-26 16:58:57
+================================================================================
+[2025-12-26 16:58:57.161] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 16:58:57.162] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 16:58:57.248] Console Window Created![2025-12-26 16:58:57.249] Font size set to 24![2025-12-26 16:58:57.249] 
+Hello From console class![2025-12-26 16:58:57.249] Memory management initialized[2025-12-26 16:58:57.252] === Application Starting ===[2025-12-26 16:58:57.946] [bright_cyan] [2025-12-26 16:58:57.947] ╔════════════════════════════════════════╗[2025-12-26 16:58:57.947] ║    MyApplication v1.0.0                ║[2025-12-26 16:58:57.947] ║    Ready to rock! 🚀                   ║[2025-12-26 16:58:57.947] ╚════════════════════════════════════════╝[2025-12-26 16:58:57.962] [success] ✨ Console window ImGui initialized!
+[2025-12-26 16:58:57.996] [success] ✨ Console window initialized!
+[2025-12-26 16:58:58.007] [reset] Successfully loaded Arial with emoji support
+================================================================================
+Console Log Session Started: 2025-12-26 17:01:10
+================================================================================
+[2025-12-26 17:01:10.725] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 17:01:10.725] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 17:01:10.822] Console Window Created![2025-12-26 17:01:10.823] Font size set to 24![2025-12-26 17:01:10.823] 
+Hello From console class![2025-12-26 17:01:10.825] Memory management initialized[2025-12-26 17:01:10.829] === Application Starting ===[2025-12-26 17:01:11.982] [bright_cyan] [2025-12-26 17:01:11.982] ╔════════════════════════════════════════╗[2025-12-26 17:01:11.984] ║    MyApplication v1.0.0                ║[2025-12-26 17:01:11.984] ║    Ready to rock! 🚀                   ║[2025-12-26 17:01:11.984] ╚════════════════════════════════════════╝[2025-12-26 17:01:12.004] [success] ✨ Console window ImGui initialized!
+[2025-12-26 17:01:12.075] [success] ✨ Console window initialized!
+[2025-12-26 17:01:12.128] [reset] Successfully loaded Arial with emoji support[2025-12-26 17:01:12.168] Loading Windows fonts...[2025-12-26 17:01:12.515] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 17:01:12.527] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000
+================================================================================
+Console Log Session Started: 2025-12-26 17:02:21
+================================================================================
+[2025-12-26 17:02:21.549] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 17:02:21.550] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 17:02:21.637] Console Window Created![2025-12-26 17:02:21.638] Font size set to 24![2025-12-26 17:02:21.638] 
+Hello From console class![2025-12-26 17:02:21.639] Memory management initialized[2025-12-26 17:02:21.642] === Application Starting ===[2025-12-26 17:02:22.022] [bright_cyan] [2025-12-26 17:02:22.022] ╔════════════════════════════════════════╗[2025-12-26 17:02:22.023] ║    MyApplication v1.0.0                ║[2025-12-26 17:02:22.023] ║    Ready to rock! 🚀                   ║[2025-12-26 17:02:22.023] ╚════════════════════════════════════════╝[2025-12-26 17:02:22.033] [success] ✨ Console window ImGui initialized!
+[2025-12-26 17:02:22.047] [success] ✨ Console window initialized!
+[2025-12-26 17:02:22.056] [reset] Successfully loaded Arial with emoji support
+================================================================================
+Console Log Session Started: 2025-12-26 17:03:35
+================================================================================
+[2025-12-26 17:03:35.725] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 17:03:35.726] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 17:03:35.829] Console Window Created![2025-12-26 17:03:35.830] Font size set to 24![2025-12-26 17:03:35.830] 
+Hello From console class![2025-12-26 17:03:35.831] Memory management initialized[2025-12-26 17:03:35.834] === Application Starting ===[2025-12-26 17:03:36.269] [bright_cyan] [2025-12-26 17:03:36.269] ╔════════════════════════════════════════╗[2025-12-26 17:03:36.270] ║    MyApplication v1.0.0                ║[2025-12-26 17:03:36.270] ║    Ready to rock! 🚀                   ║[2025-12-26 17:03:36.270] ╚════════════════════════════════════════╝[2025-12-26 17:03:36.277] [reset] Successfully loaded Arial with emoji support[2025-12-26 17:03:36.279] Loading Windows fonts...[2025-12-26 17:03:36.525] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 17:03:36.533] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 17:03:49.995] # quit
+[2025-12-26 17:03:49.995] [warning] 👋 Exiting application...
+
+================================================================================
+Console Log Session Started: 2025-12-26 17:06:22
+================================================================================
+[2025-12-26 17:06:22.158] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 17:06:22.158] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 17:06:22.250] Console Window Created![2025-12-26 17:06:22.250] Font size set to 24![2025-12-26 17:06:22.251] 
+Hello From console class![2025-12-26 17:06:22.251] Memory management initialized[2025-12-26 17:06:22.255] === Application Starting ===[2025-12-26 17:06:22.641] [bright_cyan] [2025-12-26 17:06:22.641] ╔════════════════════════════════════════╗[2025-12-26 17:06:22.642] ║    MyApplication v1.0.0                ║[2025-12-26 17:06:22.642] ║    Ready to rock! 🚀                   ║[2025-12-26 17:06:22.642] ╚════════════════════════════════════════╝[2025-12-26 17:06:22.649] [reset] Successfully loaded Arial with emoji support[2025-12-26 17:06:22.651] Loading Windows fonts...[2025-12-26 17:06:22.899] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 17:06:22.908] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 17:06:28.002] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 17:07:04
+================================================================================
+[2025-12-26 17:07:04.267] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 17:07:04.267] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 17:07:04.337] Console Window Created![2025-12-26 17:07:04.338] Font size set to 24![2025-12-26 17:07:04.338] 
+Hello From console class![2025-12-26 17:07:04.339] Memory management initialized[2025-12-26 17:07:04.341] === Application Starting ===[2025-12-26 17:07:04.719] [bright_cyan] [2025-12-26 17:07:04.719] ╔════════════════════════════════════════╗[2025-12-26 17:07:04.719] ║    MyApplication v1.0.0                ║[2025-12-26 17:07:04.719] ║    Ready to rock! 🚀                   ║[2025-12-26 17:07:04.719] ╚════════════════════════════════════════╝[2025-12-26 17:07:04.728] [reset] Successfully loaded Arial with emoji support[2025-12-26 17:07:04.730] Loading Windows fonts...[2025-12-26 17:07:04.963] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 17:07:04.971] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 17:07:10.940] # COMMANDS
+[2025-12-26 17:07:10.940] [error] ❌ Unknown command: 'COMMANDS'
+[2025-12-26 17:07:20.844] Configuration saved on exit
+================================================================================
+Console Log Session Started: 2025-12-26 17:08:47
+================================================================================
+[2025-12-26 17:08:47.459] [success] ✨ Welcome to Dear ImGui Console! 🎮
+[2025-12-26 17:08:47.460] [info] 📋 Type 'help' or 'commands' to get started.
+[2025-12-26 17:08:47.545] Console Window Created![2025-12-26 17:08:47.545] Font size set to 24![2025-12-26 17:08:47.546] 
+Hello From console class![2025-12-26 17:08:47.546] Memory management initialized[2025-12-26 17:08:47.549] === Application Starting ===[2025-12-26 17:08:47.907] [bright_cyan] [2025-12-26 17:08:47.907] ╔════════════════════════════════════════╗[2025-12-26 17:08:47.907] ║    MyApplication v1.0.0                ║[2025-12-26 17:08:47.907] ║    Ready to rock! 🚀                   ║[2025-12-26 17:08:47.907] ╚════════════════════════════════════════╝[2025-12-26 17:08:47.915] [reset] Successfully loaded Arial with emoji support[2025-12-26 17:08:47.916] Loading Windows fonts...[2025-12-26 17:08:48.155] Successfully loaded 326 fonts from Windows\Fonts[2025-12-26 17:08:48.163] Loaded clear color: R=0.078767 G=0.076879 B=0.077064 A=1.000000[2025-12-26 17:08:54.420] # COMMANDS
+[2025-12-26 17:08:54.420] [info] 📜 Available commands:
+[2025-12-26 17:08:54.420] [cmd]   ▸ clear
+[2025-12-26 17:08:54.420] [cmd]   ▸ commands
+[2025-12-26 17:08:54.420] [cmd]   ▸ demo
+[2025-12-26 17:08:54.420] [cmd]   ▸ exit
+[2025-12-26 17:08:54.420] [cmd]   ▸ help
+[2025-12-26 17:08:54.420] [cmd]   ▸ hide cmd
+[2025-12-26 17:08:54.420] [cmd]   ▸ history
+[2025-12-26 17:08:54.420] [cmd]   ▸ quit
+[2025-12-26 17:08:54.420] [cmd]   ▸ show cmd
+[2025-12-26 17:08:54.420] [cmd]   ▸ status
+[2025-12-26 17:09:02.194] # clear
+[2025-12-26 17:09:09.874] # COMMANDS
+[2025-12-26 17:09:09.875] [info] 📜 Available commands:
+[2025-12-26 17:09:09.875] [cmd]   ▸ clear
+[2025-12-26 17:09:09.875] [cmd]   ▸ commands
+[2025-12-26 17:09:09.875] [cmd]   ▸ demo
+[2025-12-26 17:09:09.875] [cmd]   ▸ exit
+[2025-12-26 17:09:09.875] [cmd]   ▸ help
+[2025-12-26 17:09:09.875] [cmd]   ▸ hide cmd
+[2025-12-26 17:09:09.875] [cmd]   ▸ history
+[2025-12-26 17:09:09.875] [cmd]   ▸ quit
+[2025-12-26 17:09:09.875] [cmd]   ▸ show cmd
+[2025-12-26 17:09:09.875] [cmd]   ▸ status
+[2025-12-26 17:09:19.542] # clear
+[2025-12-26 17:09:22.730] # status
+[2025-12-26 17:09:22.730] [info] 📊 Generating status report...
+[2025-12-26 17:09:22.730] ============================================================[2025-12-26 17:09:22.730]            APPLICATION STATUS REPORT[2025-12-26 17:09:22.730] ============================================================[2025-12-26 17:09:22.730] 
+[DIRECTX 12 RENDERER][2025-12-26 17:09:22.731]   Device: Initialized[2025-12-26 17:09:22.731]   GPU: NVIDIA GeForce RTX 3060[2025-12-26 17:09:22.731]   Dedicated Video Memory: 12110 MB[2025-12-26 17:09:22.731]   Dedicated System Memory: 0 MB[2025-12-26 17:09:22.732]   Shared System Memory: 16313 MB[2025-12-26 17:09:22.732]   Vendor ID: 0x10DE[2025-12-26 17:09:22.732]   Device ID: 0x2487[2025-12-26 17:09:22.732]   Swap Chain Format: 28[2025-12-26 17:09:22.733]   Swap Chain Buffers: 2[2025-12-26 17:09:22.733]   Swap Chain Size: 2560x1009[2025-12-26 17:09:22.733]   Tearing Support: Yes[2025-12-26 17:09:22.733]   Occluded: No[2025-12-26 17:09:22.734]   Frame Index: 2590[2025-12-26 17:09:22.734]   Fence Value: 2590[2025-12-26 17:09:22.734]   Command Queue: Active[2025-12-26 17:09:22.734]   Command List: Active[2025-12-26 17:09:22.734]   SRV Heap Descriptors: 64[2025-12-26 17:09:22.734]   SRV Heap Type: 0[2025-12-26 17:09:22.735]   Render Targets: 2/2[2025-12-26 17:09:22.735] 
+[IMGUI CONTEXT][2025-12-26 17:09:22.735]   Context: Initialized[2025-12-26 17:09:22.735]   Frame Count: 2591[2025-12-26 17:09:22.736]   FPS: 75.0[2025-12-26 17:09:22.736]   Delta Time: 0.0138s[2025-12-26 17:09:22.736]   Display Size: 2560x1009[2025-12-26 17:09:22.736]   Mouse Position: (1554, 676)[2025-12-26 17:09:22.737]   Backend Platform: imgui_impl_win32[2025-12-26 17:09:22.737]   Backend Renderer: imgui_impl_dx12[2025-12-26 17:09:22.737]   Fonts Loaded: 327[2025-12-26 17:09:22.737] 
+[IMPLOT CONTEXT][2025-12-26 17:09:22.738]   Context: Initialized[2025-12-26 17:09:22.738] 
+[MEMORY STATUS][2025-12-26 17:09:22.738]   Physical Memory Usage: 56%[2025-12-26 17:09:22.738]   Total Physical: 32626 MB[2025-12-26 17:09:22.738]   Available Physical: 14336 MB[2025-12-26 17:09:22.739]   Total Virtual: 134217727 MB[2025-12-26 17:09:22.739]   Available Virtual: 134211754 MB[2025-12-26 17:09:22.739]   Process Working Set: 471 MB[2025-12-26 17:09:22.739]   Process Private Bytes: 478 MB[2025-12-26 17:09:22.739]   Page Fault Count: 125917[2025-12-26 17:09:22.740] 
+[SYSTEM INFORMATION][2025-12-26 17:09:22.740]   Current Time: Fri Dec 26 17:09:22 2025[2025-12-26 17:09:22.740]   Processor Count: 8[2025-12-26 17:09:22.740]   Page Size: 4 KB[2025-12-26 17:09:22.741]   Hardware Concurrency: 8[2025-12-26 17:09:22.741] 
+============================================================[2025-12-26 17:09:22.741]            END OF STATUS REPORT[2025-12-26 17:09:22.742] ============================================================[2025-12-26 17:10:25.551] # quit
+[2025-12-26 17:10:25.551] [warning] 👋 Exiting application...

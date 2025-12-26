@@ -87,5 +87,11 @@ public:
 
 	int	 TextEditCallback(ImGuiInputTextCallbackData* data);
 	void ShowExampleAppConsole(bool* p_open) { Render("Example: Console", p_open); }
+
+    private:
+        WNDCLASSW
+
+            m_wc;
+        HWND m_Hwnd_Internal_console;
 };
 } // namespace app
