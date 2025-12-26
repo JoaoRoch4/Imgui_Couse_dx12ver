@@ -22,7 +22,8 @@ App::App() :
     m_window_obj(nullptr),
     m_renderer(nullptr),
     m_HeapAlloc(nullptr),
-    m_io(nullptr) {
+    m_io(nullptr),
+    m_style(nullptr) {
     
     s_instance = this;
 }
@@ -98,7 +99,7 @@ void App::SetupImGui() {
 
     // Note: Style configuration is handled by StyleManager in MainLoop()
     // This includes theme selection, scaling, and all visual properties
-    // Do NOT set style properties here to avoid conflicts with StyleManager
+    // Do NOT set m_style properties here to avoid conflicts with StyleManager
 
     ImPlot::CreateContext();
 }
@@ -149,15 +150,16 @@ void App::MainLoop() {
     m_configManager = m_memory->Get_ConfigManager();
     m_configManager->Open();
 
-    // Initialize StyleManager and load saved style settings
+    // Initialize StyleManager and load saved m_style settings
     // Must be called after ImGui::CreateContext() in SetupImGui()
     StyleManager* styleManager = m_memory->Get_StyleManager();
     styleManager->Open();
 
-    // Apply DPI scaling after style is loaded
-    // This ensures scaling is applied to the loaded or default style
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.ScaleAllSizes(m_window->get_main_scale());
+    // Apply DPI scaling after m_style is loaded
+    // This ensures scaling is applied to the loaded or default m_style
+   
+    m_style = &ImGui::GetStyle();
+    m_style->ScaleAllSizes(m_window->get_main_scale());
     
     // Load the saved clear color (or use default)
     ImVec4 clear_color = m_configManager->GetClearColorAsImVec4();
@@ -287,9 +289,9 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
     if (m_memory->m_bShow_Debug_window) m_debug_window->Tick();
     if (m_memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
     
-    // Show style editor window (can be opened from demo window or main menu)
+    // Show m_style editor window (can be opened from demo window or main menu)
     if (m_memory->m_bShow_styleEditor_window) {
-        // Create a manual window for the style editor with proper close button
+        // Create a manual window for the m_style editor with proper close button
         ImGui::Begin("Style Editor", &m_memory->m_bShow_styleEditor_window);
         
         // Add custom save/load buttons at the top - Load button first
@@ -309,7 +311,7 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
                 styleManager->ApplyStyleToImGui();
                 m_console->Out << tc::green << "Style configuration loaded successfully!\n" << tc::reset;
             } else {
-                m_console->Out << tc::red << "Failed to load style configuration!\n" << tc::reset;
+                m_console->Out << tc::red << "Failed to load m_style configuration!\n" << tc::reset;
             }
         }
         ImGui::PopStyleColor(3);
@@ -328,7 +330,7 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
             if(styleManager->SaveConfiguration()) {
                 m_console->Out << tc::green << "Style configuration saved successfully!\n" << tc::reset;
             } else {
-                m_console->Out << tc::red << "Failed to save style configuration!\n" << tc::reset;
+                m_console->Out << tc::red << "Failed to save m_style configuration!\n" << tc::reset;
             }
         }
         ImGui::PopStyleColor(3);
@@ -371,42 +373,42 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
         ImGui::Separator();
         ImGui::Spacing();
         
-        // Save current style button
+        // Save current m_style button
         if (ImGui::Button("Save Current Style to JSON", ImVec2(250, 0))) {
             StyleManager* styleManager = m_memory->Get_StyleManager();
             if (styleManager->SaveConfiguration()) {
                 m_console->Out << tc::green << "Style saved to JSON successfully!\n" << tc::reset;
             } else {
-                m_console->Out << tc::red << "Failed to save style to JSON!\n" << tc::reset;
+                m_console->Out << tc::red << "Failed to save m_style to JSON!\n" << tc::reset;
             }
         }
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("Save your current style changes to style_config.json");
+            ImGui::SetTooltip("Save your current m_style changes to style_config.json");
         }
         
         ImGui::Separator();
         ImGui::Spacing();
         
-        // Show the built-in ImGui style editor
+        // Show the built-in ImGui m_style editor
         ImGui::ShowStyleEditor(nullptr);
         
         ImGui::End();
     }
     
     // Show demo window
-    // Note: The demo window has "Tools > Style Editor" menu that will open the style editor
+    // Note: The demo window has "Tools > Style Editor" menu that will open the m_style editor
     // To make it work with our flag, we need to detect when it's opened
     if (m_memory->m_bShow_demo_window) {
         ImGui::ShowDemoWindow(&m_memory->m_bShow_demo_window);
         
-        // Detect if demo window opened the style editor via its menu
+        // Detect if demo window opened the m_style editor via its menu
         // When user clicks "Tools > Style Editor" in demo, it creates a window named "Dear ImGui Style Editor"
         if (!m_memory->m_bShow_styleEditor_window && ImGui::FindWindowByName("Dear ImGui Style Editor")) {
             m_memory->m_bShow_styleEditor_window = true;
         }
     }
     
-    // If demo window opened the native style editor, we need to manage it separately
+    // If demo window opened the native m_style editor, we need to manage it separately
     // Close the native one and use our wrapped version instead
     if (ImGui::FindWindowByName("Dear ImGui Style Editor") && !m_memory->m_bShow_styleEditor_window) {
         // Demo window opened it, so set our flag to true

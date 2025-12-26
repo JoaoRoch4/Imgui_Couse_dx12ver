@@ -138,6 +138,7 @@ private:
 
     // ImGui context
     ImGuiIO* m_io;
+    ImGuiStyle* m_style;
 };
 
 } // namespace app
