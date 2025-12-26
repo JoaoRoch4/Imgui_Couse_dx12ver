@@ -366,3 +366,6 @@ FodyWeavers.xsd
 /Doxy
 *.cd
 *.md
+*.disabled
+*.backup
+*.ps1
