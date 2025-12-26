@@ -36,6 +36,8 @@ private:
 
 	void ExecuteCustomCommand(const std::string& command);
 
+	void ShowStatus();
+
 	std::thread m_inputThread;
 
 	std::atomic<bool> m_bIsRunning;

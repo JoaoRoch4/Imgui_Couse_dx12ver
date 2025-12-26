@@ -541,6 +541,7 @@
       <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
     </ClCompile>
     <ClCompile Include="code\src\StyleConfiguration.cpp" />
+    <ClCompile Include="ImGuiTermcolor_Examples.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\Include\App.hpp" />
@@ -562,10 +563,12 @@
     <ClInclude Include="code\Include\FrameContext.hpp" />
     <ClInclude Include="code\Include\Globals.hpp" />
     <ClInclude Include="code\Include\Helpers.hpp" />
+    <ClInclude Include="code\Include\ImGuiTermcolor.hpp" />
     <ClInclude Include="code\Include\MainWindow.hpp" />
     <ClInclude Include="code\Include\Master.hpp" />
     <ClInclude Include="code\Include\MemoryManagement.hpp" />
     <ClInclude Include="code\Include\OutputConsole.hpp" />
+    <ClInclude Include="code\Include\OutputConsole_NEW.hpp" />
     <ClInclude Include="code\Include\render.hpp" />
     <ClInclude Include="code\Include\StyleManager.hpp" />
     <ClInclude Include="code\Include\WindowManager.hpp" />

@@ -14,5 +14,11 @@ class Helpers {
 
         static  int UnkExcpt();
 
+        static std::string strtoLower(std::string s);
+
+        static std::wstring strtoLowerW(std::wstring s);
+
+        static void charToLower(char* c);
+        static const char* constCharToLower(const char* c);
 };
 

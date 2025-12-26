@@ -128,6 +128,32 @@ public:
 	bool m_bShow_FileSys_window;
 	bool m_bShow_Console_window;
 
+	// ImGui Console Color State
+	enum class ImGuiConsoleColor {
+		Reset,
+		Grey,
+		Red,
+		Green,
+		Yellow,
+		Blue,
+		Magenta,
+		Cyan,
+		White,
+		BrightRed,
+		BrightGreen,
+		BrightYellow,
+		BrightBlue,
+		BrightMagenta,
+		BrightCyan,
+		BrightWhite
+	};
+	
+	ImGuiConsoleColor m_currentConsoleColor;
+	
+	void SetConsoleColor(ImGuiConsoleColor color) { m_currentConsoleColor = color; }
+	ImGuiConsoleColor GetConsoleColor() const { return m_currentConsoleColor; }
+	void ResetConsoleColor() { m_currentConsoleColor = ImGuiConsoleColor::Reset; }
+
 	void Set_ImGuiIO(ImGuiIO* m_io);
 
 	ImGuiIO* Get_ImGuiIO();
@@ -141,5 +167,11 @@ private:
 
 	ImVec4* m_clear_color_ptr;
 	ImVec4	m_clear_color;
+
+    public:
+
+    bool m_bShowCmd;
+    bool m_bShowHelp;
+    bool m_bShowArgs;
 };
 } // namespace app

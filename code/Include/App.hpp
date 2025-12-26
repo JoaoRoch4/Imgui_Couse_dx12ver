@@ -7,6 +7,7 @@ namespace app {
     class MemoryManagement;
     class OutputConsole;
     class CommandLineArguments;
+    class ConsoleWindow;
     class WindowManager;
     class FontManager;
     class FontManagerWindow;
@@ -15,7 +16,7 @@ namespace app {
     class WindowClass;
     class ExampleDescriptorHeapAllocator;
     class DX12Renderer;
-}
+    }
 
 namespace app {
 
@@ -67,6 +68,12 @@ public:
      */
     static App* GetInstance() { return s_instance; }
 
+    /**
+     * @brief Get the DirectX 12 renderer instance
+     * @return Pointer to the DX12Renderer
+     */
+    DX12Renderer* GetRenderer() const { return m_renderer; }
+
 private:
     /**
      * @brief Initialize all application subsystems
@@ -117,6 +124,8 @@ private:
      */
     void Cleanup();
 
+    HRESULT Alloc();
+
 private:
     // Singleton instance
     static App* s_instance;
@@ -125,6 +134,7 @@ private:
     MemoryManagement* m_memory;
     OutputConsole* m_console;
     CommandLineArguments* m_cmdArgs;
+    ConsoleWindow* m_consoleWindow;
     WindowManager* m_window;
     FontManager* m_font_manager;
     FontManagerWindow* m_font_manager_window;

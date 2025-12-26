@@ -1,29 +1,42 @@
 #include "PCH.hpp"
 #include "OutputConsole.hpp"
 #include "ConsoleWindow.hpp"
+#include "Classes.hpp"
+#include "App.hpp"
+#include "DX12Renderer.hpp"
+#include <psapi.h>
+#include <iomanip>
+#include <dxgi1_4.h>
 
 namespace app {
 
 void OutputConsole::Open() {
-
-	if (!m_bShouldCreateConsole) m_bShouldCreateConsole = true;
-	if (!m_bShowConsole) m_bShowConsole = true;
+    
 	CreateConsole();
+
+  
+    ShowConsole(m_args->m_bShowCmd);
 }
 
-void OutputConsole::Tick() {}
+void OutputConsole::Tick() {
+
+    ShowConsole(m_memory->m_bShowCmd);
+}
 
 void OutputConsole::Close() {}
 
-OutputConsole::OutputConsole()
-:
+OutputConsole::OutputConsole() :
+m_bWasConsoleCreated(false),
+m_bShouldCreateConsole(false),
+m_bShowConsole(false),
+m_hWnd_console(nullptr),
+m_memory(nullptr),
+m_args(nullptr) {
 
-  m_bWasConsoleCreated(false),
-  m_bShouldCreateConsole(false),
-  m_bShowConsole(false),
-  m_hWnd_console(nullptr)
-
-{}
+    m_memory = MemoryManagement::Get_MemoryManagement();
+    if(m_memory) m_args = m_memory->Get_CommandLineArguments();
+    else throw std::runtime_error("m_memory is nullptr");
+}
 
 OutputConsole::~OutputConsole() {
 
@@ -47,9 +60,7 @@ void CustomOutput::FlushToConsoleWindow() {
 		if (m_buffer.back() == '\n') {
 			// Remove the newline before sending to ConsoleWindow
 			m_buffer.pop_back();
-			if (!m_buffer.empty()) {
-				m_consoleWindow->AddLog("%s", m_buffer.c_str());
-			}
+			if (!m_buffer.empty()) { m_consoleWindow->AddLog("%s", m_buffer.c_str()); }
 			m_buffer.clear();
 		}
 	}
@@ -77,7 +88,7 @@ void OutputConsole::CreateConsole() {
 	m_bWasConsoleCreated = true;
 
 	ShowConsole(m_bShowConsole);
-	std::wcout << L"Console Window Created!\n\n";
+	Out.WriteLine(L"Console Window Created!");
 	setConsoleFontSize(24);
 }
 
@@ -99,7 +110,7 @@ void OutputConsole::setConsoleFontSize(int size) {
 
 	// 3. Aplicar a nova fonte
 	if (SetCurrentConsoleFontEx(hOut, FALSE, &cfi)) {
-		std::cout << "Font size set to " << std::to_string(size) << "! \n";
+		Out.WriteLine("Font size set to " + std::to_string(size) + "!");
 	} else {
 		throw std::runtime_error("can't set m_console font size!");
 	}
@@ -132,6 +143,13 @@ CustomOutput& CustomOutput::operator<<(const long long& valor) {
 	}
 }
 
+CustomOutput& CustomOutput::operator<<(const int& valor) {
+	std::cout << valor;
+	m_buffer += std::to_string(valor);
+	FlushToConsoleWindow();
+	return *this;
+}
+
 CustomOutput& CustomOutput::operator<<(const long double& valor) {
 
 	std::cout << valor;
@@ -149,7 +167,17 @@ CustomOutput& CustomOutput::operator<<(const float& valor) {
 
 CustomOutput& CustomOutput::operator<<(const char* dado) {
 	std::cout << dado;
-	m_buffer += dado;
+	
+	// Check if this is an ImGui color tag
+	if (dado && dado[0] == '[' && strchr(dado, ']')) {
+		m_currentColorTag = dado;
+		// Add color tag to buffer for ImGui console
+		m_buffer += dado;
+		m_buffer += " "; // Space after tag for cleaner appearance
+	} else {
+		m_buffer += dado;
+	}
+	
 	FlushToConsoleWindow();
 	return *this;
 }
@@ -170,23 +198,266 @@ CustomOutput& CustomOutput::operator<<(const wchar_t* dado) {
 	// Convert wchar_t* to string for ConsoleWindow
 	if (m_consoleWindow) {
 		std::wstring wstr(dado);
-		std::string str(wstr.begin(), wstr.end());
+		std::string	 str(wstr.begin(), wstr.end());
 		m_buffer += str;
 		FlushToConsoleWindow();
 	}
 	return *this;
 }
 
-//CustomOutput& CustomOutput::operator<<(std::ostream& (*manip)(std::ostream&)) {
+void CustomOutput::WriteLine(const std::string& message) {
+	// Output to Windows console
+	std::cout << message << std::endl;
+	std::cout.flush();
+	
+	// Output to ImGui console window
+	if (m_consoleWindow) {
+		m_consoleWindow->AddLog("%s", message.c_str());
+	}
+}
+
+void CustomOutput::WriteLine(const std::wstring& message) {
+	// Output to Windows console
+	std::wcout << message << std::endl;
+	std::wcout.flush();
+	
+	// Output to ImGui console window (convert to string)
+	if (m_consoleWindow) {
+		std::string str(message.begin(), message.end());
+		m_consoleWindow->AddLog("%s", str.c_str());
+	}
+}
+
+void CustomOutput::Write(const std::string& message) {
+	// Output to Windows console without newline
+	std::cout << message;
+	std::cout.flush();
+	
+	// Add to buffer for ImGui console
+	m_buffer += message;
+	// Check if we should flush (if message contains newline)
+	if (message.find('\n') != std::string::npos) {
+		ForceFlush();
+	}
+}
+
+void CustomOutput::Write(const std::wstring& message) {
+	// Output to Windows console without newline
+	std::wcout << message;
+	std::wcout.flush();
+	
+	// Convert and add to buffer for ImGui console
+	std::string str(message.begin(), message.end());
+	m_buffer += str;
+	// Check if we should flush (if message contains newline)
+	if (str.find('\n') != std::string::npos) {
+		ForceFlush();
+	}
+}
+
+void CustomOutput::ForceFlush() {
+	if (m_consoleWindow && !m_buffer.empty()) {
+		// Remove trailing newline if present
+		if (m_buffer.back() == '\n') {
+			m_buffer.pop_back();
+		}
+		if (!m_buffer.empty()) {
+			m_consoleWindow->AddLog("%s", m_buffer.c_str());
+		}
+		m_buffer.clear();
+	}
+}
+
+CustomOutput& CustomOutput::SetImGuiColor(const char* colorTag) {
+	if (colorTag) {
+		m_currentColorTag = colorTag;
+		// Add color tag to buffer
+		m_buffer += colorTag;
+		m_buffer += " ";
+	}
+	return *this;
+}
+
+CustomOutput& CustomOutput::ResetImGuiColor() {
+	m_currentColorTag.clear();
+	return *this;
+}
+
+void CustomOutput::ShowSystemStatus() {
+	auto app = app::App::GetInstance();
+	if (!app) {
+		WriteLine("[ERROR] Application instance not available!");
+		return;
+	}
+
+	WriteLine(std::string(60, '='));
+	WriteLine("           APPLICATION STATUS REPORT");
+	WriteLine(std::string(60, '='));
+
+	// DirectX 12 Renderer Status
+	WriteLine("\n[DIRECTX 12 RENDERER]");
+	auto renderer = app->GetRenderer();
+	if (renderer && renderer->GetDevice()) {
+		WriteLine("  Device: Initialized");
+		
+		// Get adapter information
+		ComPtr<IDXGIFactory4> factory;
+		if (SUCCEEDED(CreateDXGIFactory1(IID_PPV_ARGS(factory.put())))) {
+			ComPtr<IDXGIAdapter1> adapter;
+			if (SUCCEEDED(factory->EnumAdapters1(0, adapter.put()))) {
+				DXGI_ADAPTER_DESC1 desc;
+				adapter->GetDesc1(&desc);
+				
+				// Convert wide string to string
+				std::wstring wAdapterName(desc.Description);
+				std::string adapterName(wAdapterName.begin(), wAdapterName.end());
+				WriteLine("  GPU: " + adapterName);
+				
+				// Video Memory
+				WriteLine("  Dedicated Video Memory: " + std::to_string(desc.DedicatedVideoMemory / (1024 * 1024)) + " MB");
+				WriteLine("  Dedicated System Memory: " + std::to_string(desc.DedicatedSystemMemory / (1024 * 1024)) + " MB");
+				WriteLine("  Shared System Memory: " + std::to_string(desc.SharedSystemMemory / (1024 * 1024)) + " MB");
+				
+				std::ostringstream oss;
+				oss << "  Vendor ID: 0x" << std::hex << std::uppercase << desc.VendorId;
+				WriteLine(oss.str());
+				
+				oss.str("");
+				oss << "  Device ID: 0x" << std::hex << std::uppercase << desc.DeviceId;
+				WriteLine(oss.str());
+			}
+		}
+		
+		// Swap Chain Info
+		if (renderer->GetSwapChain()) {
+			DXGI_SWAP_CHAIN_DESC1 swapChainDesc;
+			renderer->GetSwapChain()->GetDesc1(&swapChainDesc);
+			
+			WriteLine("  Swap Chain Format: " + std::to_string(swapChainDesc.Format));
+			WriteLine("  Swap Chain Buffers: " + std::to_string(swapChainDesc.BufferCount));
+			WriteLine("  Swap Chain Size: " + std::to_string(swapChainDesc.Width) + "x" + std::to_string(swapChainDesc.Height));
+			WriteLine("  Tearing Support: " + std::string(renderer->GetSwapChainTearingSupport() ? "Yes" : "No"));
+			WriteLine("  Occluded: " + std::string(renderer->GetSwapChainOccluded() ? "Yes" : "No"));
+		}
+		
+		// Frame sync info
+		WriteLine("  Frame Index: " + std::to_string(renderer->GetFrameIndex()));
+		WriteLine("  Fence Value: " + std::to_string(renderer->GetFenceLastSignaledValue()));
+		
+		// Command Queue
+		if (renderer->GetCommandQueue()) {
+			WriteLine("  Command Queue: Active");
+		}
+		
+		// Command List
+		if (renderer->GetCommandList()) {
+			WriteLine("  Command List: Active");
+		}
+		
+		// Descriptor Heaps
+		if (renderer->GetSrvDescHeap()) {
+			D3D12_DESCRIPTOR_HEAP_DESC heapDesc = renderer->GetSrvDescHeap()->GetDesc();
+			WriteLine("  SRV Heap Descriptors: " + std::to_string(heapDesc.NumDescriptors));
+			WriteLine("  SRV Heap Type: " + std::to_string(heapDesc.Type));
+		}
+		
+		// Render Targets
+		int validRenderTargets = 0;
+		for (UINT i = 0; i < APP_NUM_BACK_BUFFERS; i++) {
+			if (renderer->GetRenderTarget(i)) {
+				validRenderTargets++;
+			}
+		}
+		WriteLine("  Render Targets: " + std::to_string(validRenderTargets) + "/" + std::to_string(APP_NUM_BACK_BUFFERS));
+		
+	} else {
+		WriteLine("  Device: Not Initialized");
+	}
+
+	// ImGui Status
+	WriteLine("\n[IMGUI CONTEXT]");
+	if (ImGui::GetCurrentContext()) {
+		ImGuiIO& io = ImGui::GetIO();
+		WriteLine("  Context: Initialized");
+		WriteLine("  Frame Count: " + std::to_string(ImGui::GetFrameCount()));
+		
+		std::ostringstream oss;
+		oss << std::fixed << std::setprecision(1);
+		oss << "  FPS: " << io.Framerate;
+		WriteLine(oss.str());
+		
+		oss.str("");
+		oss << std::fixed << std::setprecision(4);
+		oss << "  Delta Time: " << io.DeltaTime << "s";
+		WriteLine(oss.str());
+		
+		WriteLine("  Display Size: " + std::to_string((int)io.DisplaySize.x) + "x" + std::to_string((int)io.DisplaySize.y));
+		WriteLine("  Mouse Position: (" + std::to_string((int)io.MousePos.x) + ", " + std::to_string((int)io.MousePos.y) + ")");
+		WriteLine("  Backend Platform: " + std::string(io.BackendPlatformName ? io.BackendPlatformName : "None"));
+		WriteLine("  Backend Renderer: " + std::string(io.BackendRendererName ? io.BackendRendererName : "None"));
+		WriteLine("  Fonts Loaded: " + std::to_string(io.Fonts->Fonts.Size));
+	} else {
+		WriteLine("  Context: Not Initialized");
+	}
+
+	// ImPlot Status
+	WriteLine("\n[IMPLOT CONTEXT]");
+	if (ImPlot::GetCurrentContext()) {
+		WriteLine("  Context: Initialized");
+	} else {
+		WriteLine("  Context: Not Initialized");
+	}
+
+	// Memory Info
+	WriteLine("\n[MEMORY STATUS]");
+	MEMORYSTATUSEX memInfo;
+	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+	if (GlobalMemoryStatusEx(&memInfo)) {
+		WriteLine("  Physical Memory Usage: " + std::to_string(memInfo.dwMemoryLoad) + "%");
+		WriteLine("  Total Physical: " + std::to_string(memInfo.ullTotalPhys / (1024 * 1024)) + " MB");
+		WriteLine("  Available Physical: " + std::to_string(memInfo.ullAvailPhys / (1024 * 1024)) + " MB");
+		WriteLine("  Total Virtual: " + std::to_string(memInfo.ullTotalVirtual / (1024 * 1024)) + " MB");
+		WriteLine("  Available Virtual: " + std::to_string(memInfo.ullAvailVirtual / (1024 * 1024)) + " MB");
+	}
+
+	// Process Memory
+	PROCESS_MEMORY_COUNTERS_EX pmc;
+	if (GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))) {
+		WriteLine("  Process Working Set: " + std::to_string(pmc.WorkingSetSize / (1024 * 1024)) + " MB");
+		WriteLine("  Process Private Bytes: " + std::to_string(pmc.PrivateUsage / (1024 * 1024)) + " MB");
+		WriteLine("  Page Fault Count: " + std::to_string(pmc.PageFaultCount));
+	}
+
+	// System Time
+	WriteLine("\n[SYSTEM INFORMATION]");
+	auto now = std::chrono::system_clock::now();
+	auto time = std::chrono::system_clock::to_time_t(now);
+	std::string timeStr = std::ctime(&time);
+	if (!timeStr.empty() && timeStr.back() == '\n') timeStr.pop_back();
+	WriteLine("  Current Time: " + timeStr);
+	
+	// CPU Info
+	SYSTEM_INFO sysInfo;
+	GetSystemInfo(&sysInfo);
+	WriteLine("  Processor Count: " + std::to_string(sysInfo.dwNumberOfProcessors));
+	WriteLine("  Page Size: " + std::to_string(sysInfo.dwPageSize / 1024) + " KB");
+	WriteLine("  Hardware Concurrency: " + std::to_string(std::thread::hardware_concurrency()));
+
+	WriteLine("\n" + std::string(60, '='));
+	WriteLine("           END OF STATUS REPORT");
+	WriteLine(std::string(60, '='));
+}
+
+// CustomOutput& CustomOutput::operator<<(std::ostream& (*manip)(std::ostream&)) {
 //
 //	manip(std::cout);
 //	return *this;
-//}
+// }
 //
-//CustomOutput& CustomOutput::operator<<(std::wostream& (*manip)(std::wostream&)) {
+// CustomOutput& CustomOutput::operator<<(std::wostream& (*manip)(std::wostream&)) {
 //
 //	manip(std::wcout);
 //	return *this;
-//}
+// }
 
 } // namespace app

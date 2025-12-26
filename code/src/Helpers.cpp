@@ -108,3 +108,27 @@ int Helpers::UnkExcpt() {
 	MessageBox(NULL, L"unknow Excepition", L"Error", MB_ICONERROR | MB_OK);
 	return EXIT_FAILURE;
 }
+
+std::string Helpers::strtoLower(std::string s) {
+    std::transform(s.begin(), s.end(), s.begin(), [](char c) { return std::tolower(c); });
+    return s;
+}
+
+std::wstring Helpers::strtoLowerW(std::wstring s) {
+    std::transform(s.begin(), s.end(), s.begin(), [](wchar_t c) { return std::tolower(c); });
+    return s;
+}
+
+void Helpers::charToLower(char* c) {
+    std::string s = Helpers::strtoLower(c);
+    std::string& es = s;
+
+    c = es.data();
+}
+
+const char* Helpers::constCharToLower(const char* c) {
+    std::string s = Helpers::strtoLower(c);
+    const char* val = s.c_str();
+    return val;
+}
+    
