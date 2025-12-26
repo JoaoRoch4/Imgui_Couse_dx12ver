@@ -61,7 +61,7 @@ void ConsoleWindow::Render(const char* title, bool* p_open) {
 		ImGui::EndPopup();
 	}
 
-	ImGui::TextWrapped("This example implements a m_console with basic coloring, completion (TAB "
+	ImGui::TextWrapped("This example implements m_a m_console with basic coloring, completion (TAB "
 					   "key) and history (Up/Down keys). A more elaborate "
 					   "implementation may want to store entries along with extra data such as "
 					   "timestamp, emitter, etc.");

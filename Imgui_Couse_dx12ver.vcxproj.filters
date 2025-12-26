@@ -203,6 +203,9 @@
     <ClCompile Include="code\src\StyleManager.cpp">
       <Filter>local\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="code\src\StyleConfiguration.cpp">
+      <Filter>local\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\imgui\imconfig.h">
@@ -413,6 +416,9 @@
       <Filter>local\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\Include\StyleManager.hpp">
+      <Filter>local\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Include\StyleConfiguration.hpp">
       <Filter>local\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

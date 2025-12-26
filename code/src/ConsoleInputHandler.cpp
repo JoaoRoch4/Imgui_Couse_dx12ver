@@ -402,7 +402,7 @@ void ConsoleInputHandler::ProcessCommand(const std::string& command) {
 	else {
 		// Print error message for unknown command
 		std::cout << "Unknown command: '" << command << "'" << std::endl;
-		std::cout << "Type 'help' for a list of available commands." << std::endl;
+		std::cout << "Type 'help' for m_a list of available commands." << std::endl;
 
 		// Optionally, you can add custom command handling here
 		// ExecuteCustomCommand(command);

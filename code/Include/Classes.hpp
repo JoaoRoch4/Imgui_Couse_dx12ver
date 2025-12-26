@@ -23,6 +23,7 @@
 #include "Helpers.hpp"
 #include "Globals.hpp"
 #include "render.hpp"
+#include "StyleConfiguration.hpp"
 #include "MemoryManagement.hpp"
 #include "WindowManager.hpp"
 #include "OutputConsole.hpp"

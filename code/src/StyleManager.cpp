@@ -5,6 +5,7 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
 #include "StyleManager.hpp"
+#include "StyleConfiguration.hpp"
 
 namespace app {
 
@@ -44,10 +45,14 @@ StyleManager::~StyleManager() {
 void StyleManager::Open() {
 	// Try to load saved configuration first
 	if (!LoadConfiguration()) {
-		// No saved config found - initialize with default dark theme
-		std::wcout << L"No saved style configuration found, using default Dark theme" << std::endl;
+		// No saved config found or config is invalid - initialize with default dark theme
+		std::wcout << L"No valid style configuration found, applying default Dark theme" << std::endl;
 		ApplyPresetDark();
 		CaptureStyleFromImGui();
+		
+		// Save the default configuration so it's available next time
+		SaveConfiguration();
+		std::wcout << L"Default style configuration saved to " << m_configFilePath << std::endl;
 	} else {
 		// Saved config loaded successfully - apply it to ImGui
 		std::wcout << L"Style configuration loaded successfully from " << m_configFilePath
@@ -112,6 +117,13 @@ bool StyleManager::LoadConfiguration() {
 
 		// Deserialize JSON using reflectcpp
 		m_styleConfig = rfl::json::read<StyleConfiguration>(jsonContent).value();
+
+		// Validate loaded config - check if it has valid values
+		// If Alpha is 0, the config was never properly initialized
+		if (m_styleConfig.Alpha <= 0.0f) {
+			std::wcout << L"Loaded style configuration appears invalid (Alpha = 0), using defaults" << std::endl;
+			return false;
+		}
 
 		m_bConfigLoaded = true;
 		return true;
