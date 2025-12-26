@@ -126,6 +126,7 @@ public:
 	bool m_bShow_styleEditor_window;
 	bool m_bShow_Debug_window;
 	bool m_bShow_FileSys_window;
+	bool m_bShow_Console_window;
 
 	void Set_ImGuiIO(ImGuiIO* m_io);
 

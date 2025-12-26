@@ -1,5 +1,6 @@
 #include "PCH.hpp"
 #include "OutputConsole.hpp"
+#include "ConsoleWindow.hpp"
 
 namespace app {
 
@@ -32,6 +33,26 @@ OutputConsole::~OutputConsole() {
 
 	m_hWnd_console = nullptr;
 	FreeConsole();
+}
+
+CustomOutput::CustomOutput() : m_consoleWindow(nullptr) {}
+
+void CustomOutput::SetConsoleWindow(ConsoleWindow* consoleWindow) {
+	m_consoleWindow = consoleWindow;
+}
+
+void CustomOutput::FlushToConsoleWindow() {
+	if (m_consoleWindow && !m_buffer.empty()) {
+		// Check if buffer ends with newline
+		if (m_buffer.back() == '\n') {
+			// Remove the newline before sending to ConsoleWindow
+			m_buffer.pop_back();
+			if (!m_buffer.empty()) {
+				m_consoleWindow->AddLog("%s", m_buffer.c_str());
+			}
+			m_buffer.clear();
+		}
+	}
 }
 
 void OutputConsole::CreateConsole() {
@@ -91,14 +112,22 @@ void OutputConsole::ShowConsole(bool bShow) {
 	if (m_hWnd_console) ShowWindow(m_hWnd_console, m_bShowConsole ? SW_SHOW : SW_HIDE);
 }
 
+void OutputConsole::SetConsoleWindow(ConsoleWindow* consoleWindow) {
+	Out.SetConsoleWindow(consoleWindow);
+}
+
 CustomOutput& CustomOutput::operator<<(const std::string& dado) {
 	std::cout << dado;
+	m_buffer += dado;
+	FlushToConsoleWindow();
 	return *this;
 }
 
 CustomOutput& CustomOutput::operator<<(const long long& valor) {
 	{
 		std::cout << valor;
+		m_buffer += std::to_string(valor);
+		FlushToConsoleWindow();
 		return *this;
 	}
 }
@@ -106,26 +135,45 @@ CustomOutput& CustomOutput::operator<<(const long long& valor) {
 CustomOutput& CustomOutput::operator<<(const long double& valor) {
 
 	std::cout << valor;
+	m_buffer += std::to_string(valor);
+	FlushToConsoleWindow();
 	return *this;
 }
 
 CustomOutput& CustomOutput::operator<<(const float& valor) {
 	std::cout << valor;
+	m_buffer += std::to_string(valor);
+	FlushToConsoleWindow();
 	return *this;
 }
 
 CustomOutput& CustomOutput::operator<<(const char* dado) {
 	std::cout << dado;
+	m_buffer += dado;
+	FlushToConsoleWindow();
 	return *this;
 }
 
 CustomOutput& CustomOutput::operator<<(const std::wstring& dado) {
 	std::wcout << dado;
+	// Convert wstring to string for ConsoleWindow
+	if (m_consoleWindow) {
+		std::string str(dado.begin(), dado.end());
+		m_buffer += str;
+		FlushToConsoleWindow();
+	}
 	return *this;
 }
 
 CustomOutput& CustomOutput::operator<<(const wchar_t* dado) {
 	std::wcout << dado;
+	// Convert wchar_t* to string for ConsoleWindow
+	if (m_consoleWindow) {
+		std::wstring wstr(dado);
+		std::string str(wstr.begin(), wstr.end());
+		m_buffer += str;
+		FlushToConsoleWindow();
+	}
 	return *this;
 }
 

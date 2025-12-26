@@ -4,7 +4,20 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${vcpkgRoot}/x64-windows/include"
+                "${vcpkgRoot}/x64-windows/include",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/code/Include",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/code/Main",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/code/pch",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/code/src",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/imgui",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/imgui/misc/freetype",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/implot",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/plutovg/source",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/plutosvg/source",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/plutovg/include",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/stb",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/imgui/misc/cpp",
+                "D:/source/Course/Imgui/UdemyCppGui/VisualStudio/DX12/Imgui_Couse_dx12ver/external/imgui/backends"
             ],
             "defines": [
                 "_DEBUG",

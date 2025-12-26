@@ -4,8 +4,18 @@
 
 namespace app {
 
+// Forward declaration
+class ConsoleWindow;
+
 class CustomOutput{
+private:
+	ConsoleWindow* m_consoleWindow;
+	std::string m_buffer; // Buffer to accumulate text until newline
+
 public:
+	CustomOutput();
+	void SetConsoleWindow(ConsoleWindow* consoleWindow);
+
 	template <class elem, class _Traits = std::char_traits<char>>
 	friend std::basic_ostream<char, std::char_traits<char>>& operator<<(
 		std::basic_ostream<elem, _Traits>& _Ostr, elem _Val) {
@@ -31,6 +41,9 @@ public:
 	CustomOutput& operator<<(const std::string& dado);
 	CustomOutput& operator<<(const std::wstring& dado);
 
+private:
+	void FlushToConsoleWindow();
+
 	/* template<typename Func>
     auto operator<<(Func&& manipulator) -> decltype(manipulator(std::declval<std::ostream&>()), *this) {
         manipulator(std::cout);
@@ -48,6 +61,7 @@ public:
 	virtual ~OutputConsole();
 
 	void ShowConsole(bool bShow);
+	void SetConsoleWindow(ConsoleWindow* consoleWindow);
 
 private:
 	void CreateConsole();

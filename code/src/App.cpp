@@ -40,19 +40,23 @@ int App::Run(_In_ HINSTANCE hInstance) {
 }
 
 void App::Initialize(_In_ HINSTANCE hInstance) {
-    // Initialize memory management
-    m_memory = MemoryManagement::Get_MemoryManagement();
-    m_memory->AllocAll();
+// Initialize memory management
+m_memory = MemoryManagement::Get_MemoryManagement();
+m_memory->AllocAll();
 
-    m_console = m_memory->Get_OutputConsole();
-    m_console->Open();
+m_console = m_memory->Get_OutputConsole();
+m_console->Open();
 
-    m_console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
+// Connect OutputConsole with ConsoleWindow so m_console->Out prints to both
+ConsoleWindow* consoleWindow = m_memory->Get_ConsoleWindow();
+m_console->SetConsoleWindow(consoleWindow);
 
-    m_cmdArgs = m_memory->Get_CommandLineArguments();
+m_console->Out << tc::green << "\nHello From console class!\n" << tc::reset;
 
-    m_console->Out << tc::green << "Memory management initialized" << std::endl;
-    m_console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
+m_cmdArgs = m_memory->Get_CommandLineArguments();
+
+m_console->Out << tc::green << "Memory management initialized" << std::endl;
+m_console->Out << L"=== Application Starting ===" << std::endl << tc::reset;
 
     m_configManager = m_memory->Get_ConfigManager();
 
@@ -281,15 +285,21 @@ bool App::RenderFrame(ImVec4& clear_color, bool& colorModified) {
 }
 
 void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
-    // Reset color modification flag for this frame
-    colorModified = false;
+// Reset color modification flag for this frame
+colorModified = false;
 
-    // Render optional windows
-    if (m_memory->m_bShow_FileSys_window) m_window_obj->Tick();
-    if (m_memory->m_bShow_Debug_window) m_debug_window->Tick();
-    if (m_memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
+// Render optional windows
+if (m_memory->m_bShow_FileSys_window) m_window_obj->Tick();
+if (m_memory->m_bShow_Debug_window) m_debug_window->Tick();
+if (m_memory->m_bShow_FontManager_window) m_font_manager_window->Tick();
     
-    // Show m_style editor window (can be opened from demo window or main menu)
+// Show console window
+if (m_memory->m_bShow_Console_window) {
+    ConsoleWindow* consoleWindow = m_memory->Get_ConsoleWindow();
+    consoleWindow->ShowExampleAppConsole(&m_memory->m_bShow_Console_window);
+}
+    
+// Show m_style editor window (can be opened from demo window or main menu)
     if (m_memory->m_bShow_styleEditor_window) {
         // Create a manual window for the m_style editor with proper close button
         ImGui::Begin("Style Editor", &m_memory->m_bShow_styleEditor_window);
@@ -483,6 +493,7 @@ void App::RenderUI(ImVec4& clear_color, bool& colorModified) {
         ImGui::Checkbox("Debug Window", &m_memory->m_bShow_Debug_window);
         ImGui::Checkbox("Font Manager Window", &m_memory->m_bShow_FontManager_window);
         ImGui::Checkbox("File System Window", &m_memory->m_bShow_FileSys_window);
+        ImGui::Checkbox("Console Window", &m_memory->m_bShow_Console_window);
 
         ImGui::Separator();
 
