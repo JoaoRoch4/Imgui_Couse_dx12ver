@@ -1,7 +1,33 @@
+/**
+ * @file ConsoleWindow.cpp
+ * @brief Implementation of the ConsoleWindow class for an
+ * ImGui-based debug console.
+ *
+ * This file contains the implementation of a feature-rich console
+ * window with command processing,
+ * logging capabilities, history management, and file output. The
+ * console supports UTF-8 and wide
+ * character strings, provides color-coded output, and integrates
+ * with ImGui's debug logging system.
+ *
+ * @author JoaoRoch4
+ * @date 2024
+ */
+
 #include "PCH.hpp"
 #include "Classes.hpp"
+#include "ConsoleWindow.hpp"
 
 namespace app {
+
+/**
+ * @brief Default constructor for ConsoleWindow.
+ *
+ * Initializes all member variables to their
+ * default values. Memory allocation
+ * and full initialization occur in the Start() and Alloc()
+ * methods.
+ */
 ConsoleWindow::ConsoleWindow() :
 InputBuf(),
 Items(),
@@ -12,22 +38,124 @@ Filter(),
 AutoScroll(),
 ScrollToBottom(),
 m_MyCommmands{},
+m_LastDebugLogPos(),
+m_bEnableFileLogging(),
+m_logFile(),
+m_logFilePath(),
 m_memory(nullptr),
 m_cmd(nullptr),
-m_bEnableFileLogging(true),
-m_logFilePath(L"console_log.txt"),
 m_cmdArgs(nullptr),
 m_window(nullptr),
 m_font_manager(nullptr),
 m_font_manager_window(nullptr),
 m_debug_window(nullptr),
 m_configManager(nullptr),
-m_window_obj(nullptr)
+m_window_obj(nullptr),
+m_App(nullptr),
+m_ConsoleInputHandler(nullptr),
+m_ConfigManager(nullptr),
+m_StyleManager(nullptr),
+m_DxDemos(nullptr),
+m_DX12Renderer(nullptr),
+m_FrameContext(nullptr)
 
+{}
 
-{
+/**
+ * @brief Destructor for ConsoleWindow.
+ *
+ * Cleans up all allocated resources including log
+ * items, command history,
+ * and closes the log file if open. Sets all pointers to nullptr for
+ * safety.
+ */
+ConsoleWindow::~ConsoleWindow() {
+	ClearLog();
+	for (int i = 0; i < History.Size; i++) ImGui::MemFree(History[i]);
+	for (int i = 0; i < Commands.Size; i++) {
+		if (Commands[i]) ImGui::MemFree((void*)Commands[i]);
+	}
 
-	m_memory = MemoryManagement::Get_MemoryManagement();
+	// Close log file
+	if (m_logFile.is_open()) {
+		m_logFile.flush();
+		m_logFile.close();
+	}
+
+	m_cmd				  = nullptr;
+	m_cmdArgs			  = nullptr;
+	m_configManager		  = nullptr;
+	m_font_manager		  = nullptr;
+	m_font_manager_window = nullptr;
+	m_debug_window		  = nullptr;
+	m_window			  = nullptr;
+	m_window_obj		  = nullptr;
+	m_App				  = nullptr;
+	m_ConsoleInputHandler = nullptr;
+	m_ConfigManager		  = nullptr;
+	m_StyleManager		  = nullptr;
+	m_DX12Renderer		  = nullptr;
+}
+
+/**
+ * @brief Allocates and retrieves all required dependencies from MemoryManagement.
+ *
+ *
+ * Retrieves pointers to all necessary subsystems (OutputConsole, ConfigManager,
+ * FontManager,
+ * etc.) from the MemoryManagement singleton. If any required object
+ * is not available, logs an
+ * error and returns E_FAIL.
+ *
+ * @return S_OK on success, E_FAIL if any dependency cannot be
+ * allocated.
+ * @throws std::runtime_error if a required object is not found in MemoryManagement.
+
+ */
+HRESULT ConsoleWindow::Alloc() {
+	// Retrieve all required objects from MemoryManagement singleton
+	try {
+		m_cmd				  = m_memory->Get_OutputConsole();
+		m_cmdArgs			  = m_memory->Get_CommandLineArguments();
+		m_configManager		  = m_memory->Get_ConfigManager();
+		m_font_manager		  = m_memory->Get_FontManager();
+		m_font_manager_window = m_memory->Get_FontManagerWindow();
+		m_debug_window		  = m_memory->Get_DebugWindow();
+		m_window			  = m_memory->Get_WindowManager();
+		m_window_obj		  = m_memory->Get_WindowClass();
+		m_App				  = m_memory->Get_App();
+		m_ConsoleInputHandler = m_memory->Get_ConsoleInputHandler();
+		m_ConfigManager		  = m_memory->Get_ConfigManager();
+		m_StyleManager		  = m_memory->Get_StyleManager();
+		m_DX12Renderer		  = m_memory->Get_DX12Renderer();
+	} catch (const std::runtime_error& e) {
+		// Log error if any object is not allocated
+		AddLog("[error] ❌ Failed to allocate ConsoleWindow dependencies: %s\n", e.what());
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+/**
+ * @brief Initializes the console window and sets up built-in commands.
+ *
+ * Performs initial
+ * setup including:
+ * - Retrieving the MemoryManagement singleton
+ * - Clearing the input buffer
+ *
+ * - Enabling file logging
+ * - Registering built-in commands for tab completion
+ * - Displaying
+ * welcome messages
+ *
+ * This method should be called before Open() to ensure proper
+ * initialization.
+ */
+void ConsoleWindow::Start() {
+
+	m_memory = MemoryManagement::Get_MemoryManagement_Singleton();
 	memset(InputBuf, 0, sizeof(InputBuf));
 	HistoryPos = -1;
 
@@ -54,6 +182,8 @@ m_window_obj(nullptr)
 	AddCommand("LOG");
 	AddCommand("SHOW");
 	AddCommand("HIDE");
+	AddCommand("BREAK");
+	AddCommand("FONTS");
 
 	AutoScroll	   = true;
 	ScrollToBottom = false;
@@ -61,34 +191,20 @@ m_window_obj(nullptr)
 	AddLog("[info] 📋 Type 'help' or 'commands' to get started.\n");
 }
 
-ConsoleWindow::~ConsoleWindow() {
-	ClearLog();
-	for (int i = 0; i < History.Size; i++) {
-		if (History[i]) ImGui::MemFree(History[i]);
-	}
-	for (int i = 0; i < Commands.Size; i++) {
-		if (Commands[i]) ImGui::MemFree((void*)Commands[i]);
-	}
-
-	// Close log file
-	if (m_logFile.is_open()) {
-		m_logFile.flush();
-		m_logFile.close();
-	}
-}
-
-HRESULT ConsoleWindow::Alloc() {
-	m_cmd = m_memory->Get_OutputConsole();
-
-	m_cmdArgs		= m_memory->Get_CommandLineArguments();
-	m_consoleWindow = m_memory->Get_ConsoleWindow();
-	m_configManager = m_memory->Get_ConfigManager();
-	m_font_manager	= m_memory->Get_FontManager();
-	return S_OK;
-}
-
+/**
+ * @brief Opens and fully initializes the console window.
+ *
+ * Calls Start() to perform basic
+ * initialization, then Alloc() to retrieve
+ * dependencies. Finally, builds the command map for
+ * command lookup and
+ * auto-completion.
+ *
+ * @note This is an override of the Master class
+ * virtual method.
+ */
 void ConsoleWindow::Open() {
-
+	Start();
 	Alloc();
 
 	// Helper to convert UTF-8 string to wstring
@@ -100,9 +216,9 @@ void ConsoleWindow::Open() {
 		return wstr;
 	};
 
-	std::vector<std::wstring> Commands{L"exit",		L"quit",   L"show", L"hide", L"demo",
-									   L"commands", L"status", L"HELP",		L"HISTORY", L"CLEAR",
-									   L"echo", L"set", L"log"};
+	std::vector<std::wstring> Commands{L"exit",		L"quit",   L"show", L"hide",	L"demo",
+									   L"commands", L"status", L"HELP", L"HISTORY", L"CLEAR",
+									   L"echo",		L"set",	   L"log",	L"break",	L"fonts"};
 	std::sort(Commands.begin(), Commands.end());
 
 	for (uint64_t i = 0; i < Commands.size(); i++) {
@@ -113,10 +229,59 @@ void ConsoleWindow::Open() {
 	}
 }
 
-void ConsoleWindow::Tick() {}
+/**
+ * @brief Per-frame update method for the console window.
+ *
+ * Called every frame to:
+ * -
+ * Update debug logs from ImGui context
+ * - Track new log entries for auto-scroll behavior
+ * -
+ * Periodically flush the log file to ensure data persistence
+ *
+ * @note This is an override of the
+ * Master class virtual method.
+ */
+void ConsoleWindow::Tick() {
+	// Update debug logs from ImGui context (capture logs every frame)
+	UpdateDebugLog();
 
+	// Track new log entries for auto-scroll
+	static int last_item_count = 0;
+	if (Items.Size > last_item_count) {
+		if (AutoScroll) { ScrollToBottom = true; }
+		last_item_count = Items.Size;
+	}
+
+	// Periodically flush log file to ensure data persistence
+	static int flush_counter = 0;
+	if (m_bEnableFileLogging && m_logFile.is_open()) {
+		if (++flush_counter >= 60) { // Once per second at 60 FPS
+			m_logFile.flush();
+			flush_counter = 0;
+		}
+	}
+}
+
+/**
+ * @brief Closes the console window.
+ *
+ * Currently a no-op implementation. Cleanup is handled
+ * by the destructor.
+ *
+ * @note This is an override of the Master class virtual method.
+ */
 void ConsoleWindow::Close() {}
 
+/**
+ * @brief Duplicates a UTF-8 string using ImGui's memory allocator.
+ *
+ * @param s The
+ * null-terminated UTF-8 string to duplicate.
+ * @return A newly allocated copy of the string.
+ * Caller must free with ImGui::MemFree().
+ * @note Asserts if s is nullptr.
+ */
 char* ConsoleWindow::Strdup(const char* s) {
 	IM_ASSERT(s);
 	size_t len = strlen(s) + 1;
@@ -125,6 +290,15 @@ char* ConsoleWindow::Strdup(const char* s) {
 	return (char*)memcpy(buf, (const void*)s, len);
 }
 
+/**
+ * @brief Duplicates a wide character string using ImGui's memory allocator.
+ *
+ * @param s The
+ * null-terminated ImWchar string to duplicate.
+ * @return A newly allocated copy of the string.
+ * Caller must free with ImGui::MemFree().
+ * @note Asserts if s is nullptr.
+ */
 ImWchar* ConsoleWindow::Wcsdup(const ImWchar* s) {
 	IM_ASSERT(s);
 	size_t len = 0;
@@ -135,11 +309,36 @@ ImWchar* ConsoleWindow::Wcsdup(const ImWchar* s) {
 	return (ImWchar*)memcpy(buf, (const void*)s, len * sizeof(ImWchar));
 }
 
+/**
+ * @brief Clears all log entries from the console.
+ *
+ * Clears all log item strings from the
+ * Items vector.
+ * This operation cannot be undone.
+ */
 void ConsoleWindow::ClearLog() {
 	for (int i = 0; i < Items.Size; i++) ImGui::MemFree(Items[i]);
 	Items.clear();
 }
 
+/**
+ * @brief Executes a console command.
+ *
+ * Parses the command line into command name and
+ * arguments, then dispatches
+ * to the appropriate command handler using a hash map lookup.
+ * Supports both
+ * simple commands (no arguments) and parameterized commands (with arguments).
+ *
+ * Commands are case-insensitive.
+ *
+ * @param command_line The wide character command string to
+ * execute.
+ *
+ * @note Command history is automatically updated with each execution.
+ * @note Uses
+ * std::variant for type-safe command dispatch.
+ */
 void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 	// Convert ImWchar to UTF-8 for processing
 	char utf8_buf[256];
@@ -161,12 +360,12 @@ void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 	std::string full_command = utf8_buf;
 	std::string command_name;
 	std::string args;
-	
+
 	// Split command and arguments
 	size_t first_space = full_command.find_first_of(" \t");
 	if (first_space != std::string::npos) {
-		command_name = full_command.substr(0, first_space);
-		args = full_command.substr(first_space + 1);
+		command_name	 = full_command.substr(0, first_space);
+		args			 = full_command.substr(first_space + 1);
 		// Trim leading whitespace from args
 		size_t arg_start = args.find_first_not_of(" \t");
 		if (arg_start != std::string::npos) {
@@ -177,7 +376,7 @@ void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 	} else {
 		command_name = full_command;
 	}
-	
+
 	// Convert command to lowercase for case-insensitive comparison
 	std::string command_lower = command_name;
 	std::transform(command_lower.begin(), command_lower.end(), command_lower.begin(), ::tolower);
@@ -207,26 +406,28 @@ void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 		{"help", SimpleCommand{&ConsoleWindow::CommandHelp}},
 		{"history", SimpleCommand{&ConsoleWindow::CommandHistory}},
 		{"status", SimpleCommand{&ConsoleWindow::CommandStatus}},
-		
+		{"break", SimpleCommand{&ConsoleWindow::CommandBreak}},
+		{"fonts", SimpleCommand{&ConsoleWindow::CommandFonts}},
+
 		// Parameterized commands (with arguments)
 		{"echo", ParameterizedCommand{&ConsoleWindow::CommandEcho}},
 		{"set", ParameterizedCommand{&ConsoleWindow::CommandSet}},
-		{"log", ParameterizedCommand{&ConsoleWindow::CommandLog}}
-	};
-	
-	
-	
+		{"log", ParameterizedCommand{&ConsoleWindow::CommandLog}}};
+
+
 	// Look up and execute command - O(1) hash lookup with variant visitation
 	auto it = commandHandlers.find(command_lower);
-	if(it != commandHandlers.end()) {
-		std::visit([this, &args](auto&& cmd) {
-			using T = std::decay_t<decltype(cmd)>;
-			if constexpr (std::is_same_v<T, SimpleCommand>) {
-				cmd.handler(this);
-			} else if constexpr (std::is_same_v<T, ParameterizedCommand>) {
-				cmd.handler(this, args);
-			}
-		}, it->second);
+	if (it != commandHandlers.end()) {
+		std::visit(
+			[this, &args](auto&& cmd) {
+				using T = std::decay_t<decltype(cmd)>;
+				if constexpr (std::is_same_v<T, SimpleCommand>) {
+					cmd.handler(this);
+				} else if constexpr (std::is_same_v<T, ParameterizedCommand>) {
+					cmd.handler(this, args);
+				}
+			},
+			it->second);
 	} else {
 		AddLog("[error] ❌ Unknown command: '%s'\n", command_name.c_str());
 	}
@@ -236,70 +437,180 @@ void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 }
 
 // Command handler implementations
+
+/**
+ * @brief Handler for the 'exit' command.
+ *
+ * Logs an exit message and terminates the
+ * application with EXIT_SUCCESS.
+ */
 void ConsoleWindow::CommandExit() {
 	AddLog("[warning] 👋 Exiting application...\n");
 	std::exit(EXIT_SUCCESS);
 }
 
+/**
+ * @brief Handler for the 'quit' command.
+ *
+ * Logs a quit message and terminates the
+ * application with EXIT_SUCCESS.
+ * Functionally equivalent to CommandExit().
+ */
 void ConsoleWindow::CommandQuit() {
-	AddLog("[warning] 👋 Exiting application...\n");
+	AddLog("[warning] 👋 Quitting application...\n");
 	std::exit(EXIT_SUCCESS);
+	// blah blah
 }
 
+/**
+ * @brief Handler for the 'demo' command.
+ *
+ * Toggles the ImGui demo window visibility.
+ */
 void ConsoleWindow::CommandDemo() {
 	m_memory->m_bShow_demo_window = !m_memory->m_bShow_demo_window;
 	AddLog("[success] 🎪 Demo window %s\n",
-		m_memory->m_bShow_demo_window ? "✅ enabled" : "❌ disabled");
+		   m_memory->m_bShow_demo_window ? "✅ enabled" : "❌ disabled");
 }
 
+/**
+ * @brief Handler for the 'show' command.
+ *
+ * Shows the native console window (if available).
+
+ */
 void ConsoleWindow::CommandShowCmd() {
 	m_memory->m_bShowCmd = true;
 	m_cmd->ShowConsole(true);
 	AddLog("[success] 👁️ Console window shown\n");
 }
 
+/**
+ * @brief Handler for the 'hide' command.
+ *
+ * Hides the native console window (if available).
+
+ */
 void ConsoleWindow::CommandHideCmd() {
 	m_memory->m_bShowCmd = false;
 	m_cmd->ShowConsole(false);
 	AddLog("[success] 🙈 Console window hidden\n");
 }
 
+/**
+ * @brief Handler for the 'commands' command.
+ *
+ * Lists all available console commands.
+ */
 void ConsoleWindow::CommandList() {
 	AddLog("[info] 📜 Available commands:\n");
-	for(const auto& it : m_MyCommmands) {
+	for (const auto& it : m_MyCommmands) {
 		std::string cmd_utf8(it.first.begin(), it.first.end());
 		AddLog("[cmd]   ▸ %s\n", cmd_utf8.c_str());
 	}
 }
 
-void ConsoleWindow::CommandClear() {
-	ClearLog();
-}
+/**
+ * @brief Handler for the 'clear' and 'cls' commands.
+ *
+ * Clears all log entries from the
+ * console display.
+ */
+void ConsoleWindow::CommandClear() { ClearLog(); }
 
+/**
+ * @brief Handler for the 'help' command.
+ *
+ * Displays help information by listing all
+ * available commands.
+ */
 void ConsoleWindow::CommandHelp() {
 	AddLog("[info] ❓ Available Commands:\n");
-	for(const auto& it : m_MyCommmands) {
+	for (const auto& it : m_MyCommmands) {
 		std::string cmd_utf8(it.first.begin(), it.first.end());
 		AddLog("[cmd]   ▸ %s\n", cmd_utf8.c_str());
 	}
 }
 
+/**
+ * @brief Handler for the 'history' command.
+ *
+ * Displays the command history (last 10
+ * commands or all if fewer).
+ */
 void ConsoleWindow::CommandHistory() {
 	AddLog("[info] 📚 Command History:\n");
 	int first = History.Size - 10;
-	for(int i = first > 0 ? first : 0; i < History.Size; i++) {
+	for (int i = first > 0 ? first : 0; i < History.Size; i++) {
 		char hist_utf8[256];
 		ImTextStrToUtf8(hist_utf8, sizeof(hist_utf8), History[i], nullptr);
 		AddLog("[history] 📌 %3d: %s\n", i, hist_utf8);
 	}
 }
 
+/**
+ * @brief Handler for the 'status' command.
+ *
+ * Generates and displays a system status
+ * report.
+ */
 void ConsoleWindow::CommandStatus() {
 	AddLog("[info] 📊 Generating status report...\n");
 	m_cmd->Out.ShowSystemStatus();
 }
 
+/**
+ * @brief Handler for the 'break' command.
+ *
+ * Triggers a debugger breakpoint for debugging
+ * purposes.
+ *
+ * @warning Only use this when a debugger is attached.
+ */
+void ConsoleWindow::CommandBreak() {
+	AddLog("[warning] 🔴 Triggering debugger breakpoint...\n");
+	__debugbreak();
+	AddLog("[info] ▶️ Resumed from breakpoint\n");
+}
+
+/**
+ * @brief Handler for the 'fonts' command.
+ *
+ * Lists all loaded fonts from the FontManager.
+
+ */
+void ConsoleWindow::CommandFonts() {
+	AddLog("[info] 🔤 Available Fonts:\n");
+
+	if (m_font_manager) {
+		const auto& fontMap = m_font_manager->GetFontMap();
+
+		if (fontMap.empty()) {
+			AddLog("[warning] ⚠️ No fonts loaded\n");
+		} else {
+			AddLog("[success] ✓ Total fonts loaded: %zu\n", fontMap.size());
+			AddLog("[info] ═══════════════════════════════════════\n");
+
+			for (const auto& [fontName, fontPtr] : fontMap) {
+				if (fontPtr) { AddLog("[cmd]   ▸ %s\n", fontName.c_str()); }
+			}
+			AddLog("[info] ═══════════════════════════════════════\n");
+		}
+	} else {
+		AddLog("[error] ❌ FontManager not available\n");
+	}
+}
+
 // Parameterized command implementations
+
+/**
+ * @brief Handler for the 'echo' command.
+ *
+ * Echoes the provided message to the console.
+ *
+
+ * * @param args The message to echo.
+ */
 void ConsoleWindow::CommandEcho(const std::string& args) {
 	if (args.empty()) {
 		AddLog("[warning] ⚠️ Usage: echo <message>\n");
@@ -308,30 +619,39 @@ void ConsoleWindow::CommandEcho(const std::string& args) {
 	AddLog("[info] %s\n", args.c_str());
 }
 
+/**
+ * @brief Handler for the 'set' command.
+ *
+ * Sets configuration values. Currently supports:
+ *
+ * - 'autoscroll' (true/false/on/off/1/0)
+ * - 'logging' (true/false/on/off/1/0)
+ *
+ * @param args
+ * The key-value pair in format "<key> <value>".
+ */
 void ConsoleWindow::CommandSet(const std::string& args) {
 	if (args.empty()) {
 		AddLog("[warning] ⚠️ Usage: set <key> <value>\n");
 		return;
 	}
-	
+
 	// Parse key and value
 	size_t space_pos = args.find_first_of(" \t");
 	if (space_pos == std::string::npos) {
 		AddLog("[error] ❌ Missing value. Usage: set <key> <value>\n");
 		return;
 	}
-	
-	std::string key = args.substr(0, space_pos);
+
+	std::string key	  = args.substr(0, space_pos);
 	std::string value = args.substr(space_pos + 1);
-	
+
 	// Trim leading whitespace from value
 	size_t val_start = value.find_first_not_of(" \t");
-	if (val_start != std::string::npos) {
-		value = value.substr(val_start);
-	}
-	
+	if (val_start != std::string::npos) { value = value.substr(val_start); }
+
 	AddLog("[success] ✅ Set '%s' = '%s'\n", key.c_str(), value.c_str());
-	
+
 	// Example: Handle specific settings
 	if (key == "autoscroll") {
 		if (value == "true" || value == "1" || value == "on") {
@@ -352,13 +672,23 @@ void ConsoleWindow::CommandSet(const std::string& args) {
 	}
 }
 
+/**
+ * @brief Handler for the 'log' command.
+ *
+ * Logs a message with a specified severity level.
+
+ * * Available levels: info, warning, error, success.
+ *
+ * @param args The log level and message in
+ * format "<level> <message>".
+ */
 void ConsoleWindow::CommandLog(const std::string& args) {
 	if (args.empty()) {
 		AddLog("[warning] ⚠️ Usage: log <level> <message>\n");
 		AddLog("[info] Available levels: info, warning, error, success\n");
 		return;
 	}
-	
+
 	// Parse log level and message
 	size_t space_pos = args.find_first_of(" \t");
 	if (space_pos == std::string::npos) {
@@ -366,19 +696,17 @@ void ConsoleWindow::CommandLog(const std::string& args) {
 		AddLog("[info] %s\n", args.c_str());
 		return;
 	}
-	
-	std::string level = args.substr(0, space_pos);
+
+	std::string level	= args.substr(0, space_pos);
 	std::string message = args.substr(space_pos + 1);
-	
+
 	// Trim leading whitespace from message
 	size_t msg_start = message.find_first_not_of(" \t");
-	if (msg_start != std::string::npos) {
-		message = message.substr(msg_start);
-	}
-	
+	if (msg_start != std::string::npos) { message = message.substr(msg_start); }
+
 	// Convert level to lowercase
 	std::transform(level.begin(), level.end(), level.begin(), ::tolower);
-	
+
 	// Log with appropriate level
 	if (level == "info") {
 		AddLog("[info] %s\n", message.c_str());
@@ -394,6 +722,21 @@ void ConsoleWindow::CommandLog(const std::string& args) {
 	}
 }
 
+/**
+ * @brief Adds a formatted log message to the console (UTF-8 version).
+ *
+ * Converts the UTF-8
+ * format string to ImWchar for internal storage and display.
+ * If file logging is enabled, also
+ * writes the message with a timestamp to the log file.
+ *
+ * @param fmt The printf-style format
+ * string (UTF-8 encoded).
+ * @param ... Variable arguments for the format string.
+ *
+ * @note
+ * Supports color tags like [error], [warning], [success], [info], etc.
+ */
 void ConsoleWindow::AddLog(const char* fmt, ...) {
 	// UTF-8 version - converts to ImWchar for storage
 	char	buf[1024];
@@ -426,6 +769,21 @@ void ConsoleWindow::AddLog(const char* fmt, ...) {
 	}
 }
 
+/**
+ * @brief Adds a formatted log message to the console (ImWchar version).
+ *
+ * Processes wide
+ * character format strings. Converts to UTF-8 internally for formatting,
+ * then back to ImWchar
+ * for storage.
+ *
+ * @param fmt The printf-style format string (ImWchar encoded).
+ * @param ...
+ * Variable arguments for the format string.
+ *
+ * @note If file logging is enabled, writes to the
+ * log file with a timestamp.
+ */
 void ConsoleWindow::AddLog(const ImWchar* fmt, ...) {
 	// Wide character version
 	ImWchar buf[1024];
@@ -463,6 +821,18 @@ void ConsoleWindow::AddLog(const ImWchar* fmt, ...) {
 	}
 }
 
+/**
+ * @brief Adds a formatted log message to the console (Windows wchar_t version).
+ *
+ *
+ * Convenience method for Windows-specific wide character strings.
+ * Converts wchar_t to ImWchar
+ * for internal storage.
+ *
+ * @param fmt The wprintf-style format string (Windows wchar_t).
+ *
+ * @param ... Variable arguments for the format string.
+ */
 void ConsoleWindow::AddLogW(const wchar_t* fmt, ...) {
 	// Windows wchar_t convenience version
 	wchar_t wbuf[1024];
@@ -480,6 +850,90 @@ void ConsoleWindow::AddLogW(const wchar_t* fmt, ...) {
 	Items.push_back(Wcsdup(imwbuf));
 }
 
+/**
+ * @brief Displays a checkbox for an ImGui debug log flag.
+ *
+ * Creates a checkbox to toggle a
+ * specific debug log flag. When SHIFT is held,
+ * clicking will enable only that flag (exclusive
+ * mode).
+ *
+ * @param name The display name of the debug flag.
+ * @param flag The
+ * ImGuiDebugLogFlags value to control.
+ */
+void ConsoleWindow::ShowDebugLogFlag(const char* name, ImGuiDebugLogFlags flag) {
+	ImGuiContext& g = *GImGui;
+	if (ImGui::CheckboxFlags(name, &g.DebugLogFlags, flag) && g.IO.KeyShift) {
+		g.DebugLogFlags = (g.DebugLogFlags & flag) ? flag : 0;
+	}
+	if (ImGui::IsItemHovered() && g.IO.KeyShift) {
+		ImGui::SetTooltip("Hold SHIFT when clicking to only enable this logging category.");
+	}
+}
+
+/**
+ * @brief Updates the console with new entries from ImGui's debug log.
+ *
+ * Checks for new
+ * debug log entries since the last update and adds them to
+ * the console with a [DEBUG] tag.
+ * Should be called every frame.
+ */
+void ConsoleWindow::UpdateDebugLog() {
+	ImGuiContext& g = *GImGui;
+
+	// Check if there are new debug log entries
+	if (g.DebugLogBuf.size() > m_LastDebugLogPos) {
+		// Get the new log entries
+		const char* log_start = g.DebugLogBuf.c_str() + m_LastDebugLogPos;
+		const char* log_end	  = g.DebugLogBuf.c_str() + g.DebugLogBuf.size();
+
+		// Split by lines and add to console
+		const char* line_start = log_start;
+		for (const char* p = log_start; p < log_end; p++) {
+			if (*p == '\n') {
+				// Found a complete line
+				size_t line_len = p - line_start;
+				if (line_len > 0) {
+					char   line_buf[1024];
+					size_t copy_len =
+						(line_len < sizeof(line_buf) - 1) ? line_len : sizeof(line_buf) - 1;
+					memcpy(line_buf, line_start, copy_len);
+					line_buf[copy_len] = '\0';
+
+					// Add to console with debug tag
+					AddLog("[grey][DEBUG] %s\n", line_buf);
+				}
+				line_start = p + 1;
+			}
+		}
+
+		// Update position
+		m_LastDebugLogPos = g.DebugLogBuf.size();
+	}
+}
+
+/**
+ * @brief Renders the console window using ImGui.
+ *
+ * Creates and displays the full console
+ * interface including:
+ * - Title bar with context menu
+ * - Control buttons (Clear, Copy,
+ * Options)
+ * - Filter input
+ * - Scrollable log display with color-coded entries
+ * - Command
+ * input with history and auto-completion
+ *
+ * @param title The window title to display.
+ * @param
+ * p_open Pointer to bool controlling window visibility (can be nullptr).
+ *
+ * @note Uses
+ * ImGuiListClipper for efficient rendering of large log histories.
+ */
 void ConsoleWindow::Render(const char* title, bool* p_open) {
 	ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin(title, p_open)) {
@@ -503,6 +957,22 @@ void ConsoleWindow::Render(const char* title, bool* p_open) {
 	// Options menu
 	if (ImGui::BeginPopup("Options")) {
 		ImGui::Checkbox("Auto-scroll", &AutoScroll);
+
+		ImGui::Separator();
+		ImGui::Text("ImGui Debug Log Flags:");
+		ImGui::Spacing();
+
+		ShowDebugLogFlag("Errors", ImGuiDebugLogFlags_EventError);
+		ShowDebugLogFlag("ActiveId", ImGuiDebugLogFlags_EventActiveId);
+		ShowDebugLogFlag("Clipper", ImGuiDebugLogFlags_EventClipper);
+		ShowDebugLogFlag("Focus", ImGuiDebugLogFlags_EventFocus);
+		ShowDebugLogFlag("IO", ImGuiDebugLogFlags_EventIO);
+		ShowDebugLogFlag("Font", ImGuiDebugLogFlags_EventFont);
+		ShowDebugLogFlag("Nav", ImGuiDebugLogFlags_EventNav);
+		ShowDebugLogFlag("Popup", ImGuiDebugLogFlags_EventPopup);
+		ShowDebugLogFlag("Selection", ImGuiDebugLogFlags_EventSelection);
+		ShowDebugLogFlag("InputRouting", ImGuiDebugLogFlags_EventInputRouting);
+
 		ImGui::EndPopup();
 	}
 
@@ -557,7 +1027,8 @@ void ConsoleWindow::Render(const char* title, bool* p_open) {
 		ImVec4 currentColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 		bool   colorActive	= false;
 
-		for (const ImWchar* item : Items) {
+		for (int i = 0; i < Items.Size; i++) {
+			const ImWchar* item = Items[i];
 			// Convert ImWchar to UTF-8 for display and filtering
 			char item_utf8[1024];
 			ImTextStrToUtf8(item_utf8, sizeof(item_utf8), item, nullptr);
@@ -692,11 +1163,39 @@ void ConsoleWindow::Render(const char* title, bool* p_open) {
 	ImGui::End();
 }
 
+/**
+ * @brief Static callback stub for ImGui text input.
+ *
+ * Forwards the callback to the instance
+ * method.
+ *
+ * @param data The ImGui input text callback data.
+ * @return Result of the instance
+ * TextEditCallback method.
+ */
 int ConsoleWindow::TextEditCallbackStub(ImGuiInputTextCallbackData* data) {
 	ConsoleWindow* m_console = (ConsoleWindow*)data->UserData;
 	return m_console->TextEditCallback(data);
 }
 
+/**
+ * @brief Handles text input callbacks for command auto-completion and history.
+ *
+ *
+ * Implements:
+ * - Tab completion: Suggests and completes commands based on partial input
+ * -
+ * History navigation: Up/Down arrows to cycle through command history
+ *
+ * @param data The ImGui
+ * input text callback data containing event information.
+ * @return 0 to continue processing,
+ * non-zero to stop.
+ *
+ * @note Tab completion supports multiple matches and shows possibilities.
+
+ * * @note History navigation preserves the current input when returning to it.
+ */
 int ConsoleWindow::TextEditCallback(ImGuiInputTextCallbackData* data) {
 	// AddLog("cursor: %d, selection: %d-%d", data->CursorPos, data->SelectionStart,
 	// data->SelectionEnd);
@@ -799,6 +1298,15 @@ int ConsoleWindow::TextEditCallback(ImGuiInputTextCallbackData* data) {
 	return 0;
 }
 
+/**
+ * @brief Case-insensitive string comparison (UTF-8).
+ *
+ * @param s1 First string to compare.
+
+ * * @param s2 Second string to compare.
+ * @return 0 if equal, negative if s1 < s2, positive if s1
+ * > s2.
+ */
 int ConsoleWindow::Stricmp(const char* s1, const char* s2) {
 	int d;
 	while ((d = toupper(*s2) - toupper(*s1)) == 0 && *s1) {
@@ -808,6 +1316,15 @@ int ConsoleWindow::Stricmp(const char* s1, const char* s2) {
 	return d;
 }
 
+/**
+ * @brief Case-insensitive string comparison (ImWchar).
+ *
+ * @param s1 First wide string to
+ * compare.
+ * @param s2 Second wide string to compare.
+ * @return 0 if equal, negative if s1 < s2,
+ * positive if s1 > s2.
+ */
 int ConsoleWindow::Wcsicmp(const ImWchar* s1, const ImWchar* s2) {
 	int d;
 	while ((d = towupper(*s2) - towupper(*s1)) == 0 && *s1) {
@@ -817,6 +1334,16 @@ int ConsoleWindow::Wcsicmp(const ImWchar* s1, const ImWchar* s2) {
 	return d;
 }
 
+/**
+ * @brief Case-insensitive string comparison with length limit (UTF-8).
+ *
+ * @param s1 First
+ * string to compare.
+ * @param s2 Second string to compare.
+ * @param n Maximum number of
+ * characters to compare.
+ * @return 0 if equal, negative if s1 < s2, positive if s1 > s2.
+ */
 int ConsoleWindow::Strnicmp(const char* s1, const char* s2, int n) {
 	int d = 0;
 	while (n > 0 && (d = toupper(*s2) - toupper(*s1)) == 0 && *s1) {
@@ -827,6 +1354,16 @@ int ConsoleWindow::Strnicmp(const char* s1, const char* s2, int n) {
 	return d;
 }
 
+/**
+ * @brief Case-insensitive string comparison with length limit (ImWchar).
+ *
+ * @param s1 First
+ * wide string to compare.
+ * @param s2 Second wide string to compare.
+ * @param n Maximum number of
+ * characters to compare.
+ * @return 0 if equal, negative if s1 < s2, positive if s1 > s2.
+ */
 int ConsoleWindow::Wcsnicmp(const ImWchar* s1, const ImWchar* s2, int n) {
 	int d = 0;
 	while (n > 0 && (d = towupper(*s2) - towupper(*s1)) == 0 && *s1) {
@@ -837,12 +1374,24 @@ int ConsoleWindow::Wcsnicmp(const ImWchar* s1, const ImWchar* s2, int n) {
 	return d;
 }
 
+/**
+ * @brief Trims trailing whitespace from a UTF-8 string.
+ *
+ * @param s The string to trim
+ * (modified in place).
+ */
 void ConsoleWindow::Strtrim(char* s) {
 	char* str_end = s + strlen(s);
 	while (str_end > s && str_end[-1] == ' ') str_end--;
 	*str_end = 0;
 }
 
+/**
+ * @brief Trims trailing whitespace from a wide character string.
+ *
+ * @param s The wide string
+ * to trim (modified in place).
+ */
 void ConsoleWindow::Wcstrim(ImWchar* s) {
 	ImWchar* str_end = s;
 	while (*str_end) str_end++;
@@ -850,12 +1399,32 @@ void ConsoleWindow::Wcstrim(ImWchar* s) {
 	*str_end = 0;
 }
 
+/**
+ * @brief Calculates the length of a wide character string.
+ *
+ * @param s The null-terminated
+ * wide string.
+ * @return The number of characters (excluding null terminator).
+ */
 size_t ConsoleWindow::Wcslen(const ImWchar* s) {
 	size_t len = 0;
 	while (s[len]) len++;
 	return len;
 }
 
+/**
+ * @brief Enables or disables file logging.
+ *
+ * When enabled, opens the log file in append
+ * mode and writes a session start marker.
+ * When disabled, writes a session end marker and closes
+ * the log file.
+ *
+ * @param enable True to enable file logging, false to disable.
+ *
+ * @note Log
+ * entries are written with timestamps in the format [YYYY-MM-DD HH:MM:SS.mmm].
+ */
 void ConsoleWindow::EnableFileLogging(bool enable) {
 	m_bEnableFileLogging = enable;
 
@@ -892,6 +1461,16 @@ void ConsoleWindow::EnableFileLogging(bool enable) {
 	}
 }
 
+/**
+ * @brief Sets the path for the log file.
+ *
+ * If logging is currently enabled, closes the
+ * current log file and reopens
+ * with the new path.
+ *
+ * @param path The filesystem path for the
+ * log file (wide string).
+ */
 void ConsoleWindow::SetLogFilePath(const std::wstring& path) {
 	bool wasEnabled = m_bEnableFileLogging;
 
@@ -904,6 +1483,14 @@ void ConsoleWindow::SetLogFilePath(const std::wstring& path) {
 	if (wasEnabled) { EnableFileLogging(true); }
 }
 
+/**
+ * @brief Manually flushes the log file buffer to disk.
+ *
+ * Ensures all buffered log data is
+ * written to the file immediately.
+ * Useful before application shutdown or when data persistence
+ * is critical.
+ */
 void ConsoleWindow::FlushLogFile() {
 	if (m_logFile.is_open()) { m_logFile.flush(); }
 }

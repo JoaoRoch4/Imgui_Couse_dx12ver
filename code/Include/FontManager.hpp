@@ -123,6 +123,17 @@ public:
 	std::string						OpenFolderBrowserDialog(HWND hwnd) const;
 	std::string						OpenFontFileDialog(HWND hwnd) const;
 
+	// NEW: Load ImGui default fonts (Proggy, Cousine, etc.)
+	// These are embedded fonts that don't require external files
+	// @return: Number of default fonts loaded
+	int LoadImGuiDefaultFonts();
+
+	// NEW: Optionally load Windows system fonts
+	// This method can be called manually when user wants to load Windows fonts
+	// @param folderPath: Path to Windows fonts folder (default: "C:\\Windows\\Fonts")
+	// @return: Number of fonts successfully loaded from Windows folder
+	int LoadWindowsFonts(const std::string& folderPath = "C:\\Windows\\Fonts");
+
 private:
 	// NEW: Helper function to check if a file has a valid font extension
 	// @param path: Path to check

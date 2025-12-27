@@ -42,37 +42,103 @@ FontManager::~FontManager() {}
 // ORIGINAL FONT LOADING METHOD
 // ============================================================================
 
-// LoadFonts - Your original implementation with hardcoded font paths
+// LoadFonts - Enhanced implementation with common Windows fonts
 void FontManager::LoadFonts() {
-	// Load font from Windows Fonts folder - Segoe UI
-	ImFont* font2 = m_io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf");
-	IM_ASSERT(font2 != nullptr);	// Assert that font loaded successfully
-	m_loadedFonts.push_back(font2); // Add to our vector of loaded fonts
-
-	//// Load DroidSans from relative path
-	//ImFont* font3 = m_io->Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf");
-	//IM_ASSERT(font3 != nullptr);
-	//m_loadedFonts.push_back(font3);
-
-	//// Load Roboto Medium font
-	//ImFont* font4 = m_io->Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf");
-	//IM_ASSERT(font4 != nullptr);
-	//m_loadedFonts.push_back(font4);
-
-	//// Load Cousine Regular font
-	//ImFont* font5 = m_io->Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
-	//IM_ASSERT(font5 != nullptr);
-	//m_loadedFonts.push_back(font5);
-
-	// Load Arial from Windows Fonts
-	ImFont* font6 = m_io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\Arial.TTF");
-	IM_ASSERT(font6 != nullptr);
-	m_loadedFonts.push_back(font6);
-
-	// Load Arial Rounded Bold
-	ImFont* font7 = m_io->Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ARLRDBD.TTF");
-	IM_ASSERT(font7 != nullptr);
-	m_loadedFonts.push_back(font7);
+	// Load common Windows system fonts for variety
+	
+	// Segoe UI - Modern Windows UI font with emoji support
+	// First load the base font
+	ImFont* segoeUI = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeui.ttf", 16.0f);
+	if (segoeUI != nullptr) {
+		m_loadedFonts.push_back(segoeUI);
+		m_fontMap["Segoe UI"] = segoeUI;
+		
+		// Merge emoji font into Segoe UI for emoji support
+		ImFontConfig config;
+		config.MergeMode = true;
+		config.GlyphMinAdvanceX = 16.0f; // Make icons monospaced
+		static const ImWchar icon_ranges[] = { 0x1F300, 0x1F9FF, 0 }; // Emoji range
+		m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\seguiemj.ttf", 16.0f, &config, icon_ranges);
+	}
+	
+	// Arial - Classic sans-serif
+	ImFont* arial = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\arial.ttf", 16.0f);
+	if (arial != nullptr) {
+		m_loadedFonts.push_back(arial);
+		m_fontMap["Arial"] = arial;
+	}
+	
+	// Consolas - Popular monospace font for code
+	ImFont* consolas = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\consola.ttf", 16.0f);
+	if (consolas != nullptr) {
+		m_loadedFonts.push_back(consolas);
+		m_fontMap["Consolas"] = consolas;
+	}
+	
+	// Courier New - Classic monospace
+	ImFont* courierNew = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\cour.ttf", 16.0f);
+	if (courierNew != nullptr) {
+		m_loadedFonts.push_back(courierNew);
+		m_fontMap["Courier New"] = courierNew;
+	}
+	
+	// Tahoma - Compact sans-serif
+	ImFont* tahoma = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\tahoma.ttf", 16.0f);
+	if (tahoma != nullptr) {
+		m_loadedFonts.push_back(tahoma);
+		m_fontMap["Tahoma"] = tahoma;
+	}
+	
+	// Verdana - Clear, readable font
+	ImFont* verdana = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\verdana.ttf", 16.0f);
+	if (verdana != nullptr) {
+		m_loadedFonts.push_back(verdana);
+		m_fontMap["Verdana"] = verdana;
+	}
+	
+	// Times New Roman - Classic serif
+	ImFont* timesNewRoman = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\times.ttf", 16.0f);
+	if (timesNewRoman != nullptr) {
+		m_loadedFonts.push_back(timesNewRoman);
+		m_fontMap["Times New Roman"] = timesNewRoman;
+	}
+	
+	// Calibri - Modern, clean font
+	ImFont* calibri = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\calibri.ttf", 16.0f);
+	if (calibri != nullptr) {
+		m_loadedFonts.push_back(calibri);
+		m_fontMap["Calibri"] = calibri;
+	}
+	
+	// Comic Sans MS - Casual font
+	ImFont* comicSans = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\comic.ttf", 16.0f);
+	if (comicSans != nullptr) {
+		m_loadedFonts.push_back(comicSans);
+		m_fontMap["Comic Sans MS"] = comicSans;
+	}
+	
+	// Georgia - Elegant serif
+	ImFont* georgia = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\georgia.ttf", 16.0f);
+	if (georgia != nullptr) {
+		m_loadedFonts.push_back(georgia);
+		m_fontMap["Georgia"] = georgia;
+	}
+	
+	// Trebuchet MS - Modern humanist font
+	ImFont* trebuchet = m_io->Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\trebuc.ttf", 16.0f);
+	if (trebuchet != nullptr) {
+		m_loadedFonts.push_back(trebuchet);
+		m_fontMap["Trebuchet MS"] = trebuchet;
+	}
+	
+	// Add Proggy Clean (ImGui's built-in default) for consistency
+	ImFontConfig config;
+	config.SizePixels = 13.0f;
+	ImFont* proggy = m_io->Fonts->AddFontDefault(&config);
+	if (proggy != nullptr) {
+		m_loadedFonts.push_back(proggy);
+		m_fontMap["Proggy Clean"] = proggy;
+	}
 }
 
 // ============================================================================
@@ -995,4 +1061,38 @@ std::map<std::string, std::string> FontManager::SearchFontsInFolderAsMap(
     return fontInfoMap;
     */
 }
+
+// ============================================================================
+// NEW: IMGUI DEFAULT FONTS AND WINDOWS FONTS LOADING
+// ============================================================================
+
+// LoadImGuiDefaultFonts - Loads built-in ImGui fonts (no external files required)
+// These fonts are embedded in ImGui and always available
+// @return: Number of default fonts loaded
+int FontManager::LoadImGuiDefaultFonts() {
+	int loadedCount = 0;
+
+	// Load default ImGui font (ProggyClean.ttf, 13px)
+	ImFont* defaultFont = m_io->Fonts->AddFontDefault();
+	if (defaultFont != nullptr) {
+		m_loadedFonts.push_back(defaultFont);
+		m_fontMap["Default"] = defaultFont;
+		loadedCount++;
+	}
+
+	// You can add more built-in fonts here if ImGui provides them
+	// For now, ImGui only has the default ProggyClean font built-in
+
+	return loadedCount;
+}
+
+// LoadWindowsFonts - Optionally loads fonts from Windows Fonts folder
+// This method can be called manually when user wants to load system fonts
+// @param folderPath: Path to Windows fonts folder (default: "C:\\Windows\\Fonts")
+// @return: Number of fonts successfully loaded
+int FontManager::LoadWindowsFonts(const std::string& folderPath) {
+	// Use the existing LoadFontsFromFolderToMap method which already has all the logic
+	return LoadFontsFromFolderToMap(folderPath);
+}
+
 } // namespace app

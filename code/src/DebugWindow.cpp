@@ -15,7 +15,7 @@ DebugWindow::DebugWindow()
   hPyProcessHandle(nullptr),
   m_memory(nullptr)
   {
-    m_memory = MemoryManagement::Get_MemoryManagement();
+    m_memory = MemoryManagement::Get_MemoryManagement_Singleton();
 
   }
 

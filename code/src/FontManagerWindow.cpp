@@ -1,6 +1,5 @@
 #include "PCH.hpp"
 #include "Classes.hpp"
-#include "FontManagerWindow.hpp"
 namespace app {
 
 FontManagerWindow::FontManagerWindow()
@@ -15,11 +14,12 @@ FontManagerWindow::FontManagerWindow()
   bFonstsWereLoaded(false),
   m_memory(nullptr)
   {
-    m_memory = MemoryManagement::Get_MemoryManagement();
   }
 
 
 void FontManagerWindow::GetAux(HWND hwnd, FontManager* fontManager) {
+    m_memory = MemoryManagement::Get_MemoryManagement_Singleton();
+
 	GetHwnd(hwnd);
 	GetFontManager(fontManager);
 }

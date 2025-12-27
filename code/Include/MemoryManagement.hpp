@@ -10,6 +10,7 @@ namespace app {
 
 // Forward declarations to avoid circular dependencies
 // These tell the compiler that these types exist without including headers
+class App;
 class CommandLineArguments;
 class ConsoleWindow;
 class ConsoleInputHandler;
@@ -37,12 +38,16 @@ public:
 
 	virtual ~MemoryManagement();
 
-	void AllocAll();
+    HRESULT AllocAll();
+    HRESULT Destroy_All();
 
-	// DX12Renderer*					Get_DX12Renderer() const;
 
 
-	static MemoryManagement*		Get_MemoryManagement();
+
+	static MemoryManagement*		Get_MemoryManagement_Singleton();
+
+    App* Get_App() const;
+
 	ExampleDescriptorHeapAllocator* Get_ExampleDescriptorHeapAllocator() const;
 
 	CommandLineArguments* Get_CommandLineArguments() const;
@@ -60,6 +65,7 @@ public:
 
 
 protected:
+    HRESULT Alloc_App();
 	HRESULT Alloc_command_line_args();
 	HRESULT Alloc_console_window();
 	HRESULT Alloc_console_input_handler();
@@ -76,15 +82,29 @@ protected:
 	HRESULT Alloc_window_manager();
 	HRESULT Alloc_output_console();
 
+    HRESULT Destroy_App();
+    HRESULT Destroy_command_line_args();
+    HRESULT Destroy_console_window();
+    HRESULT Destroy_console_input_handler();
+    HRESULT Destroy_config_manager();
+    HRESULT Destroy_style_manager();
+    HRESULT Destroy_dx12_renderer();
+    HRESULT Destroy_dx_demos();
+    HRESULT Destroy_debug_window();
+    HRESULT Destroy_Example_Descriptor_Heap_Allocator();
+    HRESULT Destroy_font_manager();
+    HRESULT Destroy_font_manager_window();
+    HRESULT Destroy_frame_context();
+    HRESULT Destroy_window_class();
+    HRESULT Destroy_window_manager();
+    HRESULT Destroy_output_console();
+
 
 private:
 	// UPtr<DX12Renderer>					 dx12_renderer;
 
-	std::shared_ptr<MemoryManagement> m_memory_management;
-
-
 	UPtr<ExampleDescriptorHeapAllocator> m_Example_Descriptor_Heap_Allocator;
-
+    UPtr<App> m_app;
 	UPtr<CommandLineArguments> m_command_line_args;
 	UPtr<ConsoleWindow>		   m_console_window;
 	UPtr<ConsoleInputHandler>  m_console_input_handler;
@@ -100,6 +120,7 @@ private:
 	UPtr<WindowManager>		   m_window_manager;
 	UPtr<OutputConsole>		   m_output_console;
 
+    bool m_bApp_allocated;
 	bool m_bCommand_line_args_allocated;
 	bool m_bConsole_window_allocated;
 	bool m_bConsole_input_handler_allocated;
@@ -159,7 +180,7 @@ public:
 	ImGuiIO* Get_ImGuiIO();
 
 	ImVec4* Get_clear_color_ptr();
-	ImVec4	Get_clear_color() { return m_clear_color; }
+    ImVec4	Get_clear_color() const { return m_clear_color; }
 
 private:
 	ImGuiIO* m_io;

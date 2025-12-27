@@ -6,7 +6,7 @@ namespace app {
 CommandLineArguments::CommandLineArguments()
 : Args{}, szArgList(nullptr), argCount(0), bConsoleLaunched(false), m_memory(nullptr){
 
-    m_memory = MemoryManagement::Get_MemoryManagement(); //m_cmd = m_memory->Get_OutputConsole();
+    m_memory = MemoryManagement::Get_MemoryManagement_Singleton(); //m_cmd = m_memory->Get_OutputConsole();
 }
 
 CommandLineArguments::~CommandLineArguments() { LocalFree(szArgList); }

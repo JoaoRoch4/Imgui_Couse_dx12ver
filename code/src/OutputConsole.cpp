@@ -33,7 +33,7 @@ m_hWnd_console(nullptr),
 m_memory(nullptr),
 m_args(nullptr) {
 
-    m_memory = MemoryManagement::Get_MemoryManagement();
+    m_memory = MemoryManagement::Get_MemoryManagement_Singleton();
     if(m_memory) m_args = m_memory->Get_CommandLineArguments();
     else throw std::runtime_error("m_memory is nullptr");
 }
@@ -74,21 +74,26 @@ void OutputConsole::CreateConsole() {
 	FILE* fp;
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 
+	// Set console to use UTF-8 for both input and output
 	SetConsoleOutputCP(CP_UTF8);
-	std::wcout.imbue(std::locale(""));
+	SetConsoleCP(CP_UTF8);
+	
+	// Set the console mode to support virtual terminal sequences (for better UTF-8 support)
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	DWORD dwMode = 0;
+	GetConsoleMode(hOut, &dwMode);
+	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(hOut, dwMode);
 
-	// 2. CONFIGURAÇÃO CRUCIAL PARA WCOUT:
-	// Define o modo de saída do m_console para Unicode (UTF-16)
-	//_setmode(_fileno(stdout), _O_U8TEXT);
-
+	// Sync stdio - don't use locale as it can cause encoding issues
 	std::ios::sync_with_stdio(true);
-	std::wcout.clear();
 
 	m_hWnd_console		 = GetConsoleWindow();
 	m_bWasConsoleCreated = true;
 
 	ShowConsole(m_bShowConsole);
-	Out.WriteLine(L"Console Window Created!");
+	// Use regular string and direct cout for initial message
+	std::cout << "Console Window Created!" << std::endl;
 	setConsoleFontSize(24);
 }
 
@@ -184,23 +189,31 @@ CustomOutput& CustomOutput::operator<<(const char* dado) {
 
 CustomOutput& CustomOutput::operator<<(const std::wstring& dado) {
 	std::wcout << dado;
-	// Convert wstring to string for ConsoleWindow
-	if (m_consoleWindow) {
-		std::string str(dado.begin(), dado.end());
-		m_buffer += str;
-		FlushToConsoleWindow();
+	// Convert wstring to UTF-8 string for ConsoleWindow
+	if (m_consoleWindow && !dado.empty()) {
+		int size_needed = WideCharToMultiByte(CP_UTF8, 0, dado.c_str(), (int)dado.size(), nullptr, 0, nullptr, nullptr);
+		if (size_needed > 0) {
+			std::string str(size_needed, 0);
+			WideCharToMultiByte(CP_UTF8, 0, dado.c_str(), (int)dado.size(), &str[0], size_needed, nullptr, nullptr);
+			m_buffer += str;
+			FlushToConsoleWindow();
+		}
 	}
 	return *this;
 }
 
 CustomOutput& CustomOutput::operator<<(const wchar_t* dado) {
 	std::wcout << dado;
-	// Convert wchar_t* to string for ConsoleWindow
-	if (m_consoleWindow) {
-		std::wstring wstr(dado);
-		std::string	 str(wstr.begin(), wstr.end());
-		m_buffer += str;
-		FlushToConsoleWindow();
+	// Convert wchar_t* to UTF-8 string for ConsoleWindow
+	if (m_consoleWindow && dado && dado[0] != L'\0') {
+		int len = (int)wcslen(dado);
+		int size_needed = WideCharToMultiByte(CP_UTF8, 0, dado, len, nullptr, 0, nullptr, nullptr);
+		if (size_needed > 0) {
+			std::string str(size_needed, 0);
+			WideCharToMultiByte(CP_UTF8, 0, dado, len, &str[0], size_needed, nullptr, nullptr);
+			m_buffer += str;
+			FlushToConsoleWindow();
+		}
 	}
 	return *this;
 }
@@ -221,10 +234,14 @@ void CustomOutput::WriteLine(const std::wstring& message) {
 	std::wcout << message << std::endl;
 	std::wcout.flush();
 	
-	// Output to ImGui console window (convert to string)
-	if (m_consoleWindow) {
-		std::string str(message.begin(), message.end());
-		m_consoleWindow->AddLog("%s", str.c_str());
+	// Output to ImGui console window (convert to UTF-8)
+	if (m_consoleWindow && !message.empty()) {
+		int size_needed = WideCharToMultiByte(CP_UTF8, 0, message.c_str(), (int)message.size(), nullptr, 0, nullptr, nullptr);
+		if (size_needed > 0) {
+			std::string str(size_needed, 0);
+			WideCharToMultiByte(CP_UTF8, 0, message.c_str(), (int)message.size(), &str[0], size_needed, nullptr, nullptr);
+			m_consoleWindow->AddLog("%s\n", str.c_str());
+		}
 	}
 }
 
@@ -247,11 +264,17 @@ void CustomOutput::Write(const std::wstring& message) {
 	std::wcout.flush();
 	
 	// Convert and add to buffer for ImGui console
-	std::string str(message.begin(), message.end());
-	m_buffer += str;
-	// Check if we should flush (if message contains newline)
-	if (str.find('\n') != std::string::npos) {
-		ForceFlush();
+	if (!message.empty()) {
+		int size_needed = WideCharToMultiByte(CP_UTF8, 0, message.c_str(), (int)message.size(), nullptr, 0, nullptr, nullptr);
+		if (size_needed > 0) {
+			std::string str(size_needed, 0);
+			WideCharToMultiByte(CP_UTF8, 0, message.c_str(), (int)message.size(), &str[0], size_needed, nullptr, nullptr);
+			m_buffer += str;
+			// Check if we should flush (if message contains newline)
+			if (str.find('\n') != std::string::npos) {
+				ForceFlush();
+			}
+		}
 	}
 }
 
@@ -308,9 +331,14 @@ void CustomOutput::ShowSystemStatus() {
 				DXGI_ADAPTER_DESC1 desc;
 				adapter->GetDesc1(&desc);
 				
-				// Convert wide string to string
+				// Convert wide string to UTF-8
 				std::wstring wAdapterName(desc.Description);
-				std::string adapterName(wAdapterName.begin(), wAdapterName.end());
+				int size_needed = WideCharToMultiByte(CP_UTF8, 0, wAdapterName.c_str(), (int)wAdapterName.size(), nullptr, 0, nullptr, nullptr);
+				std::string adapterName;
+				if (size_needed > 0) {
+					adapterName.resize(size_needed);
+					WideCharToMultiByte(CP_UTF8, 0, wAdapterName.c_str(), (int)wAdapterName.size(), &adapterName[0], size_needed, nullptr, nullptr);
+				}
 				WriteLine("  GPU: " + adapterName);
 				
 				// Video Memory

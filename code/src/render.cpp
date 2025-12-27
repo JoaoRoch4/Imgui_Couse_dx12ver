@@ -58,7 +58,7 @@ void WindowClass::Close() {}
  * - m_renameDialogOpen and m_deleteDialogOpen are set to false
  * - m_memory is initialized with a reference to the MemoryManagement singleton
  *
- * @see MemoryManagement::Get_MemoryManagement()
+ * @see MemoryManagement::Get_MemoryManagement_Singleton()
  */
 WindowClass::WindowClass() :
 m_currentPath(fs::current_path()),
@@ -66,7 +66,7 @@ m_selectedEntry(fs::path{}),
 m_memory(nullptr),
 m_renameDialogOpen(false),
 m_deleteDialogOpen(false) {
-	m_memory = MemoryManagement::Get_MemoryManagement();
+	m_memory = MemoryManagement::Get_MemoryManagement_Singleton();
 }
 
 /**

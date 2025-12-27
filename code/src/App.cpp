@@ -31,8 +31,7 @@ App::App() :
 }
 
 HRESULT App::Alloc() {
-    m_memory = MemoryManagement::Get_MemoryManagement();
-    m_memory->AllocAll();
+    m_memory = MemoryManagement::Get_MemoryManagement_Singleton();
 
     m_cmdArgs = m_memory->Get_CommandLineArguments();
     m_console = m_memory->Get_OutputConsole();
@@ -46,7 +45,6 @@ HRESULT App::Alloc() {
 }
 
 App::~App() {
-    Cleanup();
     s_instance = nullptr;
 }
 
@@ -221,18 +219,24 @@ m_consoleWindow->Tick();
 // Get font manager and initialize
 m_font_manager->GetIo(m_io);
 
+// Load Windows system fonts for variety
+m_console->Out << tc::cyan << "Loading Windows system fonts..." << tc::reset << std::endl;
+m_font_manager->LoadFonts();
+m_console->Out << tc::green << "✓ Loaded " << m_font_manager->GetFontCount() << " fonts" << tc::reset << std::endl;
+
+// Auto-load ImGui default fonts (built-in, no external files needed)
+int defaultFontsLoaded = m_font_manager->LoadImGuiDefaultFonts();
+m_console->Out << tc::cyan << "Loaded " << defaultFontsLoaded << " ImGui default font(s)" << tc::reset << std::endl;
+
+// Note: Windows fonts can be optionally loaded via:
+// int winFontsLoaded = m_font_manager->LoadWindowsFonts("C:\\Windows\\Fonts");
+// Or manually through the Font Manager Window UI
 
 m_font_manager_window->GetAux(m_window->GetHWND(), m_font_manager);
 
 
 m_debug_window->GetIo(m_io);
 
-// Auto-load all Windows fonts at startup
-m_console->Out << tc::cyan << "Loading Windows fonts..." << tc::reset << std::endl;
-int fontsLoaded = m_font_manager->LoadFontsFromFolderToMap("C:\\Windows\\Fonts");
-m_console->Out << tc::green << "Successfully loaded " << fontsLoaded << " fonts from Windows\\Fonts" 
-               << tc::reset << std::endl;
-    
     // Initialize ConfigManager and load saved settings
     m_configManager->Open();
 

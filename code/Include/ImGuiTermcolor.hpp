@@ -81,7 +81,7 @@ public:
 namespace itc {
     // Helper to get MemoryManagement instance
     inline MemoryManagement* GetMemory() {
-        return MemoryManagement::Get_MemoryManagement();
+        return MemoryManagement::Get_MemoryManagement_Singleton();
     }
     
     // Color manipulators that return color tags AND update MemoryManagement state

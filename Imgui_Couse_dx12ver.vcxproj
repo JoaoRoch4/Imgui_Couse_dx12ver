@@ -60,6 +60,8 @@
     <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>Spectre</SpectreMitigation>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug3|Win32'">
     <PlatformToolset>v145</PlatformToolset>
@@ -70,7 +72,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <SpectreMitigation>Spectre</SpectreMitigation>
-    <EnableUnitySupport>false</EnableUnitySupport>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -103,14 +105,24 @@
     <PublicIncludeDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;$(PublicIncludeDirectories)</PublicIncludeDirectories>
     <PublicModuleDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;$(PublicModuleDirectories)</PublicModuleDirectories>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\stb;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;</ExternalIncludePath>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
+    <VcpkgXUseBuiltInApplocalDeps>true</VcpkgXUseBuiltInApplocalDeps>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
     <VcpkgUseMD>true</VcpkgUseMD>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
     <VcpkgUseMD>true</VcpkgUseMD>
   </PropertyGroup>
@@ -170,20 +182,39 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.hPP</PrecompiledHeaderFile>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <IntelJCCErratum>true</IntelJCCErratum>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <TurnOffAssemblyGeneration>false</TurnOffAssemblyGeneration>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
     <ClCompile>
@@ -194,16 +225,16 @@
     <ClCompile>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <FloatingPointExceptions>true</FloatingPointExceptions>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
       <IntelJCCErratum>true</IntelJCCErratum>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>PCH.hpp</PrecompiledHeaderFile>
-      <WarningLevel>Level4</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4267;4273;4244;</DisableSpecificWarnings>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
@@ -212,6 +243,9 @@
       <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset>NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalIncludeDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src</AdditionalIncludeDirectories>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <FixedBaseAddress>false</FixedBaseAddress>
@@ -226,29 +260,466 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="code\src\App.cpp" />
-    <ClCompile Include="code\src\Classes.cpp" />
-    <ClCompile Include="code\src\CommandLineArgumments.cpp" />
-    <ClCompile Include="code\src\ConfigManager.cpp" />
-    <ClCompile Include="code\src\ConsoleInputHandler.cpp" />
-    <ClCompile Include="code\src\ConsoleWindow.cpp" />
-    <ClCompile Include="code\src\Conv.cpp" />
-    <ClCompile Include="code\src\DarkMode.cpp" />
-    <ClCompile Include="code\src\DebugWindow.cpp" />
-    <ClCompile Include="code\src\DX12Demos.cpp" />
-    <ClCompile Include="code\src\DX12Renderer.cpp" />
-    <ClCompile Include="code\src\ExampleDescriptorHeapAllocator.cpp" />
-    <ClCompile Include="code\src\FontManager.cpp" />
-    <ClCompile Include="code\src\FontManagerWindow.cpp" />
-    <ClCompile Include="code\src\FrameContext.cpp" />
-    <ClCompile Include="code\src\Globals.cpp" />
-    <ClCompile Include="code\src\Helpers.cpp" />
-    <ClCompile Include="code\src\MainWindow.cpp" />
-    <ClCompile Include="code\src\MemoryManagement.cpp" />
-    <ClCompile Include="code\src\OutputConsole.cpp" />
-    <ClCompile Include="code\src\render.cpp" />
-    <ClCompile Include="code\src\StyleManager.cpp" />
-    <ClCompile Include="code\src\WindowManager.cpp" />
+    <ClCompile Include="code\src\App.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\Classes.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\CommandLineArgumments.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\ConfigManager.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\ConsoleInputHandler.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\ConsoleWindow.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\Conv.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\DarkMode.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\DebugWindow.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\DX12Demos.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\DX12Renderer.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\ExampleDescriptorHeapAllocator.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\FontManager.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\FontManagerWindow.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\FrameContext.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\Globals.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\Helpers.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\MainWindow.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\MemoryManagement.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\OutputConsole.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\render.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\StyleManager.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="code\src\WindowManager.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="external\imgui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatAngleIncludeAsExternal>
@@ -258,6 +729,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\backends\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -268,6 +740,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -278,6 +751,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_demo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -288,6 +762,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_draw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -298,6 +773,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_tables.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -308,6 +784,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui_widgets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -318,6 +795,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\imgui\misc\freetype\imgui_freetype.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -328,6 +806,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\implot\implot.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -338,6 +817,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\implot\implot_demo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -348,6 +828,7 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\implot\implot_items.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -358,11 +839,16 @@
       <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="external\plutosvg\source\plutosvg.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-blend.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -375,6 +861,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-canvas.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -387,6 +877,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-font.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -399,6 +893,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-math.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -411,6 +909,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-raster.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -423,6 +925,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-ft-stroker.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -435,6 +941,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-matrix.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -447,6 +957,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-paint.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -459,6 +973,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-path.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -471,6 +989,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-rasterize.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -483,6 +1005,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\plutovg\source\plutovg-surface.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -495,12 +1021,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</LanguageStandard_C>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Default</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="external\stb\stb_vorbis.c">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">TurnOffAllWarnings</WarningLevel>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="code\Main\Main.cpp">
       <MinFilesInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">2</MinFilesInUnityFile>
@@ -518,6 +1049,8 @@
       </DisableSpecificWarnings>
       <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
       <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="code\pch\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -525,22 +1058,47 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Create</PrecompiledHeader>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">/analyze- %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
       <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
       <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ConformanceMode>
-      <TreatAngleIncludeAsExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level4</ExternalWarningLevel>
-      <ExternalTemplatesDiagnostics Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ExternalTemplatesDiagnostics>
-      <DisableAnalyzeExternal Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</DisableAnalyzeExternal>
-      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">AllRules.ruleset</AnalyzeExternalRuleset>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
       </DisableSpecificWarnings>
-      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</ScanSourceForModuleDependencies>
+      <ScanSourceForModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</ScanSourceForModuleDependencies>
       <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
     </ClCompile>
-    <ClCompile Include="code\src\StyleConfiguration.cpp" />
+    <ClCompile Include="code\src\StyleConfiguration.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">All</AssemblerOutput>
+      <GenerateXMLDocumentationFiles Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</GenerateXMLDocumentationFiles>
+      <GenerateSourceDependencies Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</GenerateSourceDependencies>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Level3</WarningLevel>
+      <SDLCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</SDLCheck>
+      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</IntrinsicFunctions>
+      <UseStandardPreprocessor Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseStandardPreprocessor>
+      <ExceptionHandling Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Sync</ExceptionHandling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</BufferSecurityCheck>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</RuntimeTypeInfo>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">Use</PrecompiledHeader>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</UseUnicodeForAssemblerListing>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">CompileAsCpp</CompileAs>
+      <EnforceTypeConversionRules Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</EnforceTypeConversionRules>
+      <OpenMPSupport Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">true</OpenMPSupport>
+      <AnalyzeExternalRuleset Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">BasicCorrectnessRules.ruleset</AnalyzeExternalRuleset>
+      <IncludeInUnityFile Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">false</IncludeInUnityFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\Include\App.hpp" />
@@ -563,6 +1121,7 @@
     <ClInclude Include="code\Include\Globals.hpp" />
     <ClInclude Include="code\Include\Helpers.hpp" />
     <ClInclude Include="code\Include\ImGuiTermcolor.hpp" />
+    <ClInclude Include="code\Include\ImWcharString.hpp" />
     <ClInclude Include="code\Include\MainWindow.hpp" />
     <ClInclude Include="code\Include\Master.hpp" />
     <ClInclude Include="code\Include\MemoryManagement.hpp" />
@@ -621,6 +1180,7 @@
     <None Include="CONSOLEWINDOW_FIX_MANUAL.md" />
     <None Include="CONSOLE_PERSISTENT_COLOR_FIX.md" />
     <None Include="cpp.hint" />
+    <None Include="docs\FONT_LOADING_REFACTORING.md" />
     <None Include="vcpkg-configuration.json" />
     <None Include="vcpkg.json" />
   </ItemGroup>

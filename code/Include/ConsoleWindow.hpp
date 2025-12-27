@@ -2,6 +2,7 @@
 
 #include "PCH.hpp"
 #include "Master.hpp"
+#include "ImWcharString.hpp"
 
 //-----------------------------------------------------------------------------
 // [SECTION] Example App: Debug Console / ShowExampleAppConsole()
@@ -13,36 +14,50 @@
 namespace app {
 class ConsoleWindow : public Master {
 private:
-	ImWchar					 InputBuf[256];
-	ImVector<ImWchar*>		 Items;
-	ImVector<const ImWchar*> Commands;
-	ImVector<ImWchar*>		 History;
-	int						 HistoryPos; // -1: new line, 0..History.Size-1 browsing history.
-	ImGuiTextFilter			 Filter;
-	bool					 AutoScroll;
-	bool					 ScrollToBottom;
-	std::map<std::wstring, uint64_t> m_MyCommmands;
-	class MemoryManagement*			 m_memory;
-	class OutputConsole*			 m_cmd;
+ImWchar							 InputBuf[256];
+ImVector<ImWchar*>					 Items;
+ImVector<const ImWchar*>		 Commands;
+ImVector<ImWchar*>					 History;
+int								 HistoryPos;
+ImGuiTextFilter					 Filter;
+bool							 AutoScroll;
+bool							 ScrollToBottom;
+std::map<std::wstring, uint64_t> m_MyCommmands;
+
+
+	// ImGui debug log tracking
+	int m_LastDebugLogPos;
+    bool		  m_bEnableFileLogging;
+
 
 	// File logging
 	std::ofstream m_logFile;
-	bool		  m_bEnableFileLogging;
 	std::wstring  m_logFilePath;
 
+
+	class MemoryManagement*		m_memory;
+	class OutputConsole*		m_cmd;
 	class CommandLineArguments* m_cmdArgs;
-	class ConsoleWindow*		m_consoleWindow;
 	class WindowManager*		m_window;
 	class FontManager*			m_font_manager;
 	class FontManagerWindow*	m_font_manager_window;
 	class DebugWindow*			m_debug_window;
 	class ConfigManager*		m_configManager;
 	class WindowClass*			m_window_obj;
+	class App*					m_App;
+	class ConsoleInputHandler*	m_ConsoleInputHandler;
+	class ConfigManager*		m_ConfigManager;
+	class StyleManager*			m_StyleManager;
+	class DxDemos*				m_DxDemos;
+	class DX12Renderer*			m_DX12Renderer;
+	class FrameContext*			m_FrameContext;
 
 public:
 	ConsoleWindow();
 	~ConsoleWindow();
 	HRESULT Alloc();
+
+    void Start();
 
 	virtual void Open() override;
 	virtual void Tick() override;
@@ -64,9 +79,8 @@ protected:
 
 
 public:
-void ClearLog();
+	void ClearLog();
 
-void ExecMyCommand(const ImWchar* command_line);
 
 	// Command handlers - each command has its own method
 	void CommandExit();
@@ -79,7 +93,9 @@ void ExecMyCommand(const ImWchar* command_line);
 	void CommandHelp();
 	void CommandHistory();
 	void CommandStatus();
-	
+	void CommandBreak();
+	void CommandFonts();
+
 	// Parameterized command handlers (with arguments)
 	void CommandEcho(const std::string& args);
 	void CommandSet(const std::string& args);
@@ -97,13 +113,17 @@ void ExecMyCommand(const ImWchar* command_line);
 	const std::wstring& GetLogFilePath() const { return m_logFilePath; }
 	void				FlushLogFile();
 
+	// Debug log flag helper
+	void ShowDebugLogFlag(const char* name, ImGuiDebugLogFlags flag);
+	void UpdateDebugLog();
+
 	void Render(const char* title, bool* p_open);
+	void ExecMyCommand(const ImWchar* command_line);
 
 	// In C++11 you'd be better off using lambdas for this sort of forwarding callbacks
 	static int TextEditCallbackStub(ImGuiInputTextCallbackData* data);
 
 	int	 TextEditCallback(ImGuiInputTextCallbackData* data);
-	void ShowExampleAppConsole(bool* p_open) { Render("Example: Console", p_open);
-    }
+	void ShowExampleAppConsole(bool* p_open) { Render("Example: Console", p_open); }
 };
 } // namespace app
