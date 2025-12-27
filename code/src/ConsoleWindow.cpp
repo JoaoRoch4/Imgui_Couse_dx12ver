@@ -49,6 +49,11 @@ m_window_obj(nullptr)
 	AddCommand("EXIT");
 	AddCommand("QUIT");
 	AddCommand("COMMANDS");
+	AddCommand("ECHO");
+	AddCommand("SET");
+	AddCommand("LOG");
+	AddCommand("SHOW");
+	AddCommand("HIDE");
 
 	AutoScroll	   = true;
 	ScrollToBottom = false;
@@ -95,8 +100,9 @@ void ConsoleWindow::Open() {
 		return wstr;
 	};
 
-	std::vector<std::wstring> Commands{L"exit",		L"quit",   L"show cmd", L"demo",	L"hide cmd",
-									   L"commands", L"status", L"HELP",		L"HISTORY", L"CLEAR"};
+	std::vector<std::wstring> Commands{L"exit",		L"quit",   L"show", L"hide", L"demo",
+									   L"commands", L"status", L"HELP",		L"HISTORY", L"CLEAR",
+									   L"echo", L"set", L"log"};
 	std::sort(Commands.begin(), Commands.end());
 
 	for (uint64_t i = 0; i < Commands.size(); i++) {
@@ -151,85 +157,241 @@ void ConsoleWindow::ExecMyCommand(const ImWchar* command_line) {
 		}
 	History.push_back(Wcsdup(command_line));
 
+	// Parse command and arguments
+	std::string full_command = utf8_buf;
+	std::string command_name;
+	std::string args;
+	
+	// Split command and arguments
+	size_t first_space = full_command.find_first_of(" \t");
+	if (first_space != std::string::npos) {
+		command_name = full_command.substr(0, first_space);
+		args = full_command.substr(first_space + 1);
+		// Trim leading whitespace from args
+		size_t arg_start = args.find_first_not_of(" \t");
+		if (arg_start != std::string::npos) {
+			args = args.substr(arg_start);
+		} else {
+			args.clear();
+		}
+	} else {
+		command_name = full_command;
+	}
+	
 	// Convert command to lowercase for case-insensitive comparison
-	std::string command_lower = utf8_buf;
+	std::string command_lower = command_name;
 	std::transform(command_lower.begin(), command_lower.end(), command_lower.begin(), ::tolower);
 
-	// Process command (use utf8_buf for comparisons)
-	// Command dispatch table - much more efficient than if-else ladder
-	static const std::unordered_map<std::string, std::function<void(ConsoleWindow*)>> commandHandlers = {
-		{"exit", [](ConsoleWindow* console) {
-			console->AddLog("[warning] 👋 Exiting application...\n");
-			std::exit(EXIT_SUCCESS);
-		}},
-		{"quit", [](ConsoleWindow* console) {
-			console->AddLog("[warning] 👋 Exiting application...\n");
-			std::exit(EXIT_SUCCESS);
-		}},
-		{"demo", [](ConsoleWindow* console) {
-			console->m_memory->m_bShow_demo_window = !console->m_memory->m_bShow_demo_window;
-			console->AddLog("[success] 🎪 Demo window %s\n",
-				console->m_memory->m_bShow_demo_window ? "✅ enabled" : "❌ disabled");
-		}},
-		{"show cmd", [](ConsoleWindow* console) {
-			console->m_memory->m_bShowCmd = true;
-			console->m_cmd->ShowConsole(true);
-			console->AddLog("[success] 👁️ Console window shown\n");
-		}},
-		{"hide cmd", [](ConsoleWindow* console) {
-			console->m_memory->m_bShowCmd = false;
-			console->m_cmd->ShowConsole(false);
-			console->AddLog("[success] 🙈 Console window hidden\n");
-		}},
-		{"commands", [](ConsoleWindow* console) {
-			console->AddLog("[info] 📜 Available commands:\n");
-			for(const auto& it : console->m_MyCommmands) {
-				std::string cmd_utf8(it.first.begin(), it.first.end());
-				console->AddLog("[cmd]   ▸ %s\n", cmd_utf8.c_str());
-			}
-		}},
-		{"clear", [](ConsoleWindow* console) {
-			console->ClearLog();
-			//console->AddLog("[success] 🧹 Console cleared\n");
-		}},
-         {       "cls", [](ConsoleWindow* console) {
-            console->ClearLog();
-            //console->AddLog("[success] 🧹 Console cleared\n");
-            }
-    },
-		{"help", [](ConsoleWindow* console) {
-			console->AddLog("[info] ❓ Available Commands:\n");
-			for(const auto& it : console->m_MyCommmands) {
-				std::string cmd_utf8(it.first.begin(), it.first.end());
-				console->AddLog("[cmd]   ▸ %s\n", cmd_utf8.c_str());
-			}
-		}},
-		{"history", [](ConsoleWindow* console) {
-			console->AddLog("[info] 📚 Command History:\n");
-			int first = console->History.Size - 10;
-			for(int i = first > 0 ? first : 0; i < console->History.Size; i++) {
-				char hist_utf8[256];
-				ImTextStrToUtf8(hist_utf8, sizeof(hist_utf8), console->History[i], nullptr);
-				console->AddLog("[history] 📌 %3d: %s\n", i, hist_utf8);
-			}
-		}},
-		{"status", [](ConsoleWindow* console) {
-			console->AddLog("[info] 📊 Generating status report...\n");
-			console->m_cmd->Out.ShowSystemStatus();
-		}}
+	// Command types - using variant for type-safe command representation
+	struct SimpleCommand {
+		std::function<void(ConsoleWindow*)> handler;
+	};
+
+	struct ParameterizedCommand {
+		std::function<void(ConsoleWindow*, const std::string&)> handler;
+	};
+
+	using CommandVariant = std::variant<SimpleCommand, ParameterizedCommand>;
+
+	// Command dispatch table using variant for extensibility and type safety
+	static const std::unordered_map<std::string, CommandVariant> commandHandlers = {
+		// Simple commands (no arguments)
+		{"exit", SimpleCommand{&ConsoleWindow::CommandExit}},
+		{"quit", SimpleCommand{&ConsoleWindow::CommandQuit}},
+		{"demo", SimpleCommand{&ConsoleWindow::CommandDemo}},
+		{"show", SimpleCommand{&ConsoleWindow::CommandShowCmd}},
+		{"hide", SimpleCommand{&ConsoleWindow::CommandHideCmd}},
+		{"commands", SimpleCommand{&ConsoleWindow::CommandList}},
+		{"clear", SimpleCommand{&ConsoleWindow::CommandClear}},
+		{"cls", SimpleCommand{&ConsoleWindow::CommandClear}},
+		{"help", SimpleCommand{&ConsoleWindow::CommandHelp}},
+		{"history", SimpleCommand{&ConsoleWindow::CommandHistory}},
+		{"status", SimpleCommand{&ConsoleWindow::CommandStatus}},
+		
+		// Parameterized commands (with arguments)
+		{"echo", ParameterizedCommand{&ConsoleWindow::CommandEcho}},
+		{"set", ParameterizedCommand{&ConsoleWindow::CommandSet}},
+		{"log", ParameterizedCommand{&ConsoleWindow::CommandLog}}
 	};
 	
 	
-	// Look up and execute command - O(1) hash lookup instead of O(n) comparisons
+	
+	// Look up and execute command - O(1) hash lookup with variant visitation
 	auto it = commandHandlers.find(command_lower);
 	if(it != commandHandlers.end()) {
-		it->second(this);
+		std::visit([this, &args](auto&& cmd) {
+			using T = std::decay_t<decltype(cmd)>;
+			if constexpr (std::is_same_v<T, SimpleCommand>) {
+				cmd.handler(this);
+			} else if constexpr (std::is_same_v<T, ParameterizedCommand>) {
+				cmd.handler(this, args);
+			}
+		}, it->second);
 	} else {
-		AddLog("[error] ❌ Unknown command: '%s'\n", utf8_buf);
+		AddLog("[error] ❌ Unknown command: '%s'\n", command_name.c_str());
 	}
 
 	// On command input, we scroll to bottom even if AutoScroll==false
 	ScrollToBottom = true;
+}
+
+// Command handler implementations
+void ConsoleWindow::CommandExit() {
+	AddLog("[warning] 👋 Exiting application...\n");
+	std::exit(EXIT_SUCCESS);
+}
+
+void ConsoleWindow::CommandQuit() {
+	AddLog("[warning] 👋 Exiting application...\n");
+	std::exit(EXIT_SUCCESS);
+}
+
+void ConsoleWindow::CommandDemo() {
+	m_memory->m_bShow_demo_window = !m_memory->m_bShow_demo_window;
+	AddLog("[success] 🎪 Demo window %s\n",
+		m_memory->m_bShow_demo_window ? "✅ enabled" : "❌ disabled");
+}
+
+void ConsoleWindow::CommandShowCmd() {
+	m_memory->m_bShowCmd = true;
+	m_cmd->ShowConsole(true);
+	AddLog("[success] 👁️ Console window shown\n");
+}
+
+void ConsoleWindow::CommandHideCmd() {
+	m_memory->m_bShowCmd = false;
+	m_cmd->ShowConsole(false);
+	AddLog("[success] 🙈 Console window hidden\n");
+}
+
+void ConsoleWindow::CommandList() {
+	AddLog("[info] 📜 Available commands:\n");
+	for(const auto& it : m_MyCommmands) {
+		std::string cmd_utf8(it.first.begin(), it.first.end());
+		AddLog("[cmd]   ▸ %s\n", cmd_utf8.c_str());
+	}
+}
+
+void ConsoleWindow::CommandClear() {
+	ClearLog();
+}
+
+void ConsoleWindow::CommandHelp() {
+	AddLog("[info] ❓ Available Commands:\n");
+	for(const auto& it : m_MyCommmands) {
+		std::string cmd_utf8(it.first.begin(), it.first.end());
+		AddLog("[cmd]   ▸ %s\n", cmd_utf8.c_str());
+	}
+}
+
+void ConsoleWindow::CommandHistory() {
+	AddLog("[info] 📚 Command History:\n");
+	int first = History.Size - 10;
+	for(int i = first > 0 ? first : 0; i < History.Size; i++) {
+		char hist_utf8[256];
+		ImTextStrToUtf8(hist_utf8, sizeof(hist_utf8), History[i], nullptr);
+		AddLog("[history] 📌 %3d: %s\n", i, hist_utf8);
+	}
+}
+
+void ConsoleWindow::CommandStatus() {
+	AddLog("[info] 📊 Generating status report...\n");
+	m_cmd->Out.ShowSystemStatus();
+}
+
+// Parameterized command implementations
+void ConsoleWindow::CommandEcho(const std::string& args) {
+	if (args.empty()) {
+		AddLog("[warning] ⚠️ Usage: echo <message>\n");
+		return;
+	}
+	AddLog("[info] %s\n", args.c_str());
+}
+
+void ConsoleWindow::CommandSet(const std::string& args) {
+	if (args.empty()) {
+		AddLog("[warning] ⚠️ Usage: set <key> <value>\n");
+		return;
+	}
+	
+	// Parse key and value
+	size_t space_pos = args.find_first_of(" \t");
+	if (space_pos == std::string::npos) {
+		AddLog("[error] ❌ Missing value. Usage: set <key> <value>\n");
+		return;
+	}
+	
+	std::string key = args.substr(0, space_pos);
+	std::string value = args.substr(space_pos + 1);
+	
+	// Trim leading whitespace from value
+	size_t val_start = value.find_first_not_of(" \t");
+	if (val_start != std::string::npos) {
+		value = value.substr(val_start);
+	}
+	
+	AddLog("[success] ✅ Set '%s' = '%s'\n", key.c_str(), value.c_str());
+	
+	// Example: Handle specific settings
+	if (key == "autoscroll") {
+		if (value == "true" || value == "1" || value == "on") {
+			AutoScroll = true;
+			AddLog("[info] Auto-scroll enabled\n");
+		} else if (value == "false" || value == "0" || value == "off") {
+			AutoScroll = false;
+			AddLog("[info] Auto-scroll disabled\n");
+		}
+	} else if (key == "logging") {
+		if (value == "true" || value == "1" || value == "on") {
+			EnableFileLogging(true);
+			AddLog("[info] File logging enabled\n");
+		} else if (value == "false" || value == "0" || value == "off") {
+			EnableFileLogging(false);
+			AddLog("[info] File logging disabled\n");
+		}
+	}
+}
+
+void ConsoleWindow::CommandLog(const std::string& args) {
+	if (args.empty()) {
+		AddLog("[warning] ⚠️ Usage: log <level> <message>\n");
+		AddLog("[info] Available levels: info, warning, error, success\n");
+		return;
+	}
+	
+	// Parse log level and message
+	size_t space_pos = args.find_first_of(" \t");
+	if (space_pos == std::string::npos) {
+		// No level specified, default to info
+		AddLog("[info] %s\n", args.c_str());
+		return;
+	}
+	
+	std::string level = args.substr(0, space_pos);
+	std::string message = args.substr(space_pos + 1);
+	
+	// Trim leading whitespace from message
+	size_t msg_start = message.find_first_not_of(" \t");
+	if (msg_start != std::string::npos) {
+		message = message.substr(msg_start);
+	}
+	
+	// Convert level to lowercase
+	std::transform(level.begin(), level.end(), level.begin(), ::tolower);
+	
+	// Log with appropriate level
+	if (level == "info") {
+		AddLog("[info] %s\n", message.c_str());
+	} else if (level == "warning" || level == "warn") {
+		AddLog("[warning] %s\n", message.c_str());
+	} else if (level == "error" || level == "err") {
+		AddLog("[error] %s\n", message.c_str());
+	} else if (level == "success") {
+		AddLog("[success] %s\n", message.c_str());
+	} else {
+		AddLog("[error] ❌ Unknown log level: '%s'\n", level.c_str());
+		AddLog("[info] Available levels: info, warning, error, success\n");
+	}
 }
 
 void ConsoleWindow::AddLog(const char* fmt, ...) {

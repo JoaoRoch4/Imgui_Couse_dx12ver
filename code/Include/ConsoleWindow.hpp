@@ -42,7 +42,7 @@ private:
 public:
 	ConsoleWindow();
 	~ConsoleWindow();
-    HRESULT Alloc();
+	HRESULT Alloc();
 
 	virtual void Open() override;
 	virtual void Tick() override;
@@ -64,9 +64,26 @@ protected:
 
 
 public:
-	void ClearLog();
+void ClearLog();
 
-	void ExecMyCommand(const ImWchar* command_line);
+void ExecMyCommand(const ImWchar* command_line);
+
+	// Command handlers - each command has its own method
+	void CommandExit();
+	void CommandQuit();
+	void CommandDemo();
+	void CommandShowCmd();
+	void CommandHideCmd();
+	void CommandList();
+	void CommandClear();
+	void CommandHelp();
+	void CommandHistory();
+	void CommandStatus();
+	
+	// Parameterized command handlers (with arguments)
+	void CommandEcho(const std::string& args);
+	void CommandSet(const std::string& args);
+	void CommandLog(const std::string& args);
 
 	// AddLog overloads for different string types
 	void AddLog(const char* fmt, ...) IM_FMTARGS(2); // UTF-8 format string
@@ -86,12 +103,7 @@ public:
 	static int TextEditCallbackStub(ImGuiInputTextCallbackData* data);
 
 	int	 TextEditCallback(ImGuiInputTextCallbackData* data);
-	void ShowExampleAppConsole(bool* p_open) { Render("Example: Console", p_open); }
-
-    private:
-        WNDCLASSW
-
-            m_wc;
-        HWND m_Hwnd_Internal_console;
+	void ShowExampleAppConsole(bool* p_open) { Render("Example: Console", p_open);
+    }
 };
 } // namespace app

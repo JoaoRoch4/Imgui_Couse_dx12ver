@@ -127,6 +127,13 @@ void App::SetupImGui() {
     
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+#ifdef Dock
+
+
+
+    m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    m_io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+#endif // DEBUG
 
     // Load Arial as the default font with emoji support
     ImFontConfig config;
@@ -301,6 +308,14 @@ RenderUI(clear_color, colorModified);
 
 // Rendering
 ImGui::Render();
+
+#ifdef Dock
+// Update and render additional platform windows
+if (m_io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    ImGui::UpdatePlatformWindows();
+    ImGui::RenderPlatformWindowsDefault(nullptr, (void*)m_renderer->GetCommandList());
+}
+#endif
 
 // Get frame context and back buffer
 FrameContext* frameCtx = m_renderer->WaitForNextFrameContext();

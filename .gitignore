@@ -369,3 +369,5 @@ FodyWeavers.xsd
 *.disabled
 *.backup
 *.ps1
+/external/imgui-docking/.github/workflows
+/external/imgui-docking
