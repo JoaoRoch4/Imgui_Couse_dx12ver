@@ -93,21 +93,21 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(ProjectDir)external\imgui\backends;$(ProjectDir)external\imgui\misc\cpp;$(ProjectDir)external\imgui;$(ProjectDir)external\imgui\misc\freetype;$(ProjectDir)external\implot;$(ProjectDir)external\plutovg\source;$(ProjectDir)external\plutosvg\source;$(ProjectDir)external\plutovg\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug3|x64'">
-    <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\stb;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;</ExternalIncludePath>
+    <ExternalIncludePath>$(ProjectDir)external\imgui;$(ProjectDir)external\imgui\misc\freetype;$(ProjectDir)external\implot;$(ProjectDir)external\plutovg\source;$(ProjectDir)external\plutosvg\source;$(ProjectDir)external\plutovg\include;$(ExternalIncludePath);$(ProjectDir)external\stb;$(ProjectDir)external\imgui\misc\cpp;$(ProjectDir)external\imgui\backends;</ExternalIncludePath>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <EnableMicrosoftCodeAnalysis>false</EnableMicrosoftCodeAnalysis>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)code\Include;$(ProjectDir)code\Main;$(ProjectDir)code\pch;$(ProjectDir)code\src;$(IncludePath)</IncludePath>
     <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
     <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
-    <PublicIncludeDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;$(PublicIncludeDirectories)</PublicIncludeDirectories>
-    <PublicModuleDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;$(PublicModuleDirectories)</PublicModuleDirectories>
+    <PublicIncludeDirectories>$(ProjectDir)code\Include;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicModuleDirectories>$(ProjectDir)code\src;$(PublicModuleDirectories)</PublicModuleDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src;$(IncludePath)</IncludePath>
-    <ExternalIncludePath>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\freetype;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\implot;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutosvg\source;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\plutovg\include;$(ExternalIncludePath);D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\stb;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\misc\cpp;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\external\imgui\backends;</ExternalIncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)code\Include;$(ProjectDir)code\Main;$(ProjectDir)code\pch;$(ProjectDir)code\src;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ProjectDir)external\imgui;$(ProjectDir)external\imgui\misc\freetype;$(ProjectDir)external\implot;$(ProjectDir)external\plutovg\source;$(ProjectDir)external\plutosvg\source;$(ProjectDir)external\plutovg\include;$(ExternalIncludePath);$(ProjectDir)external\stb;$(ProjectDir)external\imgui\misc\cpp;$(ProjectDir)external\imgui\backends;</ExternalIncludePath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
@@ -242,7 +242,7 @@
       <ExternalTemplatesDiagnostics>false</ExternalTemplatesDiagnostics>
       <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
       <AnalyzeExternalRuleset>NativeMinimumRules.ruleset</AnalyzeExternalRuleset>
-      <AdditionalIncludeDirectories>D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Include;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\Main;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\pch;D:\source\Course\Imgui\UdemyCppGui\VisualStudio\DX12\Imgui_Couse_dx12ver\code\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)code\Include;$(ProjectDir)code\Main;$(ProjectDir)code\pch;$(ProjectDir)code\src</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ConformanceMode>true</ConformanceMode>
